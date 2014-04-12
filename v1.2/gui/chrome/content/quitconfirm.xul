@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://ifpms/locale/main.dtd">
+<dialog  title='&quitconfirm.title;'  pack='center' width="250" height="200" 
+        xmlns:html="http://www.w3.org/1999/xhtml"
+        xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+        buttons="accept,cancel"
+	onload='Quit_ini();'
+        buttonlabelcancel="&btn_cancel;"
+        ondialogaccept="Quit_confirm();"		
+	buttonlabelaccept="&btn_ok;"
+>
+    <script type="text/javascript" src="js/user_management.js"></script>
+    <script type="application/x-javascript" src="GREUtils.js"/>    
+    <script>
+	<![CDATA[	
+	function Quit_confirm()
+	{
+	  window.arguments[0].op=0;
+	  var va=document.getElementById('quit_op').selectedIndex;
+	  window.arguments[0].op=va;
+	  window.arguments[0].saveconfig=document.getElementById('saveconfig').checked;
+	  return true;
+	}
+	function Quit_ini()
+	{
+	    document.getElementById('saveconfig').setAttribute('style','display:none');
+	}
+	function Quit_showconfig()
+	{
+	      var va=document.getElementById('quit_op').selectedIndex;
+	      if(va==1)
+	      {
+	         document.getElementById('saveconfig').setAttribute('style','display:;');
+		 document.getElementById('saveconfig').setAttribute('checked',true);
+	      }
+	      else {
+	          document.getElementById('saveconfig').setAttribute('style','display:none');
+	      }
+	}
+	]]>
+	</script>
+<stringbundleset >
+<stringbundle id="user_management_str" src="chrome://ifpms/locale/user_management.properties"/>
+</stringbundleset>
+    <vbox flex='4' pack='center' >
+    <groupbox>
+	<description value='&quitconfirm.tip;' />
+	<radiogroup id='quit_op' onselect='Quit_showconfig();'>
+	    <radio label='&quitconfirm.minimize;' />
+	    <radio label='&quitconfirm.close;' />
+	</radiogroup>
+	<checkbox id='saveconfig' label='&quitconfirm.saveconfig;' />
+    </groupbox>
+    </vbox>
+</dialog>

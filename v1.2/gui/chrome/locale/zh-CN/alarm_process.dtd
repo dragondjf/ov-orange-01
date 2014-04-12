@@ -1,0 +1,38 @@
+﻿<!ENTITY alarmprocess.total "">
+<!ENTITY alarmprocess.record "条告警需处理">
+<!ENTITY alarmprocess.alarminfo "告警信息">
+<!ENTITY alarmprocess.title "告警处理">
+
+<!ENTITY alarmprocess.alarmtype "告警类型:">
+<!ENTITY alarmprocess.collector "采集器:">
+<!ENTITY alarmprocess.pa "防区:">
+<!ENTITY alarmprocess.paName "防区名称:">
+<!ENTITY alarmprocess.happen_time "发生时间:">
+
+<!ENTITY alarmprocess.advice "建议处警方案:">
+<!ENTITY alarmprocess.notifycenter "通知中心机房">
+<!ENTITY alarmprocess.alarmcheck "告警复核">
+
+
+<!ENTITY alarmprocess.waveShow "是否显示波形">
+<!ENTITY alarmprocess.sound "声音">
+<!ENTITY alarmprocess.wave "波形">
+
+<!ENTITY alarmprocess.preview "上一段">
+<!ENTITY alarmprocess.current "当前段">
+<!ENTITY alarmprocess.next "下一段">
+<!ENTITY alarmprocess.alarmprocess "告警处理">
+<!ENTITY alarmprocess.notify "通知:">
+<!ENTITY alarmprocess.status "状态:">
+
+<!ENTITY alarmprocess.crusize "巡警">
+<!ENTITY alarmprocess.controlcenter "110">
+
+<!ENTITY alarmprocess.ok  "确定">
+<!ENTITY alarmprocess.cancel  "取消">
+<!ENTITY alarmprocess.label1  "说明: 请填写备注信息，然后点击确认按钮确认此条告警。">
+<!ENTITY alarmprocess.label2  "也可以忽略此告警，暂时不处理这条告警。">
+
+<!ENTITY alarmprocess.writenotes  "填写备注:">
+
+<!ENTITY alarmprocess.ignore "忽略">

@@ -1,0 +1,38 @@
+﻿<!ENTITY alarmprocess.total "">
+<!ENTITY alarmprocess.record " alarms">
+<!ENTITY alarmprocess.alarminfo "Alarm info">
+<!ENTITY alarmprocess.title "Alarm Process">
+
+<!ENTITY alarmprocess.alarmtype "Alarm Type:">
+<!ENTITY alarmprocess.collector "Collector:">
+<!ENTITY alarmprocess.pa "Protection Area:">
+<!ENTITY alarmprocess.paName "Protection Area Name:">
+<!ENTITY alarmprocess.happen_time "Happen Time:">
+
+<!ENTITY alarmprocess.advice "Recommended Process Approach:">
+<!ENTITY alarmprocess.notifycenter "Notify Control Center">
+<!ENTITY alarmprocess.alarmcheck "Alarm Review">
+
+
+<!ENTITY alarmprocess.waveShow "Whether to display the waveform">
+<!ENTITY alarmprocess.sound "Sound">
+<!ENTITY alarmprocess.wave "Wave ">
+
+<!ENTITY alarmprocess.preview "Preview">
+<!ENTITY alarmprocess.current "Current">
+<!ENTITY alarmprocess.next "Next">
+<!ENTITY alarmprocess.alarmprocess "Alarm Process">
+<!ENTITY alarmprocess.notify "Notify:">
+<!ENTITY alarmprocess.status "status:">
+
+<!ENTITY alarmprocess.crusize "Patrolman">
+<!ENTITY alarmprocess.controlcenter "110">
+
+<!ENTITY alarmprocess.ok  "ok">
+<!ENTITY alarmprocess.cancel  "cancel">
+<!ENTITY alarmprocess.label1  "Description: please write notes and then  press 'ok' button to confirm an alarm">
+<!ENTITY alarmprocess.label2   " or you can ignore this alarm.">
+
+<!ENTITY alarmprocess.writenotes  "Notes:">
+
+<!ENTITY alarmprocess.ignore "ignore">

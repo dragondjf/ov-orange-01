@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "chrome://ifpms/locale/protectionArea.dtd">
+
+<bindings id="paBindings"
+  xmlns="http://www.mozilla.org/xbl"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="protectionArea" extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+    <content>
+
+      <xul:hbox flex="1"  align="center" pack="start" xbl:inherits="tooltiptext=tooltiptext">
+
+
+            <xul:checkbox class="gsd" oncommand="Ifpms.PaMgr.enable_audio_monitor(this.checked);"/>
+            <xul:image class="paStateIcon"/>
+            <xul:label xbl:inherits="value=sid" crop="end" class="sid"/>
+            <xul:label xbl:inherits="value=status" crop="end"/>
+            <xul:label xbl:inherits="value=name" crop="end" class="name"/>
+            <xul:spacer flex="1"/>
+            <xul:hbox class="pa-buttons" anonid="buttons" xbl:inherits="autologin"/>
+
+           <xul:hbox  style="display:none;">
+            <xul:label xbl:inherits="value=enable" crop="end" class="enable" style="display:none;"/>
+            <xul:label xbl:inherits="value=ipaddr" crop="end" class="ipaddr" style="display:none;"/>
+            <xul:label xbl:inherits="value=product_type" crop="end" class="product_type" style="display:none;"/>
+           </xul:hbox>
+            <!--<xul:hbox>          
+            <xul:label xbl:inherits="value=coord" class="coord"/>
+            <xul:spacer flex="1"/>
+            <xul:checkbox label="&protectionArea.showWave;" class="enableplot" oncommand="Ifpms.PaMgr.plot(this.checked);"/>
+            </xul:hbox>
+           <xul:description xbl:inherits="value=desc" class="desc"/>
+           <xul:spacer flex="1"/>-->
+
+
+      </xul:hbox>
+
+    </content>
+    <implementation>
+    <constructor>
+    <![CDATA[
+        this.setAttribute("state", "connected");       
+    ]]>
+    </constructor>
+     <method name="build">
+      <parameter name="xobj"/>
+      <body>
+      <![CDATA[
+        var bundle = document.getElementById("paBundle");
+        var product_type_desc = {0:bundle.getString("paChannelType0"), 1:bundle.getString("paChannelType1"), 2:bundle.getString("paChannelType2"), 3:bundle.getString("paChannelType3"), 4:bundle.getString("paChannelType4"), 5:bundle.getString("paChannelType5")};
+        var status_type_desc = {0:bundle.getString("paStatus0"), 1:bundle.getString("paStatus1"), 2:bundle.getString("paStatus2"), 3:bundle.getString("paStatus3"), 4:bundle.getString("paStatus4"), 5:bundle.getString("paStatus5"), 6:bundle.getString("paStatus6")};
+        this._xobj = xobj;
+        this._enableplot = false;
+        this.setAttribute("sid", xobj.sid);
+        this.setAttribute("status",status_type_desc[xobj.status]);
+        this.setAttribute("id", "item-"+xobj.sid);
+        this.setAttribute("did", xobj.did);
+        this.setAttribute("pid", xobj.pid);
+        this.setAttribute("ipaddr", xobj.dc.ipaddr);
+        this.setAttribute("product_type", product_type_desc[xobj.dc.product_type]);
+
+        this.setAttribute("name", xobj.name);
+        this.setAttribute("desc", xobj.desc);
+        this.setAttribute("enable", xobj.enable?bundle.getString("labelEnable"):bundle.getString("labelDisable"));
+        this.setAttribute("coord", ""+xobj.cx+","+xobj.cy);
+        this.setAttribute("tooltiptext", product_type_desc[xobj.dc.product_type]+","+xobj.dc.ipaddr+","+xobj.desc);
+        
+      ]]>
+      </body>
+     </method>
+     <method name="refresh">
+      <body>
+      <![CDATA[
+        var xobj = this.xobj;
+        var bundle = document.getElementById("paBundle");
+        var product_type_desc = {0:bundle.getString("paChannelType0"), 1:bundle.getString("paChannelType1"), 2:bundle.getString("paChannelType2"), 3:bundle.getString("paChannelType3"), 4:bundle.getString("paChannelType4"), 5:bundle.getString("paChannelType5")};
+        var status_type_desc = {0:bundle.getString("paStatus0"), 1:bundle.getString("paStatus1"), 2:bundle.getString("paStatus2"), 3:bundle.getString("paStatus3"), 4:bundle.getString("paStatus4"), 5:bundle.getString("paStatus5"), 6:bundle.getString("paStatus6"), 7:bundle.getString("paStatus7"), 8:bundle.getString("paStatus8")};
+
+        if (xobj) {
+          this.setAttribute("name", xobj.name);
+          this.setAttribute("desc", xobj.desc);
+          if(xobj.did ==2 && xobj.pid==2 && xobj.work_mode==2 &&xobj.status==2){
+            this.setAttribute("status",status_type_desc[7]);
+          }else if(xobj.did ==2 && xobj.pid==2 && xobj.work_mode==2 && xobj.status == 4){
+            this.setAttribute("status",status_type_desc[8]);
+          }else{
+            this.setAttribute("status",status_type_desc[xobj.status]);
+          }
+          this.setAttribute("enable", xobj.enable?bundle.getString("labelEnable"):bundle.getString("labelDisable"));
+          this.setAttribute("coord", ""+xobj.cx+","+xobj.cy);
+          this.setAttribute("tooltiptext", xobj.desc);
+          this.setAttribute("tooltiptext", product_type_desc[xobj.dc.product_type]+","+xobj.dc.ipaddr+","+xobj.desc);
+          this.setAttribute("ipaddr", xobj.dc.ipaddr);
+        }
+      ]]>
+      </body>
+     </method>
+     <!--by ly 值班员登录时 ，隐藏控制按钮 -->
+     <method name='PermissionCheck'>
+     <body>
+    <![CDATA[
+    var conbutton= document.getAnonymousElementByAttribute(this,'class','pa-buttons');
+        conbutton.setAttribute("style","display:none;");
+     ]]>
+     </body>
+     </method>
+      <!--####-->
+     <property name="xobj" onget="return this._xobj;"/>
+    </implementation>
+    <handlers>
+    </handlers>
+  </binding>
+
+  <binding id="buttons" extends="xul:hbox">
+    <content>
+      <xul:spacer flex="1"/>
+      <xul:button label="&protectionArea.setting;" oncommand="Ifpms.PaMgr.edit();"/>
+      <xul:button label="&protectionArea.delete;"  oncommand="Ifpms.PaMgr.pa_delete();"/>
+    </content>
+    <implementation>
+    </implementation>
+  </binding>
+
+  <binding id="nobuttons" extends="xul:hbox"/>
+</bindings>

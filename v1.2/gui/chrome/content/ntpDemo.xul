@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+    <script type="application/x-javascript">
+      <![CDATA[
+	function make_pyNTPRequest() {
+	    document.getElementById("pyNTPRequest_time_result_label").setAttribute("value", "");
+	    try {
+//		document.getElementById("pyNTPRequest_request_status_hbox").setAttribute("collapsed", "false");
+		var request = Components.classes["@twhiteman.netfirms.com/pyNTPRequest;1"].
+				createInstance(Components.interfaces.pyINTPRequest);
+		var time_result = "";
+		var asyncNTPListener = {
+		    onStartRequest: function(aContext) {
+			document.getElementById("pyNTPRequest_request_status_result_label").value = "运行中...";
+		    },
+		    onDataAvailable: function(aContext, aData) {
+			document.getElementById("pyNTPRequest_request_status_result_label").value = "数据来自: " + aContext.join(":");
+			time_result = aData;
+		    },
+		    onStopRequest: function(aContext, aStatus) {
+			if (aStatus != Components.results.NS_OK) {
+			    document.getElementById("pyNTPRequest_time_result_label").setAttribute("value", aContext);
+			} else {
+			    document.getElementById("pyNTPRequest_time_result_label").setAttribute("value", time_result);
+			    document.getElementById("pyNTPRequest_request_status_result_label").value = "完成.";
+			}
+		    }
+		}
+		request.asyncOpen(asyncNTPListener);
+	    } catch (ex) {
+		alert("make_pyNTPRequest exception: " + ex);
+	    }
+	}
+      ]]>
+    </script>
+
+
+<vbox id="pyxpcom"  flex="1" align="center" pack="center">
+    <vbox>
+	<groupbox>
+	    <caption label="PyXPCOM演示" />
+	    <description id="pyNTPRequest_description">
+		点击“运行”按钮将从位于“time.apple.com”的NTP时间服务器取回当前时间。
+	    </description>
+	    <hbox align="center" pack="center">
+		<button id="pyNTPRequest_request_button"
+			label="运行"
+			oncommand="make_pyNTPRequest();" />
+	    </hbox>
+	    <hbox align="center" pack="top">
+		<label id="pyNTPRequest_time_label"
+		       value="时间："/>
+		<label id="pyNTPRequest_time_result_label" value=""/>
+	    </hbox>
+	    <hbox id="pyNTPRequest_request_status_hbox"
+		  align="center" pack="top"
+		  collapsed="false">
+		<label id="pyNTPRequest_request_status_label"
+		       value="状态："/>
+		<label id="pyNTPRequest_request_status_result_label"/>
+	    </hbox>
+	</groupbox>
+    </vbox>
+</vbox>
+</overlay>

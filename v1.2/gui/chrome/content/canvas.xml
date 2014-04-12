@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding='utf-8' ?>
+<!DOCTYPE window SYSTEM "chrome://ifpms/locale/main.dtd">
+<bindings id="waveBindings"
+  xmlns="http://www.mozilla.org/xbl"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  xmlns:xbl="http://www.mozilla.org/xbl">
+    <binding id="WaveCanvas" >
+    <handlers>
+    <handler event='click' action=''>
+    </handler>
+    </handlers>
+    <content>
+    <!--<children/>-->
+    <xul:hbox>
+    <!--<xul:vbox>    -->
+    <html:canvas xbl:inherits='height'  anoid='canvas' style='border:0px blue solid;' flex='3'></html:canvas>
+    <!--</xul:vbox>-->
+    <!--<xul:vbox  id='spliter' pack='center'   style="background:#B0B0B0;pointer:hand;-moz-appearance:none;" >
+    <xul:spacer flex='1' />
+    <xul:grippy id='grippy'  style='background:green;' />
+    <xul:spacer flex='1' />
+	</xul:vbox>-->
+    <xul:splitter collapse="before" resizeafter="farthest" id='spliter' pack='center'>
+    <xul:grippy id='grippy'/>
+    </xul:splitter>
+    <xul:spacer flex='1' />
+    <xul:vbox id='control' flex='1' style='border:1px green dashed;'>
+    <xul:vbox> <!-- can not delete this line . for unknown reason -->
+	<xul:hbox flex='1'> 
+    <xul:button id='pause' label='&debug.ok;' style='width:50px;' oncommand='MouseOut();' />
+    <xul:button id='cancel' label='&debug.cancel;' style='width:50px;'  oncommand='onCancel();' />
+    <xul:button id='export' label='&debug.wave.export;' style='width:50px;'  oncommand='exportWave();' />
+    <xul:spacer  flex='1'/>
+    </xul:hbox>
+    <xul:hbox flex='1'>
+    <xul:label style='color:black;' class='margin_label' value='&debug.pa.label;'/>
+    <xul:menulist  id='pa_list' >
+    <xul:menupopup id='pa_container'> </xul:menupopup>
+    </xul:menulist>
+    </xul:hbox>
+    <xul:hbox flex='1'>
+      <xul:label style='color:black;' class='margin_label'  value='&debug.yaxis;'/>
+      <xul:menulist  id='yrange'  onselect='setYRange(this.value);'>
+	<xul:menupopup >
+	  <xul:menuitem  label='&debug.wave.auto;'  value='0' />
+	  <xul:menuitem  label='&debug.wave.manual;'  value='1' />
+	</xul:menupopup>
+      </xul:menulist>
+    </xul:hbox>
+    <xul:hbox flex='1' id='xValue'>
+      <xul:label style='color:black;' class='margin_label'  value='&debug.wave.xvalue;'/>
+      <xul:menulist  id='x_value'>
+      	<xul:menupopup >
+      	  <xul:menuitem  label='&debug.wave.count;'  value='0' />
+      	  <xul:menuitem  label='&debug.wave.timestamp;'  value='1' />
+      	</xul:menupopup>
+      </xul:menulist>
+    </xul:hbox>
+    <xul:hbox id='yran_control' flex='1'>
+      <xul:label value='&debug.wave.win_floor;' id='fre_begin_la' class='margin_label' style='color:black;'  />
+      <xul:textbox id='wave_begin'  type='number' width='60' min='-65535' max='65535' value='0'/>
+      <xul:label value='&debug.wave.win_ceil;'  id='fre_end_la' class='margin_label' style='color:black;'/>
+      <xul:textbox id='wave_end' type='number' width='60' min='-65535' max='65535' value='65535'/>
+    </xul:hbox>
+    <xul:hbox >
+      <xul:checkbox id='sourcefreq'  />
+      <xul:label value='freq'   style='color:black;margin-left:0px;'  />
+      <xul:checkbox id='sourcemax' />
+      <xul:label value='max'    style='color:black;margin-left:0px;' />
+      <xul:checkbox id='sourcemin' />
+      <xul:label value='min'    style='color:black;margin-left:0px; ' />
+      <xul:checkbox id='sourcespread' />
+      <xul:label value='spread'   style='color:black;margin-left:0px;' />
+      <xul:checkbox id='sourceprewarn' />
+      <xul:label value='prewarn'   style='color:black;margin-left:0px;' />
+    </xul:hbox>
+    <xul:hbox >
+      <xul:checkbox id='sourcedata0'  />
+      <xul:label value='data0'   style='color:black;margin-left:0px;'  />
+      <xul:checkbox id='sourcedata1' />
+      <xul:label value='data1'    style='color:black;margin-left:0px;' />
+      <xul:checkbox id='sourcedata2' />
+      <xul:label value='data2'    style='color:black;margin-left:0px;' />
+      <xul:checkbox id='sourcedata3' />
+      <xul:label value='data3'   style='color:black;margin-left:0px;' />
+      <xul:checkbox id='sourcedata4' />
+      <xul:label value='data4'   style='color:black;margin-left:0px;' />
+    </xul:hbox>
+    <xul:hbox >
+      <xul:checkbox id='sourcedata5'/>
+      <xul:label value='data5'   style='color:black;margin-left:0px;'  />
+      <xul:checkbox id='sourcedata6' />
+      <xul:label value='data6'    style='color:black;margin-left:0px;' />
+      <xul:checkbox id='sourcedata7' />
+      <xul:label value='data7'    style='color:black;margin-left:0px;' />
+      <xul:checkbox id='sourcedata8' />
+      <xul:label value='data8'   style='color:black;margin-left:0px;' />
+      <xul:checkbox id='sourcedata9' />
+      <xul:label value='data9'   style='color:black;margin-left:0px;' />
+    </xul:hbox>
+
+    </xul:vbox>
+    </xul:vbox>
+    </xul:hbox>
+    </content>
+     <implementation>
+     <field name='waveobj'/>
+     <field name='isMouseover'/>
+     <field name='pid'/>
+     <field name='id'/>
+     <field name='clicks'/>
+     <field name='out'/>
+     <field name='offset'/>
+     <field name='points'/>
+     <field name='controlfocus'/>
+     <property name="cwidth" >
+     <setter>
+       var can=document.getAnonymousElementByAttribute(this,'anoid','canvas');
+       can.setAttribute('width',val);
+     </setter>
+     <getter>
+       var can=document.getAnonymousElementByAttribute(this,'anoid','canvas');
+       return can.width;
+     </getter>
+     </property>
+
+     <method name='initial' >
+     <parameter name='obj' />
+	 <parameter name='setting' />
+     <body>
+    <![CDATA[
+      var palist=obj['palist'];
+      //var wavelist=obj['wavelist'];
+      var pa_container=document.getAnonymousElementByAttribute(this,'id','pa_container');
+      for(var i=pa_container.childNodes.length-1;i>=0;i--)//clear children
+      {
+        pa_container.removeChild(pa_container.childNodes[i]); 
+      }
+      for(i=0;i<palist.length;i++)
+      {
+        var pa = palist[i];
+        var it=document.createElement("menuitem");
+        it.setAttribute("label",pa.sid);
+        it.setAttribute("value",pa.pid);
+        pa_container.appendChild(it);
+      }
+      if(this.pid)
+      {
+        if(this.pid !=0){
+          this.pid = debug.getPidFromSid(this.sid);
+          if(this.pid == "null" || this.pid == null){
+            this.pid = 0;
+          }
+        }
+        if(palist.length>0)//有下拉列表
+        {
+          document.getAnonymousElementByAttribute(this,'id','pa_list').value=this.pid;
+          if(this.pid!=document.getAnonymousElementByAttribute(this,'id','pa_list').value)
+          {
+            document.getAnonymousElementByAttribute(this,'id','pa_list').value=0;
+            document.getAnonymousElementByAttribute(this,'id','pa_list').selectedIndex=0;
+          }
+        }
+        else{
+          jsdump("no pa exist......");
+        }
+        //check whether the assignment has been done  successfully. cause Maybe the PA has already been removed.
+        if(typeof(document.getAnonymousElementByAttribute(this,'id','pa_list').value)=='undefined')
+        {
+           jsdump("no pa  list.....");
+        }
+      }
+      else{//set pa 
+	      if(typeof(setting)=='undefined')
+        {
+          var setting={};
+          setting.pid='0';
+          setting.source=[];
+          setting.Ymode=true;
+        }
+        if(setting.pid == "null"){
+          setting.pid = 0;
+        }
+	      document.getAnonymousElementByAttribute(this,'id','pa_list').value=setting.pid;
+	      if(setting.pid!=document.getAnonymousElementByAttribute(this,'id','pa_list').value)
+	      {
+          document.getAnonymousElementByAttribute(this,'id','pa_list').selectedIndex=0;
+	      }
+      }
+      this.setSourceCheckbox(setting);
+      this.out=false;   
+      var sp=document.getAnonymousElementByAttribute(this,'id','grippy');
+      var thiz=this;
+      thiz.clicks=0;
+      sp.addEventListener('click',function(){
+  	    thiz.clicks+=1;
+  	    setTimeout(thiz.processClick,100,thiz.clicks,thiz.id);
+      },false);
+      this.setWave();//开始显示波形
+      ]]>
+     </body>
+     </method>
+    <method name="setWave"> <!--设置波形参数 -->
+    <body >
+    <![CDATA[
+      var pid=document.getAnonymousElementByAttribute(this,'id','pa_list').value;
+      this.pid=pid;
+      var sid=debug.getSidFromPid(pid);
+      this.sid=sid;
+      //jsdump("wav sidsidsidsidsidsidsid: "+sid+",pid: "+pid);
+      var wavetype='frequency';
+      var ar=debug.getWaveByType(wavetype);
+      var wav=new waveType(ar,sid);
+      this.waveobj=wav;
+      this.waveobj.rawflag=false;
+      this.waveobj.sampletype=[];
+      var dsource=['sourcefreq','sourcemax','sourcemin','sourcespread','sourceprewarn','sourcedata0','sourcedata1','sourcedata2',
+	  'sourcedata3','sourcedata4','sourcedata5','sourcedata6','sourcedata7','sourcedata8','sourcedata9'];
+      var dscheck;
+      for(var i=0;i<dsource.length;i++)
+      {
+        dscheck=document.getAnonymousElementByAttribute(this,'id',dsource[i]);
+  	    if(dscheck.checked)
+  	    {
+          this.waveobj.sampletype.push(i);
+        }
+      }
+      //jsdump(this.waveobj.sampletype.join('-')+' this pid '+this.pid);
+      var end=document.getElementById('sample_end').value;
+      var points=document.getElementById('sampleNumber').value;
+      var off=parseInt(end);
+      this.offset=off;
+      this.points=parseInt(points)-1;
+      var ca= document.getAnonymousElementByAttribute(this,'anoid','canvas');
+      var mod=document.getAnonymousElementByAttribute(this,'id','yrange').value;
+      var wv=this.waveobj;
+      var did = wv.sid.substring(wv.sid.indexOf("-")+1,wv.sid.lastIndexOf("-"));
+      if(Ifpms.Xpcom.DCMgmt.getDC(did)){
+      	if(Ifpms.Xpcom.DCMgmt.getDC(did).product_type==0){
+      	  document.getAnonymousElementByAttribute(this,'id','xValue').style.display="none";
+      	}else{
+      	  document.getAnonymousElementByAttribute(this,'id','xValue').style.display="block";
+      	}
+      }else{
+      	document.getAnonymousElementByAttribute(this,'id','xValue').style.display="none";
+      	//return;
+      }
+      var showHideTimes=document.getAnonymousElementByAttribute(this,'id','x_value').value;
+      wv.showHideTime=showHideTimes;
+      if(mod==0)//auto
+      {
+        wv.mode=0;
+      }
+      else{
+        wv.mode=1;
+        var begin=document.getAnonymousElementByAttribute(this,'id','wave_begin').value;
+        var end=document.getAnonymousElementByAttribute(this,'id','wave_end').value;
+        wv.ybase=parseInt(begin);
+        wv.yrange=parseInt(end)-wv.ybase;
+      }
+      var ars={'pid':this.pid,'wv':wv,'off':this.offset,'po':this.points,'canvas':ca};
+      var foo=this.showWave;
+      var ti=this.getAttribute('timer');
+      if(ti) {clearInterval(ti);}
+      var timer=setInterval(function(){ foo(ars);},250);
+      this.setAttribute('timer',timer);
+    ]]>
+    </body>
+    </method>
+	<method name='saveConfig'>
+	<body>
+	<![CDATA[ 
+	  var re={};
+	  if(!this.waveobj){ 
+	  re.pid=0;
+   	  re.source=[0];
+	  re.Ymode=true;
+	  re.ybegin=0;
+	  re.yend=65535;
+	  if(this.id=='wave_canvas')
+	  {
+	    re.source=[1,2];
+	  }
+	  return  re ;
+	  }
+	  re.pid=this.pid;
+	  re.source=this.waveobj.sampletype;
+	  re.Ymode=this.waveobj.mode==0?true:false;
+	  re.ybegin=this.waveobj.ybase;
+	  re.yend=this.waveobj.ybase+this.waveobj.yrange;
+	  return re;
+	]]>
+	</body>
+	</method>
+	
+    <method name='setSourceCheckbox'>
+	<parameter name='setting' />
+	<body>
+	<![CDATA[
+		var dsource=['sourcefreq','sourcemax','sourcemin','sourcespread','sourceprewarn','sourcedata0','sourcedata1','sourcedata2',
+	  'sourcedata3','sourcedata4','sourcedata5','sourcedata6','sourcedata7','sourcedata8','sourcedata9'];
+	   if(!this.waveobj){
+	       for(var i=0;i<dsource.length;i++)
+	       {
+	            document.getAnonymousElementByAttribute(this,'id',dsource[i]).checked=false;
+	       }
+		   for(var i in setting.source)
+		   {
+		       document.getAnonymousElementByAttribute(this,'id',dsource[setting.source[i]]).checked=true;
+		   }
+		   if(!setting.Ymode)
+		   {
+		     document.getAnonymousElementByAttribute(this,'id','yrange').value=1;
+		     document.getAnonymousElementByAttribute(this,'id','wave_begin').value=setting.ybegin;
+			 document.getAnonymousElementByAttribute(this,'id','wave_end').value=setting.yend;
+		   }
+	      return;
+	   }
+	  //jsdump(this.id+' '+this.waveobj.sampletype.join('-'));
+	   for(var i=0;i<dsource.length;i++)
+	   {
+	     document.getAnonymousElementByAttribute(this,'id',dsource[i]).checked=false;
+	   }
+       for(var id in this.waveobj.sampletype)
+       {
+           document.getAnonymousElementByAttribute(this,'id',dsource[this.waveobj.sampletype[id]]).checked=true;
+       }
+	]]>
+	</body>
+	</method>
+    <method name="showWave">
+    <parameter name='ars' />
+    <body>
+     <![CDATA[
+      var pid=ars['pid'];
+      var wv=ars['wv'];
+      if(wv.enableflag==false)
+	  {
+         return ;
+      }
+      var off=ars['off'];
+      var po=ars['po'];
+      var ca=ars['canvas'];
+      debug.updateWave(pid,wv,off,po);
+      debug.reDraw(ca,wv);
+     ]]>
+     </body>
+     </method>
+    
+    <method name='processClick'>
+    <parameter  name='time'/>
+    <parameter  name='id'/>
+    <body >
+    <![CDATA[
+     var thiz=document.getElementById(id);
+     var ti=thiz.clicks;//
+     if(ti==time)
+     {
+        thiz.clicks=0;
+        if(thiz.out)
+        {
+           thiz.onCancel();
+	      return false;
+        }
+        thiz.out=true;
+        thiz.onMouseOver();
+        return false;
+     }
+     ]]>    
+    </body>
+    </method>
+    
+    <method name="setCanvasWidth">
+    <parameter name="wid"/>
+    <body>
+     <![CDATA[
+        this.cwidth=wid;
+        this.setAttribute('canvaswidth',wid);
+     ]]>
+    </body>
+    </method>
+    <method name="hide">
+    <body>
+     <![CDATA[
+       this.clearUp();
+     ]]>
+    </body>
+    </method>
+    <method name="show">
+    <body>
+     <![CDATA[
+       this.trigger(1);
+     ]]>
+    </body>
+    </method>
+    <method name="setId">
+    <parameter name='id' />
+    <body>
+     <![CDATA[
+       this.id=id;
+     ]]>
+    </body>
+    </method>  
+    <method name="setYRange">
+    <parameter name="flag"/>
+    <body>
+      <![CDATA[
+       if(flag==1)
+       {
+        document.getAnonymousElementByAttribute(this,'id','yran_control').style.display='block';
+       }
+       else{
+        document.getAnonymousElementByAttribute(this,'id','yran_control').style.display='none';
+       }
+      ]]>
+     </body>
+     </method>
+     <method name="trigger">
+     <parameter name="flag"/>
+     <body>
+      <![CDATA[
+      var ti=this.getAttribute('timer');
+       if(flag==1)//开始 
+       {
+          this.setWave();
+       }
+       else
+       {
+           var wv=this.waveobj;//
+           if(wv){
+                var ti=this.getAttribute('timer');
+                if(ti) {clearInterval(ti);}
+                var ca= document.getAnonymousElementByAttribute(this,'anoid','canvas');
+                if(wv.rawflag==true) { return;}
+                debug.reDraw(ca,wv);
+            }
+       }
+      ]]>
+      </body>
+      </method>
+      <method name="MouseOut">
+      <body>
+      <![CDATA[
+             this.out=false;
+             document.getAnonymousElementByAttribute(this,'id','control').style.display='none';
+             this.cwidth=parseInt(this.getAttribute('canvaswidth'));
+             this.setWave();
+      ]]>
+      </body>
+      </method>
+      
+      <method name="onCancel">
+      <body>
+      <![CDATA[
+          this.out=false;
+          this.setSourceCheckbox();
+          //设置 防区  y轴
+          document.getAnonymousElementByAttribute(this,'id','pa_list').value=this.pid;
+          document.getAnonymousElementByAttribute(this,'id','yrange').value=this.waveobj.mode;
+          if(this.waveobj.mode=='1')
+          {
+            var begin=this.waveobj.ybase;
+            document.getAnonymousElementByAttribute(this,'id','wave_begin').value=begin;
+            var end=this.waveobj.ybase+this.waveobj.yrange;
+            document.getAnonymousElementByAttribute(this,'id','wave_end').value=end;
+          }
+          document.getAnonymousElementByAttribute(this,'id','control').style.display='none';
+          this.cwidth=parseInt(this.getAttribute('canvaswidth'));
+          this.setWave();
+      ]]>
+      </body>
+      </method>
+      
+      <method name="onMouseOver">
+      <body>
+      <![CDATA[
+      var stdwid=parseInt(this.getAttribute('canvaswidth'));
+      this.hideControl(0);
+      this.cwidth=stdwid-350;
+      this.trigger(0);
+      ]]>
+      </body>
+      </method>
+      <method name="clearUp">
+      <body>
+      <![CDATA[
+        var ti=this.getAttribute('timer');
+        clearInterval(ti);
+       ]]>
+      </body>
+      </method>
+      <method name="exportWave">
+      <body>
+      <![CDATA[
+        var ca= document.getAnonymousElementByAttribute(this,'anoid','canvas');
+     	var si=this.waveobj.sid;
+	    debug.export_png(ca,si);
+	    this.MouseOut();
+       ]]>
+      </body>
+      </method>
+      <method name='hideControl'>
+      <parameter name='flag'/>
+      <body>
+        <![CDATA[
+        var can=document.getAnonymousElementByAttribute(this,'id','control');
+        if(flag==1)
+        {
+         can.style.display='none';
+        }
+        else{
+          can.style.display='block';
+        }
+       ]]>
+      </body>
+     </method>
+     </implementation>
+  </binding>
+</bindings>

@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<overlay xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+    <script type="application/x-javascript">
+      <![CDATA[
+      
+	function myTest1() {
+		var mgmt = Components.classes["@ov-orange.com/pyIfpmsDCMgmt;1"].
+				getService(Components.interfaces.nsIPyIfpmsDCMgmt);
+		var dc1 = mgmt.createDC(1,1);
+		var dc2 = mgmt.createDC(2,2);
+		
+		alert(dc1.toJson());
+		
+		dc1.init(3,3);
+		
+		alert(dc1.toJson());
+		
+	}
+
+	function myTest2() {
+		var mgmt = Components.classes["@ov-orange.com/pyIfpmsDCMgmt;1"].
+				getService(Components.interfaces.nsIPyIfpmsDCMgmt);
+		alert("len="+mgmt.dc_list.length);
+    }
+	  
+	function doTest() {
+	    try {
+		var request = Components.classes["@ov-orange.com/PyIfpms;1"].
+				createInstance(Components.interfaces.nsIPyIfpms);
+		var asyncListener = {
+		    onLog: function(log) {
+			document.getElementById("log_box").value = log+"\n"+document.getElementById("log_box").value;
+		    },
+		    onRaiseEvent: function(evt) {
+//			document.getElementById("event_value").value = evt;
+			Map.nodes["node1"].setStatus(evt);
+		    },
+		    onDataArrival: function(src, data) {
+//			document.getElementById("event_value").value = src;
+		    }
+		}
+		request.open(["123","234"],asyncListener);
+	    } catch (ex) {
+		alert("exception: " + ex);
+	    }
+	}
+      ]]>
+    </script>
+
+
+<vbox id="monitor"  flex="1" align="center" pack="start">
+    <vbox width="400" height="300">
+	<groupbox flex="1">
+        <caption label="日志"/>
+        <textbox flex="1" multiline="true" rows="100" id="log_box" value="Ready..."/>
+	</groupbox>
+    </vbox>
+    <hbox align="center" pack="center">
+	<button id="test"
+		label="启动1"
+		oncommand="myTest1();" />
+	<button id="test"
+		label="启动2"
+		oncommand="myTest2();" />
+    </hbox>
+</vbox>
+</overlay>

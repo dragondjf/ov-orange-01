@@ -1,0 +1,209 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://ifpms/skin/css/main.css" type="text/css"?> 
+<!DOCTYPE window SYSTEM "chrome://ifpms/locale/protectionArea.dtd">
+
+<dialog
+  id     = "protectionAreaNew"
+  title  = "&protectionArea.addTitle;"
+  buttons= "accept,cancel"
+  width="400px"
+  height="360px"
+  xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  ondialogaccept="return Ifpms.Pa.pa_new();" 
+>
+
+<script type="application/x-javascript" src="GREUtils.js"/>
+<script type="application/x-javascript" src="js/user_management.js"/>
+<script type="application/x-javascript" src="ifpms.js"/>
+<script type="application/x-javascript" src="xpcom.js"/>
+<script type="application/x-javascript" src="map.js"/>
+<script type="application/x-javascript" src="protectionArea.js"/>
+<script>
+<![CDATA[
+
+function changeType(){
+  var dc_type = document.getElementById("dc_type").value;
+  var wav_path=GREUtils.File.chromeToPath("chrome://wav/content/");
+  document.getElementById('dckType').setAttribute('selectedIndex', parseInt(dc_type));
+  if(dc_type==4) {
+    if(document.getElementById("sample_path").value == "") {
+        document.getElementById("sample_path").value=wav_path;
+    }
+  }
+}
+
+]]>
+</script>
+<stringbundleset>
+<stringbundle id="paBundle" src="chrome://ifpms/locale/protectionArea.properties"/>
+</stringbundleset>
+
+<vbox align="start" flex="1">
+<grid>
+  <columns>
+    <column/>
+    <column flex="1"/>
+  </columns>
+  <rows>
+    <row align="center" id="ip">
+      <label value="&protectionArea.paChannelType;:" control="dc_type"/>
+      <hbox>
+      <menulist id="dc_type" oncommand="changeType();">
+        <menupopup>
+          <menuitem label="&protectionArea.paChannelType0;" value="0"/>
+          <menuitem label="&protectionArea.paChannelType6;" value="6"/>
+          <menuitem label="&protectionArea.paChannelType4;" value="4"/>
+          <menuitem label="&protectionArea.paChannelType5;" value="5"/>
+        </menupopup>
+      </menulist>
+      <space flex='1' />
+      </hbox>
+    </row>
+  </rows>
+</grid>
+<separator class="groove"/>
+<deck id="dckType" flex="1">
+<box>
+<grid>
+  <columns>
+    <column/>
+    <column flex="1"/>
+  </columns>
+  <rows>
+    <row align="center" id="ip">
+      <label value="&protectionArea.labelIP;:" control="ipaddr"/>
+      <hbox>
+      <textbox id="ipaddr0" maxlength="16" width='145' oninput="document.getElementById('error').value='';"/>
+      <space flex='1' />
+      </hbox>
+    </row>
+  </rows>
+</grid>
+</box>
+<box></box>
+<box></box>
+<box></box>
+<box>
+<grid>
+
+  <columns>
+    <column/>
+    <column flex="1"/>
+  </columns>
+
+  <rows>
+    <row align="center" id="ip">
+      <label value="&protectionArea.labelIP;:" control="ipaddr"/>
+      <hbox>
+      <textbox id="ipaddr4" maxlength="16" width='145' oninput="document.getElementById('error').value='';"/>
+      <space flex='1' />
+      </hbox>
+    </row>
+    <row align="center" id="num">
+      <label value="&protectionArea.paChannelNum;:"/>
+      <hbox>
+      <textbox id="paChannelNum" type='number' max='2' min='1' increment='1'/>
+      <space flex='1' />
+      </hbox>
+    </row>
+    <row align='center' id='path'>
+      <label  value='&protectionArea.paChannelPath;:'/>
+      <vbox>
+      <hbox>
+      <label id='sample_path' value=""/>
+      <space flex='1' />
+      </hbox>
+      <hbox>
+      <button  label='&protectionArea.paChannelPathChange;' oncommand='Ifpms.Pa.ChangeSamplePath("sample_path");' />
+      <space flex='1' />
+      </hbox>
+      </vbox>
+   </row>
+   <row align='center' id='startDay'>
+      <label  value='&protectionArea.paChannelBeginDay;:'  />
+   <hbox>
+      <datepicker id="startDate" type="popup" value="1970-01-01"/>
+      <space flex='1' />
+    </hbox>
+   </row>
+   <row align='center' id='startTime'>
+      <label value='&protectionArea.paChannelBeginTime;:'/>
+   <hbox>
+      <timepicker id="startTimes" value="08:00"/>
+      <space flex='1' />
+    </hbox>
+   </row>
+   <row align='center' id='endDay'>
+      <label  value='&protectionArea.paChannelEndDay;:' />
+   <hbox>
+      <datepicker id="endDate" type="popup" value="1970-01-01"/>
+      <space flex='1' />
+    </hbox>
+   </row>
+   <row align='center' id='endTime'>
+      <label value='&protectionArea.paChannelEndTime;:' />
+    <hbox>
+      <timepicker id="endTimes" value="08:00"/>
+      <space flex='1' />
+    </hbox>
+   </row>
+  </rows>
+</grid>
+</box>
+<box id="box5">
+<grid>
+
+  <columns>
+    <column/>
+    <column flex="1"/>
+  </columns>
+
+  <rows>
+    <row align="center">
+      <label value="&protectionArea.labelSubnet;:"/>
+      <hbox>
+      <textbox id="subnet" maxlength="16" width='145' oninput="document.getElementById('error').value='';" value="192.168.100.1"/>
+      <space flex='1' />
+      </hbox>
+    </row>
+    <row align="center">
+      <label value="&protectionArea.labelNetmask;:"/>
+      <hbox>
+      <textbox id="netmask" maxlength="16" width='145' oninput="document.getElementById('error').value='';" value="255.255.255.0"/>
+      <space flex='1' />
+      </hbox>
+    </row>
+    <row align="center">
+      <label value="&protectionArea.labelNum;:"/>
+      <hbox>
+      <textbox id="deviceNum" type='number' max='8' min='1' increment='1'/>
+      <space flex='1' />
+      </hbox>
+    </row>
+  </rows>
+</grid>
+</box>
+<box>
+<grid>
+  <columns>
+    <column/>
+    <column flex="1"/>
+  </columns>
+  <rows>
+    <row align="center" id="ip">
+      <label value="&protectionArea.labelIP;:" control="ipaddr"/>
+      <hbox>
+      <textbox id="ipaddr6" maxlength="16" width='145' oninput="document.getElementById('error').value='';"/>
+      <space flex='1' />
+      </hbox>
+    </row>
+  </rows>
+</grid>
+</box>
+</deck>
+
+<hbox align="center" pack="center"><label id="error" class="error" style="color:red" value=""/></hbox>
+</vbox>
+
+</dialog>

@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://ifpms/skin/css/protectionArea.css" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://ifpms/locale/protectionArea.dtd">
+
+<overlay xmlns:html="http://www.w3.org/1999/xhtml" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+<script type="application/x-javascript" src="js/index.js"/>
+
+<stringbundleset>
+<stringbundle id="paBundle" src="chrome://ifpms/locale/protectionArea.properties"/>
+</stringbundleset>
+
+<vbox id="boxDeviceTree" width="350">
+<box pack="start" style="margin: 20px 5px 20px 5px">
+<image src='chrome://ifpms/skin/Icons/title.png'/>
+</box>
+
+<hbox><label value="&protectionArea.title;"/><spacer flex="1"/>
+<button class="borderless" id="Q_workmodes" style="display:none" label="&protectionArea.Q_workmode;" oncommand="Ifpms.PaMgr.Q_workmodeChange();"/>
+<button class="borderless" permission='1' label="&protectionArea.add;" oncommand="Ifpms.PaMgr.pa_new();"/>
+</hbox>
+<richlistbox id="palist" flex="1" onselect="Ifpms.PaMgr.onItemSelect();"/>
+<bbox height="25" style="background:#202020; border-bottom:1px solid #FFDDC6; margin-top:5px">
+    <label value="&protectionArea.alarmtitle;"/>
+    <spacer flex="1"/>
+    <button class="borderless" label="&protectionArea.all;" oncommand="switchDeck(1);alarmmgmt.ini();"/>
+</bbox>
+
+    <html:div style="height:185px; overflow:auto; padding-top:5px; padding-left:5px; padding-right:5px;">
+    <html:table id="indexalarmtable" cellpadding="0" cellspacing="0">
+        <html:tr>
+            <html:th  width="20%" align="center">&protectionArea.alarmtype;</html:th>
+            <html:th  width="20%" align="center">&protectionArea.protection;</html:th>
+            <html:th  width="60%" align="center">&protectionArea.happen_time;</html:th>
+        </html:tr>
+        <html:tbody id="index_alarm_body">
+        </html:tbody>
+    </html:table>
+    </html:div>
+
+</vbox>
+</overlay>

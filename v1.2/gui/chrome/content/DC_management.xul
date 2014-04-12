@@ -1,0 +1,608 @@
+<?xml version="1.0"?>
+<!DOCTYPE window SYSTEM "chrome://ifpms/locale/main.dtd">
+<overlay
+xmlns:html="http://www.w3.org/1999/xhtml"
+xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+<script>
+<![CDATA[
+var do_modify=function(){
+	var strbun=document.getElementById("dc_management_str");
+if(global_show_DC_PA==-1)
+{
+	GREUtils.Dialog.alert(strbun.getString("alert"),strbun.getString("choose_DCPA_moodify"));
+	return;
+}
+if(global_show_obj_DC==undefined&&global_show_obj_PA==undefined)
+{
+	//alert("请选择要修改的DC或PA");
+	GREUtils.Dialog.alert(strbun.getString("alert"),strbun.getString("choose_DCPA_moodify"));
+	return;	
+}
+if(global_show_DC_PA==0)//当前显示的是DC
+{
+       global_edit_DC_PA=0;
+       grid_DC_show_modify();
+}
+else{
+	global_edit_DC_PA=1;
+	grid_PA_show_modify();	
+}
+}
+
+function grid_DC_show_modify()
+{
+	var idlist=[];
+	idlist.push("enableflag","name","desc","mediumtype","sensitivity","sensitivity2","environmentfactor");
+	for(i in idlist)
+	{
+	  document.getElementById("dc_label_"+idlist[i]).setAttribute("style","display:none;");	
+	  document.getElementById("dc_input_"+idlist[i]).setAttribute("style","display:;");
+	  if(i==0)
+	  {
+		var index=1;
+		
+		if(global_show_obj_DC[idlist[i]])
+		{
+			index=0;
+		}
+		document.getElementById("dc_input_radio_"+idlist[i]).selectedIndex=index;
+	  }
+	  else{
+	   document.getElementById("dc_input_"+idlist[i]).value=global_show_obj_DC[idlist[i]];
+	  }
+	}	
+}
+
+function grid_DC_show_detail()
+{
+	var idlist=[];
+	idlist.push("enableflag","name","desc","mediumtype","sensitivity","sensitivity2","environmentfactor");
+	for(var i in idlist)
+	{
+	  document.getElementById("dc_input_"+idlist[i]).setAttribute("style","display:none;");	
+	  document.getElementById("dc_label_"+idlist[i]).setAttribute("style","display:;");
+	}
+}
+
+function grid_PA_show_modify(){
+	
+	var idlist=[];
+	idlist.push("enableflag","name","desc","mediumlength","alarmseverity","windfactor","alarmsensitivity","workmode");
+	//"mediumtype","sensitivity","sensitivity2","environmentfactor"
+	for(i in idlist)
+	{
+	  document.getElementById("pa_label_"+idlist[i]).setAttribute("style","display:none;");	
+	  document.getElementById("pa_input_"+idlist[i]).setAttribute("style","display:;");
+	  if(i==0)
+	  {
+		var index=1;
+		if(global_show_obj_PA[idlist[i]])
+		{
+			index=0;
+		}
+		document.getElementById("pa_input_radio_"+idlist[i]).selectedIndex=index;
+	  }
+	  else
+	  {		
+	  document.getElementById("pa_input_"+idlist[i]).value=global_show_obj_PA[idlist[i]];	
+	  }
+	}
+	
+	document.getElementById('pa_input_beginhour').value=global_show_obj_PA['enable_start'];
+	document.getElementById('pa_input_endhour').value=global_show_obj_PA['enable_end'];
+	document.getElementById('pa_label_enablehours').setAttribute('style','display:none;');
+	document.getElementById('pa_input_enablehours').setAttribute('style','display:;');
+	document.getElementById("pa_ob_alarmseverity").setAttribute('readonly',false);
+	//document.getElementById("pa_ob_alarmseverity").value=global_show_obj_PA['alarmseverity'];
+	document.getElementById("pa_ob_alarmseverity").setAttribute('readonly',true);	
+	document.getElementById("pa_ob_alarmsensitivity").setAttribute('readonly',false);
+	//document.getElementById("pa_ob_alarmsensitivity").value=global_show_obj_PA['alarmsensitivity'];
+	document.getElementById("pa_ob_alarmsensitivity").setAttribute('readonly',true);	
+	document.getElementById("pa_ob_windfactor").setAttribute('readonly',false);
+	//document.getElementById("pa_ob_windfactor").value=global_show_obj_PA['windfactor'];
+	document.getElementById("pa_ob_windfactor").setAttribute('readonly',true);	
+	document.getElementById("pa_ob_workmode").setAttribute('readonly',false);
+	//document.getElementById("pa_ob_workmode").value=global_show_obj_PA['workmode'];
+	document.getElementById("pa_ob_workmode").setAttribute('readonly',true);
+}
+
+function grid_PA_show_detail(){
+	var idlist=[];
+	idlist.push("enableflag","name","desc","mediumlength","alarmseverity","windfactor","alarmsensitivity","workmode");
+	//"mediumtype","sensitivity","sensitivity2","environmentfactor"
+	for(i in idlist)
+	{
+	  document.getElementById("pa_input_"+idlist[i]).setAttribute("style","display:none;");	
+	  document.getElementById("pa_label_"+idlist[i]).setAttribute("style","display:;");
+	}
+	document.getElementById('pa_label_enablehours').setAttribute('style','display:;');
+	document.getElementById('pa_input_enablehours').setAttribute('style','display:none;');
+}
+
+function do_select_row(){	
+var dc_tree=document.getElementById("dc_tree");
+var did=dc_tree.view.getCellText(dc_tree.currentIndex,dc_tree.columns.getNamedColumn('A'));
+var pid=dc_tree.view.getCellText(dc_tree.currentIndex,dc_tree.columns.getNamedColumn('B'));
+var number=dc_tree.view.getCellText(dc_tree.currentIndex,dc_tree.columns.getNamedColumn('C'));
+global_edit_DC_PA=-1;// 
+    if(pid=='--')
+    {
+       global_show_DC_PA=0;
+        var sdc;//  获得dc信息
+        var res=fetch_DC_obj(did);
+         if(!res.flag){
+	       GREUtils.Dialog.alert(strbun.getString("alert"),"fail to get dc");
+	      return;
+           }
+           sdc=res.dc;
+           global_show_obj_DC=sdc;
+           show_DC_detail(sdc);
+     }
+    else
+    {
+	global_show_DC_PA=1;
+	var spa;//获得 pa信息
+	var res=fetch_PA_obj(did,pid);
+	if(!res.flag){
+	     GREUtils.Dialog.alert(strbun.getString("alert"),"fail to get pa");
+	     return;
+          }
+         spa=res.pa;	 
+	global_show_obj_PA=spa;
+	show_PA_detail(spa);
+   }
+}
+
+function apply_modification()
+{
+ var strbun=document.getElementById("dc_management_str");
+ if(global_edit_DC_PA==0)//修改DC信息
+ {
+	var ids=[];
+	ids.push("enableflag","name","desc","mediumtype","sensitivity","sensitivity2","environmentfactor");
+	var newenableflag=document.getElementById("dc_input_radio_enableflag").selectedIndex;
+	var newname=document.getElementById("dc_input_name").value;
+	var newdesc=document.getElementById("dc_input_desc").value;
+	var newmediumtype=document.getElementById("dc_input_mediumtype").value;
+	var newsensi=document.getElementById("dc_input_sensitivity").value;
+	var newsensi2=document.getElementById("dc_input_sensitivity2").value;
+	var newenvfactor=document.getElementById("dc_input_environmentfactor").value;
+	var did=global_show_obj_DC.did;	
+	did=parseInt(did);
+	var enable=true;	 
+	if(newenableflag==1) {enable=false;}
+          for(di=0;di<Ifpms.Xpcom.DCMgmt.dc_list.length;di++)
+          {
+               var candc=Ifpms.Xpcom.DCMgmt.dc_list.queryElementAt(di,Components.interfaces.nsIPyIfpmsDC);
+               if(candc.did==did)
+               {
+                  candc.enable=enable;
+                  candc.name=newname;
+	          candc.desc=newdesc;
+	          candc.medium_type=newmediumtype;
+	          candc.sensitivity=newsensi;
+	          candc.sensitivity2=newsensi2;
+	          candc.env_factor=newenvfactor;
+               }        
+          }
+	  Refresh_DC_info();
+	  global_show_DC_PA=0;
+	   var  res=fetch_DC_obj(did);
+           if(res.flag)
+           {
+	    global_show_obj_DC=res.dc;
+	    show_DC_detail(global_show_obj_DC);
+           }
+         else{
+	    GREUtils.Dialog.alert(strbun.getString("alert"),strbun.getString("fail_to_fetch_DC"));
+          }
+ }
+ else if(global_edit_DC_PA==1)
+ {      
+      var ids=[];
+      ids.push("name","desc","mediumlength","alarmseverity","windfactor","alarmsensitivity","workmode");
+      //"mediumtype","sensitivity","sensitivity2",,"environmentfactor"
+      var pid=global_show_obj_PA.pid;
+      var did=global_show_obj_PA.did;
+      var newpa={};
+      newpa.pid=pid;
+      var newenableflag=document.getElementById("pa_input_radio_enableflag").selectedIndex;
+      newpa.enableflag=newenableflag;
+      var ena=false;
+      if(newpa.enableflag==0){ena=true;}
+      for (i in ids)
+      {
+	newpa[ids[i]]=document.getElementById("pa_input_"+ids[i]).value;
+      }
+      newpa['enable_start']=document.getElementById('pa_input_beginhour').value;
+      newpa['enable_end']=document.getElementById('pa_input_endhour').value;
+      var str='';
+      for(i in newpa)
+      {
+	str+=newpa[i]+" ";
+      }
+      for(var i=0;i<Ifpms.Xpcom.DCMgmt.pa_list.length; i++)
+      {
+             var modpa = Ifpms.Xpcom.DCMgmt.pa_list.queryElementAt(i,Components.interfaces.nsIPyIfpmsPA);
+	     if(modpa.did==did&&modpa.pid==pid)
+	     {
+                  modpa.name=newpa.name;
+                  modpa.desc=newpa.desc;
+		  modpa.enable=ena;
+                  modpa.medium_len=newpa.mediumlength;
+                  modpa.alarm_sensitivity=newpa.alarmsensitivity;
+		  modpa.work_mode=newpa.workmode;
+                  modpa.alarm_severity=newpa.alarmseverity;
+                  modpa.wind_factor=newpa.windfactor;
+		  modpa.enable_start=newpa['enable_start'];
+		  modpa.enable_end=newpa['enable_end'];
+		  //jsdump('pa enable start end :'+modpa.enable_start+" "+modpa.enable_end);
+		  
+	    }
+      }
+     Refresh_DC_info();
+     global_show_DC_PA=1;
+     var res=fetch_PA_obj(did,pid);
+     if(res.flag)
+     {
+     global_show_obj_PA=res.pa;
+     show_PA_detail(global_show_obj_PA);
+     }
+     else{
+	GREUtils.Dialog.alert(strbun.getString("alert"),strbun.getString("fail_to_fetch_PA"));
+     }
+  }
+}
+
+function do_delete_item()
+{
+var strbun=document.getElementById("dc_management_str"); 
+if(global_show_DC_PA==0)
+{
+	var did=global_show_obj_DC.did;
+        var strconfirm=strbun.getFormattedString('removedcconfirm',[did]);          	
+	if(!GREUtils.Dialog.confirm(strbun.getString("confirm"),strconfirm))
+	{
+		return;
+	}
+	Ifpms.Xpcom.DCMgmt.removeDC(did);//删除DC
+	Refresh_DC_info();//刷新 DC tree
+	return;
+}
+else if(global_show_DC_PA==1)
+{
+	var did=global_show_obj_PA.did;
+	var pid=global_show_obj_PA.pid;
+	return;	
+}
+
+	GREUtils.Dialog.alert(strbun.getString("alert"),strbun.getString("choose_DC_todelete"));
+}
+function Add_DC()
+{
+Refresh_DC_info();
+var re={};
+var para={};
+this.openDialog("chrome://ifpms/content/Add_pa.xul","","chrome, dialog, modal",para).focus();
+if(para.pa.ipaddr)
+{
+	var maxdid=0;
+	for(i in global_DC_list)
+	{
+		if(global_DC_list[i].did>maxdid)
+		{
+			maxdid=global_DC_list[i].did;
+		}			
+	}
+	var strbun=document.getElementById("dc_management_str");
+	var ndc=Ifpms.Xpcom.DCMgmt.createDC(para.pa.dc_type,para.pa.ipaddr,para.pa.pa_num,maxdid+1,re);
+	if(re.value!=0)
+	{
+		var str=strbun.getString("ip_exist");//"IP地址已存在";
+		if(re.value==-1)
+		{
+		   str=strbun.getString("invalid_ipaddr");//"无效的IP地址";	
+		}
+	       GREUtils.Dialog.alert(strbun.getString("alert"),str);
+	}
+	else{
+            Refresh_DC_info();
+	     //  周界监控对应添加  防区信息 
+	}	
+}	
+}
+]]>
+</script>
+<stringbundleset >
+<stringbundle id="dc_management_str" src="chrome://ifpms/locale/dc_management.properties"/>
+</stringbundleset>
+<vbox id='DC_management' pack='start' flex='1' style='background-color:white;'> 
+	    <groupbox style="background-color:#dddddd"  flex='1' pack='start'>
+	    <hbox flex='10' >
+	    <vbox width='500px' > 
+	    <tree flex='2' id='dc_tree' onselect="do_select_row();" >
+            <treecols>
+	    <treecol flex='1' id='I' label='&maintance.dc;'	primary="true" /> 
+            <treecol flex="1" id="A" label="&maintance.dcid;" />
+            <treecol flex="1" id="B" label="&maintance.paid;"/>
+            <treecol flex="1" id="C" label="&maintance.serialnumber;"/>   
+            </treecols>
+            <treechildren id="topchildren" flex="1">
+	    </treechildren>
+             </tree>
+	     </vbox>	    
+ <vbox  flex='3'>
+ <hbox flex='1'> 
+	<grid id="DC_info" flex='1'  style="color:black;background:white;border:1px gray solid;-moz-border-radius: 10px;"  >
+	       <columns>
+	       <column flex='1' />
+	       <column flex='1' />			
+	       </columns>
+	       <rows>		
+	       <row style="background-color:rgb(235,234,219)">
+	       <label value='&maintance.attribute;' />
+	       <label value='&maintance.value;' />
+	       </row>	
+               <row style="border-top:1px  gray dashed;">
+	       <label class="margin_label" value="&maintance.dcid;" />
+	       <label class="margin_label" id="dc_label_did" value="dc1" />
+	       <!--<textbox  id='dc_input_id' style="display:none"  > </textbox>-->
+	        </row>
+	        <row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.serialnumber;" />
+	        <label class="margin_label" id='dc_label_number' value='xxx' />
+	        </row>	
+	        <row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.ipaddr;" /> 
+	        <label class="margin_label" id="dc_label_ipaddr"  value='xxx' />
+	        </row>
+	        <row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.macaddr;" /> 
+	        <label class="margin_label" id="dc_label_macaddr" value='xxx' />
+	        </row>
+		<row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.enableflag;" />
+	        <hbox>
+	        <label class="margin_label" id='dc_label_enableflag' value="...."  tooltiptext='&maintance.tip.dcenableflag;' />
+	        <vbox id="dc_input_enableflag" >
+		<radiogroup id="dc_input_radio_enableflag" tooltiptext='&maintance.tip.dcenableflag;' >
+		<radio label='&maintance.enable;' />
+		<radio label='&maintance.disable;' />
+		</radiogroup>
+	        </vbox>
+	        </hbox>
+	        </row>
+		
+
+		
+	        <row style="border-top:1px  gray dashed;">
+		<label class="margin_label" value='&maintance.devicename;'/>
+		<hbox>
+		<label class="margin_label" id='dc_label_name'  value=''/>
+		<textbox id='dc_input_name'  maxlength='100'></textbox>
+		</hbox>
+	        </row>
+	        <row style="border-top:1px  gray dashed;">
+		<label class="margin_label" value='&maintance.devicedesc;' />
+		<hbox> <label class="margin_label" id='dc_label_desc' value='' />
+		<textbox id='dc_input_desc' maxlength='100' ></textbox> </hbox>
+	        </row>	   
+        	<row style="border-top:1px  gray dashed;">
+                <label  class="margin_label"  value="&maintance.x-coordinate;" /> 
+                <label class="margin_label" id="dc_label_cx" value='xxx' />
+	        </row>	
+	        <row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.y-coordinate;" /> 
+	        <label  class="margin_label" id="dc_label_cy" value='xxx' />
+	        </row>
+		<row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.status;" /> 
+	        <label class="margin_label" id="dc_label_status" value='xxx' tooltiptext='0-undef 1-disconn 2-connect 3-fault' />	
+	        </row>
+		<row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.latest_change_time;" />
+	        <label class="margin_label" id="dc_label_lastest_change_time" value='xxx' />
+	        </row>
+	        <row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.producttype;" /> 
+	        <label class="margin_label" id="dc_label_product_type" value='xxx' tooltiptext='0-undef 1-IFP3800-DC 9-IFP3800-DC-J'/> 	
+	        </row>
+	        <row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.panumber;" /> 
+	        <label class="margin_label" id="dc_label_pa_number" value='xxx' />	 	
+	        </row>
+		<row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.productid;" /> 
+	        <label class="margin_label" id="dc_label_product_ID" value='xxx' />	
+	        </row>
+	        <row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.hwversion;" /> 
+	        <label class="margin_label" id="dc_label_hw_version" value='xxx' /> 	
+	        </row>
+	        <row style="border-top:1px  gray dashed;">
+	        <label class="margin_label" value="&maintance.swversion;" /> 
+	        <label class="margin_label"  id="dc_label_sw_version" value='xxx' /> 	
+	        </row>
+	      	<row style="border-top:1px  gray dashed;">
+		<label class="margin_label" value="&maintance.mediumtype;" />
+		<hbox>
+		<label class="margin_label"  id="dc_label_mediumtype" value="" />
+		<menulist id='dc_input_mediumtype'>
+                <menupopup>
+                <menuitem  label='&maintance.coated;'  value='0'  />
+                <menuitem  label='&maintance.hang1;' value='1' />
+                <menuitem  label='&maintance.hang2;' value='2' />
+		<menuitem  label='&maintance.hang3;' value='3' />
+                <menuitem  label='&maintance.hang4;' value='4' />			
+		<menuitem  label='&maintance.hang5;' value='5' />
+		<menuitem  label='&maintance.underground1;' value='6' />
+		<menuitem  label='&maintance.underground2;' value='7' />
+		<menuitem  label='&maintance.underground3;' value='8' />
+		<menuitem  label='&maintance.underground4;' value='9' />
+                </menupopup>
+		</menulist>
+		</hbox>
+		</row>
+	      	<row style="border-top:1px  gray dashed;">
+		<label  class="margin_label" value="&maintance.sensitivity;" />
+		<hbox>
+		<label class="margin_label"  id="dc_label_sensitivity" value="" tooltiptext='&maintance.tip.sensitivity;' />
+		<scale  id='dc_input_sensitivity' value='0'  min='0' max='9' tooltiptext='&maintance.tip.sensitivity;'  />
+		<textbox id='dc_ob_sensit' readonly='true'  width='32'  observes='dc_input_sensitivity' />
+		</hbox>
+		</row>
+		<row style="border-top:1px  gray dashed;">
+		<label  class="margin_label" value="&maintance.sensitivity2;" />
+		<hbox>
+		<label class="margin_label"  id="dc_label_sensitivity2" value="" tooltiptext='&maintance.tip.sensitivity2;' />
+		<scale  id='dc_input_sensitivity2' value='0'  min='0' max='9' tooltiptext='&maintance.tip.sensitivity2;'  />
+		<textbox id='dc_ob_sensit2' readonly='true'  width='32'  observes='dc_input_sensitivity2' />
+		</hbox>
+		</row>
+	      	<row style="border-top:1px  gray dashed;">
+		<label class="margin_label" value="&maintance.envfactor;" />
+		<hbox>
+		<label  class="margin_label"  id="dc_label_environmentfactor" value="" tooltiptext='&maintance.tip.envfactor;' />
+                <!--<textbox id='pa_input_environmentfactor' type="number" min='1' max='50'  />-->
+		<scale  id='dc_input_environmentfactor' value='1'  min='1' max='10' tooltiptext='&maintance.tip.envfactor;' />
+		<textbox id='dc_ob_envfac' readonly='true'  width='32' observes='dc_input_environmentfactor'/>
+		</hbox>
+		</row>
+	      </rows>
+	</grid>
+	<grid flex='1' id='PA_info' style="color:black;background:white;border:1px gray solid;-moz-border-radius: 10px;"  >
+		<columns>
+			<column flex='1' />
+			<column flex='1' />			
+		</columns>
+	   <rows>		
+	        <row style="background-color:rgb(235,234,219)">
+	         <label value='&maintance.attribute;' />
+	         <label value='&maintance.value;' />
+	        </row>
+	        <row style="border-top:1px  gray dashed;">
+		<label  class="margin_label" value="&maintance.paid;" />
+		<label class="margin_label" id="pa_label_pid" value="...." />
+		</row>
+	        <row style="border-top:1px  gray dashed;">
+		<label class='margin_label' value="&maintance.dcid;" />
+		<label class="margin_label" id="pa_label_did" value="...." />
+		</row>
+		<row style="border-top:1px  gray dashed;">
+		<label class='margin_label' value="&maintance.serialnumber;" />
+		<label class="margin_label" id="pa_label_number" value="...." />
+		</row>
+		<row style="border-top:1px  gray dashed;">
+		<label class='margin_label' value="&maintance.paname;" />
+		<hbox>
+		<label class="margin_label" id="pa_label_name" value="" />
+                <textbox id='pa_input_name' maxlength='100' ></textbox>
+		</hbox>
+		</row>
+		<row style="border-top:1px  gray dashed;">
+		<label class='margin_label' value="&maintance.padesc;" />
+		<hbox>
+		<label class="margin_label" id="pa_label_desc" value="" />
+                <textbox id='pa_input_desc'  maxlength='100' ></textbox>
+		</hbox>
+		</row>
+	      <row style="border-top:1px  gray dashed;">
+	      <label  class="margin_label" value="&maintance.enableflag;" />
+	      <hbox>
+	      <label class="margin_label" id='pa_label_enableflag' value="...." tooltiptext='&maintance.tip.paenableflag;' />
+	      <vbox id="pa_input_enableflag" >
+		<radiogroup id="pa_input_radio_enableflag" tooltiptext='&maintance.tip.paenableflag;'>
+			<radio label='&maintance.enable;'/>
+			<radio label='&maintance.disable;' />
+		</radiogroup>
+	      </vbox>
+	      </hbox>
+	      </row>
+	      
+	      	<row style="border-top:1px  gray dashed;">
+		<hbox >
+		<label class="margin_label" value='布防时间' pack='center' />
+		</hbox>
+		<hbox >
+		<label  class="margin_label" id='pa_label_enablehours' value='0:00-12:00' />
+		<hbox    style='border:1px red dashed;' id='pa_input_enablehours' >
+		<label   style='padding-top:10px;' value='起始时间 ' />
+		<textbox type='number'  id='pa_input_beginhour' width='50' min='0' max='23' />
+		<label   style='padding-top:10px;'  value='结束时间 ' />
+		<textbox  type='number'  id='pa_input_endhour' width='50' min='0' max='23' />
+		</hbox>
+		</hbox>
+		</row>
+	        <row style="border-top:1px  gray dashed;">
+		<label class="margin_label" value="&maintance.paxcoor;" />
+		<hbox>
+		<label class="margin_label" id="pa_label_cx" value="" />
+		</hbox>
+		</row>
+		<row style="border-top:1px  gray dashed;">
+		<label class="margin_label" value="&maintance.paycoor;" />
+		<hbox>
+		<label class="margin_label" id="pa_label_cy" value="" />
+		</hbox>
+		</row>
+		<row style="border-top:1px  gray dashed;">
+		<label class="margin_label" value="&maintance.pastatus;" />
+		<hbox>
+		<label class="margin_label" id="pa_label_status" value=""  tooltiptext='&maintance.tip.status;'/>
+		</hbox>
+		</row>
+		<row style="border-top:1px  gray dashed;">
+		<label class="margin_label" value="&maintance.length;" />
+		<hbox>
+		<label class="margin_label"  id="pa_label_mediumlength" value=""  tooltiptext='&maintance.tip.mediumlength;' />
+                <textbox id='pa_input_mediumlength' type="number" min='1' max='40' width='120' tooltiptext='&maintance.tip.mediumlength;'></textbox>
+		</hbox>
+		</row>
+		<row style="border-top:1px  gray dashed;">
+		<label  class="margin_label" value="&maintance.alarmseverity;" />
+		<hbox>
+		<label class="margin_label"   id="pa_label_alarmseverity" value="" tooltiptext='&maintance.tip.alarmseverity;' />
+		<scale  id='pa_input_alarmseverity' value='1'  min='1' max='50' tooltiptext='&maintance.tip.alarmseverity;' />
+		<textbox id='pa_ob_alarmseverity'  width='32' readonly='true'  observes='pa_input_alarmseverity' />
+		</hbox>
+		</row>
+		<row style="border-top:1px  gray dashed;">
+		<label  class="margin_label" value="&maintance.alarmsensitivity;" />
+		<hbox>
+		<label class="margin_label"  id="pa_label_alarmsensitivity" value="" tooltiptext='&maintance.tip.alarmsensitivity;' />
+		<scale  id='pa_input_alarmsensitivity' value='0'  min='0' max='9' tooltiptext='&maintance.tip.alarmsensitivity;'  />
+		<textbox  id='pa_ob_alarmsensitivity' width='32' readonly='true' observes='pa_input_alarmsensitivity' />
+		</hbox>
+		</row>
+		<row style="border-top:1px  gray dashed;">
+		<label  class="margin_label" value="&maintance.workmode;" />
+		<hbox>
+		<label class="margin_label"  id="pa_label_workmode" value="" tooltiptext='&maintance.tip.workmode;' />
+		<scale  id='pa_input_workmode' value='0'  min='0' max='9' tooltiptext='&maintance.tip.workmode;'  />
+		<textbox  id='pa_ob_workmode'  width='32'  readonly='true' observes='pa_input_workmode' />
+		</hbox>
+		</row>
+		<row style="border-top:1px  gray dashed;">
+		<label class="margin_label" value="&maintance.windfacor;" />
+		<hbox>
+		<label  class="margin_label"  id="pa_label_windfactor" value="" tooltiptext='&maintance.tip.windfactor;' />
+		<scale  id='pa_input_windfactor'  value='0' min='0' max='3' tooltiptext='&maintance.tip.windfactor;' />
+		<textbox  id='pa_ob_windfactor' readonly='true'   width='32' observes='pa_input_windfactor' />
+		</hbox>	
+		</row>
+	        </rows>
+</grid>
+</hbox>	
+</vbox>
+<vbox>
+	<button label='&maintance.adddc;'   permission='1' class='sysbutton'  oncommand="Add_DC();" />
+ 	<button label='&maintance.modify;'  permission='1'  class='sysbutton' oncommand="do_modify();"/>
+	<button label='&maintance.apply;'   permission='1'  class='sysbutton' oncommand="apply_modification();" />
+	<button label='&maintance.remove;'  permission='1'  class='sysbutton' oncommand="do_delete_item();" />
+	<button label='&hlp.label;'  hlpid='zhoujieweihu'/>
+</vbox>
+<vbox></vbox>
+</hbox>
+</groupbox>
+</vbox>
+</overlay>

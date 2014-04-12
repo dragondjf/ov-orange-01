@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<bindings
+	xmlns="http://www.mozilla.org/xbl" 
+	xmlns:xbl="http://www.mozilla.org/xbl" 
+	xmlns:html="http://www.w3.org/1999/xhtml" 
+	xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:svg="http://www.w3.org/2000/svg" 
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+>
+	<binding id="map">
+		<implementation>
+			<field name="svg_shape_box"/>
+			<property name="disabled">
+				<getter>
+	<![CDATA[
+	return this.getAttribute('disabled') == 'true';
+	]]>
+				</getter>
+				<setter>
+	<![CDATA[
+  	if (val) {
+	  	this.setAttribute('disabled', 'true');
+  	}
+  	else {
+  		this.removeAttribute('disabled');
+  	}
+	return val;
+	]]>
+				</setter>
+			</property>			
+			<constructor>
+	<![CDATA[
+
+	Ifpms.Map.createSvgBox(this);
+
+	]]>
+			</constructor>
+            <method name="test">
+                <parameter name="dname"/>
+                <parameter name="x"/>
+                <parameter name="y"/>
+                <body>
+                <![CDATA[
+                
+			var v1 = "foo";
+
+                ]]>
+                </body>
+            </method>
+
+	</implementation>
+		
+		<resources>
+			<!-- <stylesheet src="perimeter-map.css" /> -->
+		</resources>
+		<content>
+		</content>
+	</binding>
+</bindings>
