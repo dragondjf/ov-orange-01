@@ -86,27 +86,27 @@ class LogoutHandler(tornado.web.RequestHandler):
         self.write("post")
 
 
-class PushStatusHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write("PushStatusHandler")
-
-    def post(self):
-        self.write("post")
-
-
-class SetProtectHandler(tornado.websocket.WebSocketHandler):
+class PushStatusHandler(tornado.websocket.WebSocketHandler):
     socket_handlers = set()
 
     def open(self):
-        WebsocketStatusHandler.socket_handlers.add(self)
+        PushStatusHandler.socket_handlers.add(self)
         logger.info("some client come in")
 
     def on_close(self):
-        WebsocketStatusHandler.socket_handlers.remove(self)
+        PushStatusHandler.socket_handlers.remove(self)
         logger.info("some client logout")
 
     def on_message(self, message):
         pass
+
+
+class SetProtectHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write("SetProtectHandler")
+
+    def post(self):
+        self.write("SetProtectHandler post")
 
 
 class NotFoundHandler(tornado.web.RequestHandler):
@@ -185,6 +185,7 @@ class RemoteThread(threading.Thread):
                 notification = {"did": did, "pid": pid, "sid": sid, "status": status, "status_change_time": status_change_time}
                 logger.info("================send========================")
                 logger.info(notification)
+                notification = simplejson.dumps(notification)
                 for handler in PushStatusHandler.socket_handlers:
                     try:
                         handler.write_message(notification)
