@@ -38,6 +38,6 @@ nosetests.xml
 # log file
 log/files/server.log
 
- v1.2/gui/chrome/etc/custom.conf
- v1.2/gui/log/ifpms.log
- v1.2/gui/log/package.log
+v1.2/gui/chrome/etc/custom.conf
+v1.2/gui/log/ifpms.log
+v1.2/gui/log/packet.log
