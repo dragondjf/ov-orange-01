@@ -1,0 +1,108 @@
+<html>
+<head>
+  <title>Evernote Export</title>
+  <basefont face="Tahoma" size="2" />
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  <meta name="exporter-version" content="Evernote Windows/270946 (zh-CN); Windows/6.3.9600;"/>
+  <style>
+    body, td {
+      font-family: Tahoma;
+      font-size: 10pt;
+    }
+  </style>
+</head>
+<body>
+<a name="395"/>
+
+<div><div><div style="position:relative"><a href="http://maxiang.info/?provider=evernote&guid=7c924c48-9f42-4b54-b5c8-1c26114ff43f" style="position:absolute;right:0px;background:#666;color:white;text-decoration:none;padding:3px 8px;border-radius:6px;font-size:12px;">编辑Markdown</a></div><div style="margin: 0; font-family: Monaco, Menlo, Ubuntu Mono, Consolas, source-code-pro,SimSun, Song, 宋体, 幼圆, Heiti, 黑体, 文泉驿等宽正黑, 文泉驿正黑, monospace; font-size: 13px;"><h1 style="font-size: 30px; margin: 10px 0; font-weight: bold; color: #444; text-rendering: optimizelegibility; line-height: 36px;">多客户端同时访问和视频联动弹窗基本实现方案——光纤安防产品管理软件</h1>
+<p style="margin: 0 0 9px; font-size: 13px; line-height: 18px;"><span>tags: </span><code style="font-size: 12px; padding: 3px 4px; color: #d14; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background-color: #f7f7f9; border: 1px solid #e1e1e8;">奥源</code> <code style="font-size: 12px; padding: 3px 4px; color: #d14; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background-color: #f7f7f9; border: 1px solid #e1e1e8;">B/S</code> <code style="font-size: 12px; padding: 3px 4px; color: #d14; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background-color: #f7f7f9; border: 1px solid #e1e1e8;">视频联动</code> </p>
+<h2 style="font-size: 24px; margin: 10px 0; font-weight: bold; color: #444; text-rendering: optimizelegibility; line-height: 36px;">下面方案的实现前提</h2>
+<ul style="margin: 0 0 9px 25px; padding: 0; list-style: disc;">
+<li style="line-height: 22px;">B/S模式，浏览器访问，可以不兼容IE6</li>
+<li style="line-height: 22px;">新功能与管理软件1.2打包在一起，即新功能在管理软件1.2的基础上扩展开发</li>
+<li style="line-height: 22px;">视频功能确认可以开放，一般为一下两种方式<ul style="margin: 0 0 9px 25px; padding: 0; margin-bottom: 0; list-style: disc;">
+<li style="line-height: 22px;">开放流媒体接口，可以每个防区方便的绑定视频流媒体通道号码(即URL标识)</li>
+<li style="line-height: 22px;">第三方视频联动提供更加友好的二次开发接口，支持浏览器访问（可以接受插件模式）</li>
+</ul>
+</li>
+</ul>
+<h2 style="font-size: 24px; margin: 10px 0; font-weight: bold; color: #444; text-rendering: optimizelegibility; line-height: 36px;">基本的软件部署形态</h2>
+<p style="margin: 0 0 9px; font-size: 13px; line-height: 18px;"><img src="Evernote.enex_files/Image.png" type="image/png" alt="Alt text" longdesc="data:image,local://q1.png" style="border: 0; -ms-interpolation-mode: bicubic;"/></p>
+<p style="margin: 0 0 9px; font-size: 13px; line-height: 18px;">说明，对需求和视频方面理解尚浅，不妥之处后面更改</p>
+<ul style="margin: 0 0 9px 25px; padding: 0; list-style: disc;">
+<li style="line-height: 22px;">1.打开管理软件，设置防区，包括设置每个防区对应的视频联动URL，<code style="font-size: 12px; padding: 3px 4px; color: #d14; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background-color: #f7f7f9; border: 1px solid #e1e1e8;">重点，这个URL对应6条目的视频联动流媒体URL</code></li>
+<li style="line-height: 22px;">2.浏览器端需要输入用户名密码，但暂时没有必要做权限管理</li>
+<li style="line-height: 22px;">3.浏览器端访问，回设防区报文暂时只有防区部署于撤销部署</li>
+<li style="line-height: 22px;">4.浏览器访问登陆后，会同步防区数目和状态，历史告警</li>
+<li style="line-height: 22px;">5.当管理软件有告警信号产生，通过webSocket及时的推送给浏览器客户端</li>
+<li style="line-height: 22px;">6.当有告警信号产生时，浏览器通过对应防区对应的视频流媒体URL播放即时画面</li>
+</ul>
+<p style="margin: 0 0 9px; font-size: 13px; line-height: 18px;">疑问</p>
+<ul style="margin: 0 0 9px 25px; padding: 0; list-style: disc;">
+<li style="line-height: 22px;">是否提供波形（音频文件访问和及时波形）播放功能</li>
+<li style="line-height: 22px;">是否考虑以后扩展其他的设置接口（比如算法参数）</li>
+<li style="line-height: 22px;">是否只管理一个区域，而不是N区域集控</li>
+<li style="line-height: 22px;">视频数据的传输访问流程是如何的</li>
+<li style="line-height: 22px;">浏览器端的电子地图是同步管理软件1.2的地图位置还是重新设置</li>
+<li style="line-height: 22px;"><code style="font-size: 12px; padding: 3px 4px; color: #d14; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background-color: #f7f7f9; border: 1px solid #e1e1e8;">重点</code>，视频的传输具体是如何设计的，看需求说明书，有几条TCP/IP通路，据我之前的了解，海康的视频机提供了流媒体的URL，个人认为我们只设置防区绑定对应摄像头流媒体URL比较好，具体还看相应研究人员的研究成果，查看其开发包提供的方案</li>
+</ul>
+<h2 style="font-size: 24px; margin: 10px 0; font-weight: bold; color: #444; text-rendering: optimizelegibility; line-height: 36px;">个人建议开发技术</h2>
+<h4 style="font-size: 14px; margin: 10px 0; font-weight: bold; color: #444; text-rendering: optimizelegibility; line-height: 18px;">1 管理软件1.2扩展部分</h4>
+<ul style="margin: 0 0 9px 25px; padding: 0; list-style: disc;">
+<li style="line-height: 22px;">防区与视频联动URL的绑定设置</li>
+<li style="line-height: 22px;">历史告警保存</li>
+<li style="line-height: 22px;">防区位置信息的收集保存（如果需要）<code style="font-size: 12px; padding: 3px 4px; color: #d14; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; background-color: #f7f7f9; border: 1px solid #e1e1e8;">调研管理软件1.2的防区位置信息是否已经保存或者可以保存</code></li>
+</ul>
+<h4 style="font-size: 14px; margin: 10px 0; font-weight: bold; color: #444; text-rendering: optimizelegibility; line-height: 18px;">2 新加webServer部分</h4>
+<ul style="margin: 0 0 9px 25px; padding: 0; list-style: disc;">
+<li style="line-height: 22px;">前端<ul style="margin: 0 0 9px 25px; padding: 0; margin-bottom: 0; list-style: disc;">
+<li style="line-height: 22px;">调研google静态地图的API（前端）<ul style="margin: 0 0 9px 25px; padding: 0; margin-bottom: 0; list-style: disc;">
+<li style="line-height: 22px;">图片切分（后端）</li>
+<li style="line-height: 22px;">地图描点（地波）</li>
+<li style="line-height: 22px;">弹框制作（视频）</li>
+<li style="line-height: 22px;">描点移动</li>
+<li style="line-height: 22px;">地图画边线框（周界）</li>
+</ul>
+</li>
+<li style="line-height: 22px;">登陆界面</li>
+<li style="line-height: 22px;">历史报警界面</li>
+<li style="line-height: 22px;">告警图表（是否需要）</li>
+</ul>
+</li>
+<li style="line-height: 22px;">后端<ul style="margin: 0 0 9px 25px; padding: 0; margin-bottom: 0; list-style: disc;">
+<li style="line-height: 22px;">webserver的选择（bottle或者Tornado）</li>
+<li style="line-height: 22px;">数据库（看后期需要）SQLite</li>
+<li style="line-height: 22px;">图片切片</li>
+<li style="line-height: 22px;">防区信息Handler</li>
+<li style="line-height: 22px;">告警历史Handler</li>
+<li style="line-height: 22px;">登陆验证</li>
+<li style="line-height: 22px;">即时状态保持与推送</li>
+</ul>
+</li>
+</ul>
+<h2 style="font-size: 24px; margin: 10px 0; font-weight: bold; color: #444; text-rendering: optimizelegibility; line-height: 36px;">总结</h2>
+<ul style="margin: 0 0 9px 25px; padding: 0; list-style: disc;">
+<li style="line-height: 22px;">前端工作相对多，但多数技术曾经接触过<ul style="margin: 0 0 9px 25px; padding: 0; margin-bottom: 0; list-style: disc;">
+<li style="line-height: 22px;">goole static map （管理软件2.0使用过）</li>
+<li style="line-height: 22px;">前端波形查看-若需要（管理软件2.0使用过）</li>
+<li style="line-height: 22px;">报表</li>
+<li style="line-height: 22px;">websocke</li>
+<li style="line-height: 22px;">海康流媒体视频（做管理软件2.0调研过）</li>
+</ul>
+</li>
+<li style="line-height: 22px;">建议与V1.2做在一起<ul style="margin: 0 0 9px 25px; padding: 0; margin-bottom: 0; list-style: disc;">
+<li style="line-height: 22px;">好处<ul style="margin: 0 0 9px 25px; padding: 0; margin-bottom: 0; list-style: disc;">
+<li style="line-height: 22px;">不用同步数据</li>
+<li style="line-height: 22px;">部署方便</li>
+</ul>
+</li>
+<li style="line-height: 22px;">坏处<ul style="margin: 0 0 9px 25px; padding: 0; margin-bottom: 0; list-style: disc;">
+<li style="line-height: 22px;">不好做多个区域集控</li>
+</ul>
+</li>
+</ul>
+</li>
+<li style="line-height: 22px;">建议先定视频联动技术方案</li>
+</ul>
+</div><center style="display:none">%0A%u591A%u5BA2%u6237%u7AEF%u540C%u65F6%u8BBF%u95EE%u548C%u89C6%u9891%u8054%u52A8%u5F39%u7A97%u57FA%u672C%u5B9E%u73B0%u65B9%u6848%u2014%u2014%u5149%u7EA4%u5B89%u9632%u4EA7%u54C1%u7BA1%u7406%u8F6F%u4EF6%0A%3D%3D%3D%3D%3D%3D%3D%3D%3D%0A%0A@%28ToDoList%29%5B%u5965%u6E90%7CB/S%7C%u89C6%u9891%u8054%u52A8%5D%0A%0A%0A%23%23%20%u4E0B%u9762%u65B9%u6848%u7684%u5B9E%u73B0%u524D%u63D0%0A%20%20+%20B/S%u6A21%u5F0F%uFF0C%u6D4F%u89C8%u5668%u8BBF%u95EE%uFF0C%u53EF%u4EE5%u4E0D%u517C%u5BB9IE6%0A%20%20+%20%u65B0%u529F%u80FD%u4E0E%u7BA1%u7406%u8F6F%u4EF61.2%u6253%u5305%u5728%u4E00%u8D77%uFF0C%u5373%u65B0%u529F%u80FD%u5728%u7BA1%u7406%u8F6F%u4EF61.2%u7684%u57FA%u7840%u4E0A%u6269%u5C55%u5F00%u53D1%0A%20%20+%20%u89C6%u9891%u529F%u80FD%u786E%u8BA4%u53EF%u4EE5%u5F00%u653E%uFF0C%u4E00%u822C%u4E3A%u4E00%u4E0B%u4E24%u79CD%u65B9%u5F0F%0A%20%20%20%20-%20%u5F00%u653E%u6D41%u5A92%u4F53%u63A5%u53E3%uFF0C%u53EF%u4EE5%u6BCF%u4E2A%u9632%u533A%u65B9%u4FBF%u7684%u7ED1%u5B9A%u89C6%u9891%u6D41%u5A92%u4F53%u901A%u9053%u53F7%u7801%28%u5373URL%u6807%u8BC6%29%0A%20%20%20%20-%20%u7B2C%u4E09%u65B9%u89C6%u9891%u8054%u52A8%u63D0%u4F9B%u66F4%u52A0%u53CB%u597D%u7684%u4E8C%u6B21%u5F00%u53D1%u63A5%u53E3%uFF0C%u652F%u6301%u6D4F%u89C8%u5668%u8BBF%u95EE%uFF08%u53EF%u4EE5%u63A5%u53D7%u63D2%u4EF6%u6A21%u5F0F%uFF09%0A%0A%23%23%20%u57FA%u672C%u7684%u8F6F%u4EF6%u90E8%u7F72%u5F62%u6001%0A%0A%21%5BAlt%20text%5D%28data%3Aimage%2Clocal%3A//q1.png%29%0A%0A%u8BF4%u660E%uFF0C%u5BF9%u9700%u6C42%u548C%u89C6%u9891%u65B9%u9762%u7406%u89E3%u5C1A%u6D45%uFF0C%u4E0D%u59A5%u4E4B%u5904%u540E%u9762%u66F4%u6539%0A%0A%20%20+%201.%u6253%u5F00%u7BA1%u7406%u8F6F%u4EF6%uFF0C%u8BBE%u7F6E%u9632%u533A%uFF0C%u5305%u62EC%u8BBE%u7F6E%u6BCF%u4E2A%u9632%u533A%u5BF9%u5E94%u7684%u89C6%u9891%u8054%u52A8URL%uFF0C%60%u91CD%u70B9%uFF0C%u8FD9%u4E2AURL%u5BF9%u5E946%u6761%u76EE%u7684%u89C6%u9891%u8054%u52A8%u6D41%u5A92%u4F53URL%60%0A%20%20+%202.%u6D4F%u89C8%u5668%u7AEF%u9700%u8981%u8F93%u5165%u7528%u6237%u540D%u5BC6%u7801%uFF0C%u4F46%u6682%u65F6%u6CA1%u6709%u5FC5%u8981%u505A%u6743%u9650%u7BA1%u7406%0A%20%20+%203.%u6D4F%u89C8%u5668%u7AEF%u8BBF%u95EE%uFF0C%u56DE%u8BBE%u9632%u533A%u62A5%u6587%u6682%u65F6%u53EA%u6709%u9632%u533A%u90E8%u7F72%u4E8E%u64A4%u9500%u90E8%u7F72%0A%20%20+%204.%u6D4F%u89C8%u5668%u8BBF%u95EE%u767B%u9646%u540E%uFF0C%u4F1A%u540C%u6B65%u9632%u533A%u6570%u76EE%u548C%u72B6%u6001%uFF0C%u5386%u53F2%u544A%u8B66%0A%20%20+%205.%u5F53%u7BA1%u7406%u8F6F%u4EF6%u6709%u544A%u8B66%u4FE1%u53F7%u4EA7%u751F%uFF0C%u901A%u8FC7webSocket%u53CA%u65F6%u7684%u63A8%u9001%u7ED9%u6D4F%u89C8%u5668%u5BA2%u6237%u7AEF%0A%20%20+%206.%u5F53%u6709%u544A%u8B66%u4FE1%u53F7%u4EA7%u751F%u65F6%uFF0C%u6D4F%u89C8%u5668%u901A%u8FC7%u5BF9%u5E94%u9632%u533A%u5BF9%u5E94%u7684%u89C6%u9891%u6D41%u5A92%u4F53URL%u64AD%u653E%u5373%u65F6%u753B%u9762%0A%0A%u7591%u95EE%0A%20%20+%20%u662F%u5426%u63D0%u4F9B%u6CE2%u5F62%uFF08%u97F3%u9891%u6587%u4EF6%u8BBF%u95EE%u548C%u53CA%u65F6%u6CE2%u5F62%uFF09%u64AD%u653E%u529F%u80FD%0A%20%20+%20%u662F%u5426%u8003%u8651%u4EE5%u540E%u6269%u5C55%u5176%u4ED6%u7684%u8BBE%u7F6E%u63A5%u53E3%uFF08%u6BD4%u5982%u7B97%u6CD5%u53C2%u6570%uFF09%0A%20%20+%20%u662F%u5426%u53EA%u7BA1%u7406%u4E00%u4E2A%u533A%u57DF%uFF0C%u800C%u4E0D%u662FN%u533A%u57DF%u96C6%u63A7%0A%20%20+%20%u89C6%u9891%u6570%u636E%u7684%u4F20%u8F93%u8BBF%u95EE%u6D41%u7A0B%u662F%u5982%u4F55%u7684%0A%20%20+%20%u6D4F%u89C8%u5668%u7AEF%u7684%u7535%u5B50%u5730%u56FE%u662F%u540C%u6B65%u7BA1%u7406%u8F6F%u4EF61.2%u7684%u5730%u56FE%u4F4D%u7F6E%u8FD8%u662F%u91CD%u65B0%u8BBE%u7F6E%0A%20%20+%20%60%u91CD%u70B9%60%uFF0C%u89C6%u9891%u7684%u4F20%u8F93%u5177%u4F53%u662F%u5982%u4F55%u8BBE%u8BA1%u7684%uFF0C%u770B%u9700%u6C42%u8BF4%u660E%u4E66%uFF0C%u6709%u51E0%u6761TCP/IP%u901A%u8DEF%uFF0C%u636E%u6211%u4E4B%u524D%u7684%u4E86%u89E3%uFF0C%u6D77%u5EB7%u7684%u89C6%u9891%u673A%u63D0%u4F9B%u4E86%u6D41%u5A92%u4F53%u7684URL%uFF0C%u4E2A%u4EBA%u8BA4%u4E3A%u6211%u4EEC%u53EA%u8BBE%u7F6E%u9632%u533A%u7ED1%u5B9A%u5BF9%u5E94%u6444%u50CF%u5934%u6D41%u5A92%u4F53URL%u6BD4%u8F83%u597D%uFF0C%u5177%u4F53%u8FD8%u770B%u76F8%u5E94%u7814%u7A76%u4EBA%u5458%u7684%u7814%u7A76%u6210%u679C%uFF0C%u67E5%u770B%u5176%u5F00%u53D1%u5305%u63D0%u4F9B%u7684%u65B9%u6848%0A%0A%0A%23%23%20%u4E2A%u4EBA%u5EFA%u8BAE%u5F00%u53D1%u6280%u672F%0A%0A%23%23%23%23%201%20%u7BA1%u7406%u8F6F%u4EF61.2%u6269%u5C55%u90E8%u5206%0A%20%20+%20%u9632%u533A%u4E0E%u89C6%u9891%u8054%u52A8URL%u7684%u7ED1%u5B9A%u8BBE%u7F6E%0A%20%20+%20%u5386%u53F2%u544A%u8B66%u4FDD%u5B58%0A%20%20+%20%u9632%u533A%u4F4D%u7F6E%u4FE1%u606F%u7684%u6536%u96C6%u4FDD%u5B58%uFF08%u5982%u679C%u9700%u8981%uFF09%60%u8C03%u7814%u7BA1%u7406%u8F6F%u4EF61.2%u7684%u9632%u533A%u4F4D%u7F6E%u4FE1%u606F%u662F%u5426%u5DF2%u7ECF%u4FDD%u5B58%u6216%u8005%u53EF%u4EE5%u4FDD%u5B58%60%0A%0A%23%23%23%23%202%20%u65B0%u52A0webServer%u90E8%u5206%0A%20+%20%u524D%u7AEF%0A%20%20+%20%u8C03%u7814google%u9759%u6001%u5730%u56FE%u7684API%uFF08%u524D%u7AEF%uFF09%0A%20%20%20%20+%20%u56FE%u7247%u5207%u5206%uFF08%u540E%u7AEF%uFF09%0A%20%20%20%20+%20%u5730%u56FE%u63CF%u70B9%uFF08%u5730%u6CE2%uFF09%0A%20%20%20%20+%20%u5F39%u6846%u5236%u4F5C%uFF08%u89C6%u9891%uFF09%0A%20%20%20%20+%20%u63CF%u70B9%u79FB%u52A8%0A%20%20%20%20+%20%u5730%u56FE%u753B%u8FB9%u7EBF%u6846%uFF08%u5468%u754C%uFF09%0A%20%20+%20%u767B%u9646%u754C%u9762%0A%20%20+%20%u5386%u53F2%u62A5%u8B66%u754C%u9762%0A%20%20+%20%u544A%u8B66%u56FE%u8868%uFF08%u662F%u5426%u9700%u8981%uFF09%0A%20+%20%u540E%u7AEF%0A%20%20+%20webserver%u7684%u9009%u62E9%uFF08bottle%u6216%u8005Tornado%uFF09%0A%20%20+%20%u6570%u636E%u5E93%uFF08%u770B%u540E%u671F%u9700%u8981%uFF09SQLite%0A%20%20+%20%u56FE%u7247%u5207%u7247%0A%20%20+%20%u9632%u533A%u4FE1%u606FHandler%0A%20%20+%20%u544A%u8B66%u5386%u53F2Handler%0A%20%20+%20%u767B%u9646%u9A8C%u8BC1%0A%20%20+%20%u5373%u65F6%u72B6%u6001%u4FDD%u6301%u4E0E%u63A8%u9001%0A%0A%0A%23%23%20%u603B%u7ED3%0A%20%20+%20%u524D%u7AEF%u5DE5%u4F5C%u76F8%u5BF9%u591A%uFF0C%u4F46%u591A%u6570%u6280%u672F%u66FE%u7ECF%u63A5%u89E6%u8FC7%0A%20%20%20%20+%20goole%20static%20map%20%uFF08%u7BA1%u7406%u8F6F%u4EF62.0%u4F7F%u7528%u8FC7%uFF09%0A%20%20%20%20+%20%u524D%u7AEF%u6CE2%u5F62%u67E5%u770B-%u82E5%u9700%u8981%uFF08%u7BA1%u7406%u8F6F%u4EF62.0%u4F7F%u7528%u8FC7%uFF09%0A%20%20%20%20+%20%u62A5%u8868%0A%20%20%20%20+%20websocke%0A%20%20%20%20+%20%u6D77%u5EB7%u6D41%u5A92%u4F53%u89C6%u9891%uFF08%u505A%u7BA1%u7406%u8F6F%u4EF62.0%u8C03%u7814%u8FC7%uFF09%0A%20%20+%20%u5EFA%u8BAE%u4E0EV1.2%u505A%u5728%u4E00%u8D77%0A%20%20%20%20+%20%u597D%u5904%0A%20%20%20%20%20%20+%20%u4E0D%u7528%u540C%u6B65%u6570%u636E%0A%20%20%20%20%20%20+%20%u90E8%u7F72%u65B9%u4FBF%0A%20%20%20%20+%20%u574F%u5904%0A%20%20%20%20%20%20+%20%u4E0D%u597D%u505A%u591A%u4E2A%u533A%u57DF%u96C6%u63A7%0A%20%20+%20%u5EFA%u8BAE%u5148%u5B9A%u89C6%u9891%u8054%u52A8%u6280%u672F%u65B9%u6848%0A%20</center><br/></div>
+</div></body></html> 
