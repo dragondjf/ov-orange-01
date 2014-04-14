@@ -48,7 +48,7 @@ class GuiManger(QtCore.QObject):
 
         self.timer = QtCore.QTimer()
         self.timer.timeout.connect(self.statusChange)
-        self.timer.start(1000)
+        #self.timer.start(1000)
         self.initData()
         self.initSignalConnect()
         self.initPAs()
@@ -61,7 +61,6 @@ class GuiManger(QtCore.QObject):
         signal_DB.pas_sin.connect(self.createItems)
         signal_DB.alarm_sin.connect(self.addItem)
         signal_DB.simpleAlarm_sin.connect(self.updatePAStatus)
-
 
     def initPAs(self):
         pas = []
@@ -124,7 +123,16 @@ class GuiManger(QtCore.QObject):
         item = self.paitems[sid]
         item.setPixmap(item.pixmaps[status])
 
-    @QtCore.pyqtSlot(list)
+    def statusManager(self, alarm):
+        '''
+        {"did": 1, "status": 2, "pid": 2, "status_change_time": 1397487425, "sid": "PA-1-2"}
+        '''
+        self.count += 1
+        alarmList = [self.count, alarm['status'], alarm['did'], alarm['pid'], alarm['status_change_time'], alarm['sid'], "yes"]
+        self.addItem(alarmList)
+        simpleAlarm = {'sid': alarm['sid'], 'status': alarm['status']}
+        self.updatePAStatus(simpleAlarm)
+
     def addItem(self, alarm):
         bgcolor = status_color[alarm[1]]
         bgBrush = QtGui.QBrush(QtGui.QColor(bgcolor))
