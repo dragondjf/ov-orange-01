@@ -75,14 +75,21 @@ import socket
 
 def get_ip_address(ifname="eth0"):
     import socket
-    if platform_is('windows', 'cygwin'):
+    if False:#platform_is('windows', 'cygwin'):
         ip = '127.0.0.1'
     else:
         myname = socket.getfqdn(socket.gethostname())
         ip = socket.gethostbyname(myname)
     if ip.startswith('127'):  # makes no sense
         import netifaces
-        ip = netifaces.ifaddresses(ifname)[netifaces.AF_INET][0]['addr']
+        print netifaces.AF_INET
+        
+        print netifaces.ifaddresses(ifname)
+        print ifname
+        try:
+            ip = netifaces.ifaddresses(ifname)[netifaces.AF_INET][0]['addr']
+        except:
+            ip = netifaces.ifaddresses("wlan0")[netifaces.AF_INET][0]['addr']
     return ip
 
 def get_mac_address(ifname):
