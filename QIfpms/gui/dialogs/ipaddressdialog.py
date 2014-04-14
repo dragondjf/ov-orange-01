@@ -52,9 +52,9 @@ class IPaddressDialog(BaseDialog):
 def ipaddressinput(options):
     dialog = IPaddressDialog(options)
     if dialog.exec_():
-        return True, dialog.ipLineEdit.text(), int(dialog.portLineEdit.text())
+        return True, (dialog.ipLineEdit.text(), int(dialog.portLineEdit.text()))
     else:
-        return False, dialog.ipLineEdit.text(), int(dialog.portLineEdit.text())
+        return False, (dialog.ipLineEdit.text(), int(dialog.portLineEdit.text()))
 
 
 if __name__ == '__main__':

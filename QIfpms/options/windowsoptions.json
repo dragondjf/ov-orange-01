@@ -1,131 +1,147 @@
 {
-    "ipaddressdialog": {
-        "title": "\u8f93\u5165\u8bbf\u95ee\u7684url", 
-        "minsize": [
-            400, 
-            300
-        ], 
-        "size": [
-            400, 
-            300
-        ], 
+    "viewbgfile": "E:/ov-orange-01/QIfpms/gui/skin/images/compayimage.jpg", 
+    "msgdialog": {
         "logo_img_url": "gui/skin/images/ov-orange-green.png", 
         "windowicon": [
             "gui/skin/images/ov-orange-logo.png"
         ], 
-        "logo_title": ""
-    }, 
-    "mainwindow": {
-        "title": "QIFPMS", 
-        "icon": "gui/skin/images/ov-orange-logo.png", 
-        "minsize": [
-            0.4, 
-            0.3
-        ], 
-        "fullscreenflag": false, 
+        "logo_title": "", 
         "size": [
-            0.8, 
-            0.9
+            400, 
+            300
+        ], 
+        "title": "\u6d88\u606f\u63d0\u793a", 
+        "minsize": [
+            400, 
+            300
         ]
     }, 
-    "msgdialog": {
-        "title": "\u6d88\u606f\u63d0\u793a", 
-        "minsize": [
-            400, 
-            300
-        ], 
-        "size": [
-            400, 
-            300
-        ], 
-        "logo_img_url": "gui/skin/images/ov-orange-green.png", 
-        "windowicon": [
-            "gui/skin/images/ov-orange-logo.png"
-        ], 
-        "logo_title": ""
-    }, 
-    "splashimg": "d:\\ov-orange-01\\QIfpms\\skin\\images\\splash.png", 
-    "viewWidth": 1118, 
-    "confirmdialog": {
-        "title": "\u6d88\u606f\u63d0\u793a", 
-        "minsize": [
-            400, 
-            300
-        ], 
-        "size": [
-            400, 
-            300
-        ], 
-        "logo_img_url": "gui/skin/images/ov-orange-green.png", 
-        "windowicon": [
-            "gui/skin/images/ov-orange-logo.png"
-        ], 
-        "logo_title": ""
-    }, 
-    "viewbgfile": "D:/ov-orange-01/QIfpms/gui/skin/images/UI  Login/26.png", 
-    "numinputdialog": {
-        "title": "\u8f93\u5165\u6574\u6570", 
-        "minsize": [
-            400, 
-            300
-        ], 
-        "size": [
-            400, 
-            300
-        ], 
-        "logo_img_url": "gui/skin/images/ov-orange-green.png", 
-        "windowicon": [
-            "gui/skin/images/ov-orange-logo.png"
-        ], 
-        "logo_title": ""
-    }, 
     "login_window": {
+        "logo_img_url": "gui/skin/images/ov-orange-green.png", 
+        "windowicon": [
+            "gui/skin/images/ov-orange-logo.png"
+        ], 
+        "logo_title": "", 
+        "size": [
+            400, 
+            300
+        ], 
         "title": "\u767b\u9646", 
         "minsize": [
             400, 
             300
-        ], 
-        "size": [
-            400, 
-            300
-        ], 
+        ]
+    }, 
+    "weblogin_window": {
         "logo_img_url": "gui/skin/images/ov-orange-green.png", 
         "windowicon": [
             "gui/skin/images/ov-orange-logo.png"
         ], 
-        "logo_title": ""
-    }, 
-    "viewHeight": 653, 
-    "exitdialog": {
-        "title": "\u9000\u51fa", 
+        "logo_title": "", 
+        "size": [
+            400, 
+            300
+        ], 
+        "title": "\u767b\u9646", 
         "minsize": [
             400, 
             300
-        ], 
-        "size": [
-            400, 
-            300
-        ], 
+        ]
+    }, 
+    "ipaddressdialog": {
         "logo_img_url": "gui/skin/images/ov-orange-green.png", 
         "windowicon": [
             "gui/skin/images/ov-orange-logo.png"
         ], 
-        "logo_title": ""
-    }, 
-    "urldialog": {
+        "logo_title": "", 
+        "size": [
+            400, 
+            300
+        ], 
         "title": "\u8f93\u5165\u8bbf\u95ee\u7684url", 
         "minsize": [
             400, 
             300
-        ], 
-        "size": [
-            400, 
-            300
-        ], 
+        ]
+    }, 
+    "numinputdialog": {
         "logo_img_url": "gui/skin/images/ov-orange-green.png", 
         "windowicon": [
             "gui/skin/images/ov-orange-logo.png"
         ], 
-        "logo_title": ""
+        "logo_title": "", 
+        "size": [
+            400, 
+            300
+        ], 
+        "title": "\u8f93\u5165\u6574\u6570", 
+        "minsize": [
+            400, 
+            300
+        ]
+    }, 
+    "viewHeight": 653, 
+    "confirmdialog": {
+        "logo_img_url": "gui/skin/images/ov-orange-green.png", 
+        "windowicon": [
+            "gui/skin/images/ov-orange-logo.png"
+        ], 
+        "logo_title": "", 
+        "size": [
+            400, 
+            300
+        ], 
+        "title": "\u6d88\u606f\u63d0\u793a", 
+        "minsize": [
+            400, 
+            300
+        ]
+    }, 
+    "exitdialog": {
+        "logo_img_url": "gui/skin/images/ov-orange-green.png", 
+        "windowicon": [
+            "gui/skin/images/ov-orange-logo.png"
+        ], 
+        "logo_title": "", 
+        "size": [
+            400, 
+            300
+        ], 
+        "title": "\u9000\u51fa", 
+        "minsize": [
+            400, 
+            300
+        ]
+    }, 
+    "urldialog": {
+        "logo_img_url": "gui/skin/images/ov-orange-green.png", 
+        "windowicon": [
+            "gui/skin/images/ov-orange-logo.png"
+        ], 
+        "logo_title": "", 
+        "size": [
+            400, 
+            300
+        ], 
+        "title": "\u8f93\u5165\u8bbf\u95ee\u7684url", 
+        "minsize": [
+            400, 
+            300
+        ]
+    }, 
+    "splashimg": "e:\\ov-orange-01\\QIfpms\\skin\\images\\splash.png", 
+    "viewWidth": 1058, 
+    "mainwindow": {
+        "icon": "gui/skin/images/ov-orange-logo.png", 
+        "size": [
+            0.8, 
+            0.9
+        ], 
+        "fullscreenflag": true, 
+        "minsize": [
+            0.4, 
+            0.3
+        ], 
+        "title": "QIFPMS"
     }
 }

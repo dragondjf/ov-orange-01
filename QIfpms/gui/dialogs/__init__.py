@@ -11,10 +11,11 @@ from .numinputdialog import numinput
 from .confirmdialog import confirm
 from .confirmdialog import ConfirmDialog
 from .basedialog import DynamicTextWidget
+from .weblogindialog import weblogin
 
 
 __version__ = '0.1.0'
 
-__all__ = ['DynamicTextWidget', 'ConfirmDialog', 'MessageDialog', 'login', 'exit', 'msg', 'ipaddressinput', 'urlinput', 'numinput', 'confirm']
+__all__ = ['DynamicTextWidget', 'ConfirmDialog', 'MessageDialog', 'weblogin', 'login', 'exit', 'msg', 'ipaddressinput', 'urlinput', 'numinput', 'confirm']
 
 __author__ = 'dragondjf(dragondjf@gmail.com)'
