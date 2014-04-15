@@ -36,16 +36,12 @@ class GuiManger(QtCore.QObject):
 
     """docstring for GuiManger"""
 
-    def __init__(self, results, parent=None):
+    def __init__(self, address, parent=None):
         super(GuiManger, self).__init__()
         self.parent = parent
-        self.results = results
-        self.address = results[0]
-        self.pas = results[1]
+        self.address = address
         self.initData()
         self.initSignalConnect()
-
-        signal_DB.pas_sin.emit(self.pas)
 
     def initData(self):
         self.paitems = {}

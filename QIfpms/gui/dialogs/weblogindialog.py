@@ -42,12 +42,7 @@ class AuthLoginDialog(BaseDialog):
 
         self.statusLabel = QtWidgets.QLabel("")
         self.statusLabel.setFixedHeight(30)
-        self.cancelButton = QtWidgets.QPushButton("取消连接")
-        self.cancelButton.hide()
 
-        statusgridlayout = QtWidgets.QGridLayout()
-        statusgridlayout.addWidget(self.statusLabel, 0, 0, 1, 4)
-        statusgridlayout.addWidget(self.cancelButton, 0, 5)
 
         mainlayout = QtWidgets.QGridLayout()
         mainlayout.addWidget(self.login_nameLabel, 0, 0)
@@ -58,12 +53,11 @@ class AuthLoginDialog(BaseDialog):
         mainlayout.addWidget(self.ipLineEdit, 2, 1)
         mainlayout.addWidget(self.portLabel, 3, 0)
         mainlayout.addWidget(self.portLineEdit, 3, 1)
-        mainlayout.addLayout(statusgridlayout, 4, 1, 1, 2)
+        mainlayout.addWidget(self.statusLabel, 4, 1, 1, 2)
         mainlayout.addLayout(enterwidget_mainlayout, 5, 0, 1, 2)
 
         self.pbLogin.clicked.connect(self.clickEnter)
         self.pbCancel.clicked.connect(self.reject)
-        self.cancelButton.clicked.connect(self.cancleConenct)
 
         self.layout().addLayout(mainlayout)
         self.resize(self.width(), self.height())
@@ -93,12 +87,8 @@ class AuthLoginDialog(BaseDialog):
             self.pas = info['result']
             self.accept()
         else:
-            self.cancelButton.show()
-            if info['result'] == 5:
-                self.pbLogin.setChecked(False)
-                self.statusLabel.setText("登录失败")
-            else:
-                self.statusLabel.setText("第%d次 登录失败 正在尝试第%d次连接" % (info['result'], info['result'] + 1))
+            self.pbLogin.setChecked(False)
+            self.statusLabel.setText("登录失败")
 
 
 class AuthLoginThread(threading.Thread, QtCore.QObject):
@@ -114,31 +104,27 @@ class AuthLoginThread(threading.Thread, QtCore.QObject):
     def run(self):
         status = None
         result = None
-        i = 0
-        while i < 5 and self.flag:
-            try:
-                # result = requests.get('http://%s:%s/LoginHandler' % (ip, port))
-                # loginflag = result.json()
-                loginflag = True
-                if loginflag:
-                    response = requests.get('http://%s:%s/palist' % self.address)
-                    pas = response.json()
-                    status = True
-                    result = pas['protection_areas']
-                    signal_DB.loginsin.emit({'status': status, 'result': result})
-                    break
-                else:
-                    pass
-            except Exception as e:
-                signal_DB.loginsin.emit({'status': False, 'result': i + 1})
-            i += 1
+        try:
+            # result = requests.get('http://%s:%s/LoginHandler' % (ip, port))
+            # loginflag = result.json()
+            loginflag = True
+            if loginflag:
+                response = requests.get('http://%s:%s/palist' % self.address,  timeout=2)
+                pas = response.json()
+                result = pas['protection_areas']
+                signal_DB.loginsin.emit({'status': True, 'result': result})
+            else:
+                signal_DB.loginsin.emit({'status': False, 'result': result})
+        except Exception as e:
+            print(e)
+            signal_DB.loginsin.emit({'status': False, 'result':result})
 
 
 def weblogin(loginoptions):
     """返回True或False"""
     dialog = AuthLoginDialog(loginoptions)
     if dialog.exec_():
-        return True, (dialog.address, dialog.pas)
+        return True, dialog.address
     else:
         return False, (u'', u'')
 
