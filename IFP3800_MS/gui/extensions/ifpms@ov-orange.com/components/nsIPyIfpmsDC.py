@@ -814,6 +814,21 @@ class nsIPyIfpmsDCMgmt:
         else:
             self.webpush = None
 
+        from remote import RemoteThread 
+        RemoteThread.mgmt = self
+        if userifpms.remote_enable:
+            #启动remote线程
+            try:
+                self.remoteThread = RemoteThread()
+                logger.info("remote startup ok.")
+            except Exception, e:
+                logger.exception(e)
+                self.remoteThread = None
+            finally:
+                pass
+        else:
+            self.remoteThread = None
+
         logger.info("startup ok.")
 
     def stop(self):

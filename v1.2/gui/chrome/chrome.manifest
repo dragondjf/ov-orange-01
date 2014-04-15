@@ -1,7 +1,0 @@
-content ifpms content/
-content etc etc/
-content wav wavs/
-content mapImg mapImg/
-skin ifpms default skin/default/
-locale ifpms zh-CN locale/zh-CN/
-locale ifpms en-US locale/en-US/

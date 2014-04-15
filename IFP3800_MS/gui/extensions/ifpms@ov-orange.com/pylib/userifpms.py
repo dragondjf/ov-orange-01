@@ -29,3 +29,29 @@ m_ctrlnumbers = ['13986218913']    # 可发送控制命令的手机号
 # Q采集器模式下GSM开关
 gsm_flag = False
 gsm_status = [4, 5]  # 4代表告警, 5代表断纤
+
+
+# 连接远程设置
+remote_enable = True          # 连接远程总开关，True表示开启，False表示关闭
+
+# 连接远程设置
+
+'''
+网络报文发送开关，True表示开启，False表示关闭
+这个开关的意义是，当发生防区状态变化的时候
+是否发送状态信息到远程
+'''
+remote_send_enable = True
+'''
+网络报文接收开关，True表示开启，False表示关闭
+这个开关的意义是，当远程发送设置报文，是否接收
+暂时只有撤布防报文
+'''
+remote_receive_enable = True  # 网络报文发送开关，True表示开启，False表示关闭
+
+'''
+供给远程接口的本地端口
+远程连接的完整地址为：
+http://ip:port
+'''
+remote_server_port = 8888            # 端口号

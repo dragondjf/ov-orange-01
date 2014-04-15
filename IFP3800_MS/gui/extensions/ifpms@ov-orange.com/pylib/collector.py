@@ -416,6 +416,9 @@ class Collector:
                 if self.manager.mgmt.webpush:
                     self.manager.mgmt.webpush.push(self.pa[pid - 1].did, pid, self.pa[pid - 1].sid, self.pa[pid - 1].status, self.pa[pid - 1].latest_change_time)
 
+                if self.manager.mgmt.remoteThread:
+                    self.manager.mgmt.remoteThread.push(self.pa[pid - 1].did, pid, self.pa[pid - 1].sid, self.pa[pid - 1].status, self.pa[pid - 1].latest_change_time)
+
             self.cmd_queue.put_nowait((ipkt.SET_SWITCH_CTRL_REQ, pid))
             if userifpms.gsm_flag and self.dc.Q_workmode ==0 and status in userifpms.gsm_status:
                 self.cmd_queue.put_nowait((ipkt.SET_GSM_CTRL_REQ, pid))
