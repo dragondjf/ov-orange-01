@@ -72,10 +72,32 @@ class AlarmHistoryHandler(tornado.web.RequestHandler):
 
 class LoginHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write("LoginHandler")
+        fd = open("chrome/etc/custom.conf","r")
+        confstr = fd.read()
+        fd.close()
+        #resp_str = simplejson.dumps(confstr)
+        self.write("<pre>" + confstr + "</pre>")
 
     def post(self):
-        self.write("post")
+        backcode = 2 # backcode: 1: success  2: 用户名不存在 3：密码错误
+        account = self.get_argument('account', '')
+        password = self.get_argument('password', '')
+        logger.info(account)
+        logger.info(password)
+        fd = open("chrome/etc/custom.conf","r")
+        confstr = fd.read()
+        fd.close()
+        confObj = simplejson.loads(confstr)
+        logger.info(confObj['userinfo'])
+        if "userinfo" in confObj:
+            for user in confObj['userinfo']:
+                if account == user['account']:
+                    if password == user['password']:
+                        backcode = 1
+                    else:
+                        backcode = 3
+                break
+        self.write(str(backcode))
 
 
 class LogoutHandler(tornado.web.RequestHandler):
