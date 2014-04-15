@@ -1,0 +1,14 @@
+#include "nsISupports.idl"
+#include "nsIVariant.idl"
+
+interface nsIPyIfpmsEvent; // Forwarded declaration.
+
+/**
+ * event
+ */
+[scriptable, uuid(1940BECA-A833-11E0-A6D0-FFA348240101)]
+interface nsIPyIfpmsEvent: nsISupports {
+
+    /* event raise*/
+    void onRaise(in unsigned long did, in unsigned long pid, in unsigned long alarm_type, in unsigned long alarm_id, in unsigned long alarm_time);
+};

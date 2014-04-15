@@ -1,0 +1,291 @@
+﻿<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+   <?xml-stylesheet href="chrome://ifpms/skin/css/alarmmgmt.css" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://ifpms/locale/alarm_process.dtd">
+<dialog
+  id     = "alarm_reexamine"
+  title  = " &alarmprocess.alarmcheck; "
+  buttons= "none"
+  width  = "650"
+  height = "565"
+  xmlns:html="http://www.w3.org/1999/xhtml"
+  xmlns  = "http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+  onload='onLoads()'
+  ondialogaccept="" 
+>
+    <script type="application/x-javascript" src="js/user_management.js"/>
+    <script type="application/x-javascript" src="jquery-1.2.1.min.js"/>
+    <script src="js/RGraph/RGraph.common.core.js" ></script>
+    <script src="js/RGraph/RGraph.common.annotate.js" ></script>
+    <script src="js/RGraph/RGraph.line.js" ></script>
+    <script type="application/x-javascript" src="ifpms.js"/>
+    <script type="application/x-javascript" src="GREUtils.js"/>
+<script>
+<![CDATA[
+function onLoads(){
+    this.elm = window.arguments[0];
+    var tit=document.getElementById("alarm_title");
+    var foot=document.getElementById("alarmConfirm");
+    var timeinfo=new Date(this.elm[3]*1000).toLocaleString();
+    var paName=window.opener.Ifpms.Xpcom.DCMgmt.getDC(this.elm[1]).getPA(this.elm[2]).name;
+    document.getElementById('alarm_did').setAttribute('value',this.elm[1]);
+    document.getElementById('alarm_pid').value=this.elm[2];
+    document.getElementById('alarm_paName').value=paName;   
+    document.getElementById('alarm_aid').value=this.elm[0];
+    document.getElementById('alarm_time').value=timeinfo;
+    document.getElementById('alarm_status').value=this.elm[4];
+    document.getElementById('confirm_note').value=this.elm[5];
+    //document.getElementById('confirm_note').value='';//window.opener.global_alarmproc_note;
+    document.getElementById('check_wave').checked=window.opener.wavechecked;
+    waveShow(window.opener.wavechecked);
+    if(this.elm[4]=="已确认"||this.elm[4]=="comfirmed"||this.elm[4]=="未确认"&&this.elm[0]=="运行"||this.elm[4]=="not confirmed"&&this.elm[0]=="Running"){
+        tit.style.backgroundColor="#6fff6f";
+        $("#alarm_title label").css("color","#000");
+        foot.style.backgroundColor="#6fff6f";
+        $("#alarmConfirm label").css("color","#000");
+    }else if(this.elm[0]=="断纤"||this.elm[0]=="Break"){
+                tit.style.backgroundColor="#ffff00";
+                $("#alarm_title label").css("color","#000");  
+                foot.style.backgroundColor="#ffff00";
+                $("#alarmConfirm label").css("color","#000");
+    }else if(this.elm[0]=="告警"||this.elm[0]=="Alarm"){
+                tit.style.backgroundColor="#ff0000";
+                foot.style.backgroundColor="#ff0000"; 
+    }
+    loadWave(0);
+}
+function loadWave(timestamp)
+{
+   this.elm = window.arguments[0];
+   var did=this.elm[1];
+   var pid=this.elm[2];
+   var aid=this.elm[0];
+
+   document.getElementById("alarmtime").value="loading...";
+   
+   if (timestamp == 0) {
+      timestamp = parseInt(this.elm[3])+60;
+   }
+
+   //绘制图形
+   var data=[];
+   data.push(0);
+   data.push(1000);
+   for(var i=0;i<5000;i++)
+   {
+    data.push(100*Math.random());
+   }
+   window.times = timestamp;
+   
+   var strbun=document.getElementById('alarm_str');
+   var pa=window.opener.Ifpms.Xpcom.DCMgmt.getDC(did).getPA(pid);
+   var dataobj={};
+   var count={};
+   var sample_rate={};
+   var fileobj={};
+   pa.getWaveFile(timestamp,fileobj);
+   if (fileobj.value == 'NULL') {
+      update_soundfile("chrome://wav/content/warn.wav");
+      RGraph.Clear(document.getElementById('checkwave'));
+      document.getElementById("alarmtime").value = "("+timestamp+")"+strbun.getString("notFind");
+
+   } else {
+      //pa.getWavData(timestamp,sample_rate,count,dataobj);
+      document.getElementById("alarmtime").value=fileobj.value;
+      //document.getElementById('alarm_sound').setAttribute('src',soundpath);//src="file://"+fileobj.value;
+      var l = fileobj.value.split('-');
+      var path = l[0]+'-'+l[1]+'/';
+      //window.opener.alert("chrome://wav/content/"+path+fileobj.value);
+      update_soundfile("chrome://wav/content/"+path+fileobj.value);
+      //alert(document.getElementById('alarm_sound').src);
+      if(window.opener.wavechecked==false){
+	 return;
+      }
+      pa.getWavData(timestamp,sample_rate,count,dataobj);
+      RGraph.Clear(document.getElementById('checkwave'));
+      renderCanvas(dataobj.value);      
+   }
+}
+
+function confirmAlarms(){
+    this.elm = window.arguments[0];
+    var acc=window.opener.global_currentuseracc;
+    var id=this.elm[6];
+    var notes=document.getElementById('confirm_note').value;
+    window.opener.Ifpms.Xpcom.DCMgmt.confirmAlarm(id,acc,notes);
+	var global_unpro_alarms= window.opener.global_unpro_alarms;
+    for(var i in global_unpro_alarms)
+	{
+	   if(global_unpro_alarms[i].alarmid==id)
+	     {
+		   global_unpro_alarms.splice(i,1);
+		 }
+	}
+	window.opener.alarmmgmt.ini();
+    var wins=window.opener.global_alarmwins;
+	for(var j in wins)//关闭可能打开的 吿警处理对话框
+	{
+	    if(typeof(wins[j].alarm)!='undefined')
+	    {
+	      if(wins[j].alarm.alarmid==id)
+	      {
+	        wins[j].close();
+	        wins.splice(j,1);
+	      }
+	    }
+	}
+	window.close();
+}
+
+function renderCanvas(data)
+{
+   RGraph.Clear(document.getElementById('checkwave'));
+   var plot = new RGraph.Line('checkwave',data);
+   plot.Set('chart.background.barcolor1', 'gray');
+   plot.Set('chart.gutter.left', 0);
+   plot.Set('chart.gutter.right', 0);
+   plot.Set('chart.gutter.top', 0);
+   plot.Set('chart.gutter.bottom', 0);
+   plot.Set('chart.colors', ['blue']);
+   plot.Set('chart.background.grid', 0);
+   plot.Set('chart.ymin',getmin(data));
+   plot.Set('chart.ymax',getmax(data));   
+   plot.Set('chart.noyaxis', true);
+   plot.Set('chart.noxaxis', true);
+   plot.Draw();
+}
+
+function getmin(ar)
+{
+var re=10000000;
+for(var i=0;i<ar.length;i++)
+{
+  if(ar[i]<re) { re=ar[i];}
+}
+return re;
+}
+
+function getmax(ar)
+{
+var re=-1000000;
+for(var i=0;i<ar.length;i++)
+{
+  if(ar[i]>re) { re=ar[i];}
+}
+return re;
+}
+
+function update_soundfile(filename)
+{
+var file = GREUtils.File.chromeToPath(filename);
+document.getElementById("playSound").src = "file:///"+file;
+}
+
+function waveShow(va){
+   window.opener.wavechecked=va;
+   if(va==false)
+   {
+      document.getElementById("waveShow").style.display="none";
+   }
+   else{
+      document.getElementById("waveShow").style.display="block";
+      loadWave(0);
+   }
+}
+
+function cancelAlarms(){
+    window.close();
+}
+]]>
+</script>
+  <stringbundleset>
+  <stringbundle id="alarm_str" src="chrome://ifpms/locale/alarm_management.properties"/>
+  </stringbundleset>
+  <vbox>
+  <hbox id="alarm_title">
+     <label value='&alarmprocess.alarmcheck;'/>
+  </hbox>
+  <hbox class="group_box" style="-moz-border-radius-topleft:5px; -moz-border-radius-topright:5px; margin-top:5px">
+  <groupbox style="color:red; margin-top:10px; width:627px">
+  <caption label='&alarmprocess.alarminfo;' />
+  <hbox> 
+  <label value='&alarmprocess.collector;' /> <label  id='alarm_did' />
+  </hbox>
+  <hbox>
+  <label value='&alarmprocess.pa;' /> <label   id='alarm_pid'  />
+  </hbox>
+  <hbox>
+  <label value='&alarmprocess.paName;' /> <label   id='alarm_paName'  />
+  </hbox>
+  <hbox>
+  <label value= '&alarmprocess.alarmtype;' /> <label id='alarm_aid'  />  
+  </hbox>
+  <hbox> 
+  <label value='&alarmprocess.happen_time;' /> <label  id='alarm_time'  />
+  </hbox>
+  <hbox> 
+  <label value='&alarmprocess.status;' /> <label  id='alarm_status'  />
+  </hbox>
+  </groupbox>
+  </hbox>
+  <hbox class="group_box" style="-moz-border-radius-bottomleft:5px; -moz-border-radius-bottomright:5px;">
+  <groupbox class="gsd">
+  <caption label='&alarmprocess.alarmcheck;' />
+  <hbox pack='left' align='center'>
+  <checkbox id='check_wave'  label='&alarmprocess.waveShow;' oncommand='waveShow(this.checked);' />
+  </hbox>
+  <hbox pack='left' align='center' id='sound_hbox' >
+  <label value='&alarmprocess.sound;' style='margin-top:18px;' />
+  <html:embed id="playSound" src="" width="585" height="30" autostart="false" controls="smallconsole"></html:embed>
+  </hbox>
+  
+  <hbox align='center' id="waveShow" style="display:none">
+  <label value='&alarmprocess.wave;' />
+  <hbox pack='left' align='center' width='585' style='border: solid  0px red;background-color:rgb(81,77,75);' id='wave_hbox'> 
+  <spacer width='35' style='background-color:rgb(81,77,75);' />
+  <html:canvas  id='checkwave' height='40' width='495' style='border: solid  1px gray;'> </html:canvas>
+  <spacer style='background-color:rgb(81,77,75);' />
+  </hbox>
+  </hbox>
+  <hbox align='center' pack='center'>
+  <label id="alarmtime" />
+  </hbox>
+  <hbox align='center' pack='center'>
+  <button label='&alarmprocess.preview;' oncommand='loadWave(parseInt(window.times)-60);' />
+  <button label='&alarmprocess.current;' oncommand='loadWave(0);' />
+  <button label='&alarmprocess.next;' oncommand='loadWave(parseInt(window.times)+60);' />
+  </hbox>
+  
+  </groupbox>
+  </hbox>
+  <hbox class="group_box">
+  <groupbox style="width:627px">
+  <caption label='&alarmprocess.alarmprocess;' />
+  
+  <hbox pack='left' align='center'>
+  <label  value='&alarmprocess.notify;' />
+  <menulist id="dc_type">
+  <menupopup>
+  <menuitem label="&alarmprocess.crusize;" value="0"/>
+  <menuitem label="&alarmprocess.controlcenter;" value="1"/>
+  </menupopup>
+  </menulist>
+  <button  label='&alarmprocess.ok;'/>
+  </hbox>
+  <hbox pack='left' align='center'>
+  <label  value='&alarmprocess.writenotes;' control='confirm_note'  />
+  <textbox  id='confirm_note'  multiline='true' height='60' width='544' oninput='window.opener.global_alarmproc_note=this.value;' />
+  </hbox>
+  
+  <hbox align='center' pack='center'>
+  <button  label='&alarmprocess.ok;' id='confirm_bar' oncommand='confirmAlarms();' />
+  <button  label='&alarmprocess.ignore;' id='confirm_cancel' oncommand='cancelAlarms();' /> 
+  </hbox>
+ </groupbox>
+  </hbox>
+  <hbox id="alarmConfirm">
+        <label value='&alarmprocess.label1;' />
+        <label value='&alarmprocess.label2;' />
+  </hbox>
+</vbox>
+</dialog>

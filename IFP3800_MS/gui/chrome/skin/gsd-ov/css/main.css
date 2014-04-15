@@ -1,0 +1,183 @@
+window {
+	font-size: 14px;
+	margin: 10px;
+	background: #202020;
+	color: #B0B0B0;
+	/*-moz-border-radius: 10px;*/
+}
+
+#boxToolbar{
+	color: #B0B0B0;
+	background: transparent;
+	margin: 10px 0px 0px 0px;
+	-moz-border-radius: 10px;
+}
+
+toolbox {
+	border: hidden;
+	font-weight: bold;
+	background: transparent;
+	-moz-border-radius: 10px;
+    -moz-appearance: none;
+}
+
+toolbar {
+	border: hidden;
+	background: #202020;
+    -moz-appearance: none;
+}
+
+toolbarbutton{
+	margin: 0px 3px;
+	color: #B0B0B0;
+    -moz-appearance: none;
+}
+toolbarbutton:hover , toolbarbutton.tlbarbtnactive:hover {
+	background: #FF6600;
+	color: #FFDDC6;
+	border-width: 1px;
+	-moz-border-radius: 8px;
+	-moz-border-top-colors: #FFB07C;
+	-moz-border-left-colors: #FFB07C;
+	-moz-border-bottom-colors: #A8561F;
+	-moz-border-right-colors: #A8561F;
+    -moz-appearance: none;
+}
+
+toolbarbutton.tlbarbtnactive{
+	background: #a0a0a0;
+	color: #303030;
+	-moz-border-radius: 8px;
+	-moz-border-top-colors: #202020;
+	-moz-border-left-colors: #202020;
+	-moz-border-bottom-colors: #ffffff;
+	-moz-border-right-colors: #dddddd;
+    -moz-appearance: none;
+}
+
+toolbarbutton:active {
+	background: #FF6600;
+	color: #FFDDC6;
+	border-width: 1px;
+	-moz-border-radius: 8px;
+	-moz-border-top-colors: #A8561F;
+	-moz-border-left-colors: #A8561F;
+	-moz-border-bottom-colors: #FFB07C;
+	-moz-border-right-colors: #FFB07C;
+    -moz-appearance: none;
+}
+
+groupbox, caption{
+	color: #303030;
+	background: #ffffff;
+}
+
+caption{
+    font-size:16px;
+    font-weight:bold;
+}
+
+.info_box {
+	margin: 0px 0px 0px 10px;
+	padding: 5px;
+	color: #B0B0B0;
+	background: #303030;
+}
+
+.map {
+	-moz-binding: url("chrome://ifpms/content/map.xml");
+	background: #909090;
+    overflow: hidden;
+    min-width: 600px;
+}
+
+.device {
+	fill: #EFEFEF;
+	stroke: #101010;	
+	stroke-width: 4px;
+    opacity: 0.7;
+}
+
+.device.blink {
+	fill: #FF0000;	
+	stroke: #FF6F6F;	
+}
+
+.device.connect {
+	fill: #6FFF6F;	
+	stroke: #00FF00;	
+}
+
+.device.alarm_minor, .device.alarm_fiber_break {
+	fill: #FFFF90;	
+	stroke: #FFFF00;	
+}
+
+.device.alarm_critical, .device.alarm_blast {
+    fill: #FF6F6F;	
+	stroke: #FF0000;
+}
+
+.device:hover, .device[selected="true"]{
+	cursor: move;
+	opacity: 1;      
+}
+
+.input_label{
+	padding-top:5px;
+}
+.margin_label{
+margin-top:10px;
+	
+}
+/*
+splitter, grippy {
+  border-width: 0px;
+  background: #a0a0a0;
+  -moz-appearance: none;
+}
+
+grippy:hover, grippy:active, splitter:hover, splitter:active {
+  background: #FF6600;
+  -moz-appearance: none;
+}
+*/
+
+tooltip {
+    margin-top: 21px;
+	max-width: 40em;  
+    -moz-appearance: none;
+    font-size: 14px;
+    padding: 8px;
+    color: #202020;
+    background: #B0B0B0;
+    border: 1px solid #000000;
+}
+
+
+tooltip[titletip="true"] {
+ /* See bug 32157 comment 128
+  * margin: -2px 0px 0px -3px;
+  */
+  max-width: none;
+}
+.sysbutton {
+/*	background:transparent;
+*/
+	color:black;
+	-moz-appearance: button;
+}
+.sysbutton:hover{
+	background:black;
+	color:white;
+}
+.systextbox{
+        color:black;
+}
+.cls_canvas{
+-moz-binding: url("chrome://ifpms/content/canvas.xml#WaveCanvas");
+}
+
+.default{ display:none;}
+.gsd-ov{display:block;}
+.gsd-none{display:none;}

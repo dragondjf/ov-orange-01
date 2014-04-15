@@ -1,0 +1,152 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://ifpms/skin/css/DC_management.css" type="text/css"?>
+<?xml-stylesheet href="chrome://ifpms/skin/css/main.css" type="text/css"?>
+<?xml-stylesheet href="chrome://ifpms/skin/css/alarmmgmt.css" type="text/css"?>
+<?xul-overlay href="chrome://ifpms/content/deviceTree.xul"?>
+<?xul-overlay href="chrome://ifpms/content/DC_management.xul"?>
+<?xul-overlay href="chrome://ifpms/content/user_management.xul"?>
+<?xul-overlay href="chrome://ifpms/content/debug.xul"?>
+<?xul-overlay href="chrome://ifpms/content/sys_management.xul"?>
+<?xul-overlay href="chrome://ifpms/content/alarm_management.xul"?>
+<!DOCTYPE window SYSTEM "chrome://ifpms/locale/main.dtd">
+<window id="main-window"  title="&MainWindow.title;"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+	xmlns:svg="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+    style="width: 700px; height: 500px; overflow: auto;" persist="screenX screenY width height sizemode"
+	onload="initial();"
+	onclose="winClose(event);"
+	windowtype="IFPMS">
+    <script type="application/x-javascript" src="jquery-1.4.4.js"/>
+    <script type="application/x-javascript" src="GREUtils.js"/>
+    <script type="application/x-javascript" src="js/user_management.js"/>
+    <script type="application/x-javascript" src="ifpms.js"/>
+    <script type="application/x-javascript" src="xpcom.js"/>
+    <script type="application/x-javascript" src="map.js"/>
+    <script type="application/x-javascript" src="protectionArea.js"/>
+    <script type="application/x-javascript" src="js/debug.js"/>
+    <script type="application/x-javascript" src="js/sys_management.js"/>
+    <script type="application/x-javascript" src="js/alarm_management.js"/>
+
+    <script type="application/x-javascript" src="app.js"/>
+	<script type="application/x-javascript" src="ver.js"/>
+    <script>
+    <![CDATA[
+
+    var ifpms_autosave_timer = null;
+
+	function winClose(evt){
+	    var str=document.getElementById("sys_management_str");
+	    var conf=str.getString("confirm");
+	    var quit=str.getString("quit");
+	    if(GREUtils.Dialog.confirm(conf,quit)){
+			window.clearInterval(ifpms_autosave_timer);
+			Ifpms.Config.save();
+	    }else{
+			evt.preventDefault();
+	    }
+	}
+	
+	function switchDeck(idx) {
+	    ShiftWindow(idx);//离开窗口释放资源
+	    document.getElementById('dckMain').setAttribute('selectedIndex', idx);
+	}	
+	function initial() //初始化
+	{
+	    var pa={};
+		$('#mainappversion').val('Version: v1.2');//version information 
+		$('#Versioninfo').val(appver);
+	    global_currentuseracc=window.arguments[0].acc;
+	    global_currentusertype=window.arguments[0].type;
+	    show_user_list();//显示用户列表
+	    Global_ConfigApp(global_currentusertype);
+	    ifpms_autosave_timer = window.setInterval("Ifpms.Config.save();", 60000);
+	}
+	function Quit()
+	{
+		var pa={};
+		var quitre=window.openDialog("chrome://ifpms/content/quitconfirm.xul",'','modal,centerscreen',pa);
+		if(pa.op==0)	//最小化操作
+		{
+			window.minimize();
+		}
+		else if(pa.op==1){	//退出操作
+			if(pa.saveconfig) //保存 配置信息
+			{
+				window.clearInterval(ifpms_autosave_timer);
+				Ifpms.Config.mapUrl = get_selected_image_url();
+				Ifpms.Config.paIcon = getPaIconArray();
+				Ifpms.Config.increase_config();
+				Ifpms.Config.save();
+			}
+			window.close();
+		}
+	}
+	]]>
+	</script>
+     <keyset>
+      <key id="help_cmd" keycode="VK_F1" oncommand="Global_openHelpHtml();"/>
+     </keyset>
+      <keyset>
+      <key id="open_alarmproc" keycode="VK_F2" oncommand="Global_openAlarmWindow();"/>
+     </keyset>
+      <keyset>
+      <key id="minimize" keycode="VK_ESCAPE" oncommand="window.minimize();"/>
+     </keyset>
+	<!-- 显示区 -->
+    <deck id="dckMain" flex="100">
+	<!-- 周界监控 -->
+	<hbox class="boxMain" flex="1" >
+	<box id="boxMap" class="map" flex="1" align="center" pack="center"/>
+	<splitter id="sptMap" collapse="after" oncommand="Ifpms.Map.resize();" p="p"><grippy/></splitter>
+	<vbox id="boxDeviceTree"/>
+	</hbox>
+	<!-- 告警管理 -->
+	<box id='alarm_management'></box>	
+	<!-- 用户管理 -->
+	<box id='user_management'> </box>
+	<!-- 系统管理 -->
+	<box id='sys_mgmt' ></box>
+	<!-- 调试-->
+	<box id='debug'> </box>
+    </deck>
+    <!-- 工具栏区 -->
+    <stringbundleset >
+        <stringbundle id="sys_management_str" src="chrome://ifpms/locale/system_management.properties"/>
+    </stringbundleset>
+    <stack>
+    <hbox align="end" flex='1' height="45">
+		<hbox flex='1' pack='start'>
+		<vbox>
+        <label style="margin:0;padding:0"><label id='mainappversion' value=''/> &loginwin.copyright;</label>
+        <label class="default" value="&loginwin.ovorange;"/>
+        <label class="default" value='&loginwin.hust_ovorange;'/>
+		<label class="gsd" value='&loginwin.ovorange_rd;'/>
+		<label class="gsd" value="&loginwin.yunduan_mkt;"/>
+		</vbox>
+		</hbox>
+		<hbox flex="1"  pack="end">
+		<vbox>
+		<label id="lblDatetime"/>
+		<label id="userinfo"/>
+		<label id="onlinetime" />
+		</vbox>
+		</hbox>
+    </hbox>
+    <hbox id="boxToolbar">
+    <toolbox id="toolbox_cent" align="center" pack="center" flex="1" >
+    <toolbar iconsize="large" mode="full">
+		<toolbarbutton orient="vertical" tooltiptext="&MainWindow.toolbar.boundary_monitor;" image="chrome://ifpms/skin/images/icons/Security.png" oncommand="switchDeck(0);"/>
+		<toolbarbutton orient="vertical" tooltiptext="&MainWindow.toolbar.alarm_mgmt;" image="chrome://ifpms/skin/images/icons/Tip.png" oncommand="switchDeck(1);alarmmgmt.ini();"/>
+		<toolbarbutton orient="vertical" tooltiptext="&MainWindow.toolbar.account_mgmt;" image="chrome://ifpms/skin/images/icons/User.png" oncommand="switchDeck(2);"/>
+		<toolbarbutton orient="vertical" tooltiptext="&MainWindow.toolbar.system_mgmt;" image="chrome://ifpms/skin/images/icons/Tools.png" oncommand="switchDeck(3);sysmgmt.ini();"/>
+		<toolbarbutton orient="vertical" tooltiptext="&MainWindow.toolbar.debug;" permission='1' image="chrome://ifpms/skin/images/icons/Computer.png" oncommand="switchDeck(4);debug.initial();"/>
+		<toolbarbutton orient="vertical" tooltiptext="&MainWindow.toolbar.help;" hlpid='#' image="chrome://ifpms/skin/images/icons/Help.png" />
+		<toolbarbutton orient="vertical" tooltiptext="&MainWindow.toolbar.logout;" image="chrome://ifpms/skin/images/icons/Close.png" oncommand="Quit();"/>
+    </toolbar>
+    </toolbox>
+    </hbox>
+    </stack>
+</window>

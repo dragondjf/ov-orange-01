@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<?xml-stylesheet href="chrome://ifpms/skin/css/login.css" type="text/css"?>
+<!DOCTYPE window SYSTEM "chrome://ifpms/locale/main.dtd">
+<window  id='ifpms' xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+	xmlns:html="http://www.w3.org/1999/xhtml"
+   width='480' height='320'
+   title="&loginwin.title;"
+ onload="ini();"
+ windowtype="IFPMS"
+>
+	      
+<script type="application/x-javascript" src="jquery-1.2.1.min.js"/>
+<script type="application/x-javascript" src="GREUtils.js"/>
+<script type="application/x-javascript" src="js/user_management.js"/>
+<script type="application/x-javascript" src="ver.js"/>
+<script>
+<![CDATA[ 
+function ini(){
+     login_adjustwindow();
+     var strbundle=document.getElementById('login_win_str');
+     document.getElementById('enter').focus();
+     $("#user_pw").click(function(){
+     document.getElementById('user_pw').focus();
+	      });
+     $(this).keypress(function(event){//屏蔽回车按钮 防止直接退出
+	     if(event.keyCode==13)
+	     {
+	       if(document.activeElement.id=='loginwin_exit')
+	       {//焦点在退出按钮时 不屏蔽
+	       }
+	       else{
+	       $('#enter').click();
+		     return false;
+	       }
+	     }
+	 });
+     var entertip=document.getElementById('login_win_str').getString('entertip');
+     var tempv=document.getElementById('user_acc').value;
+     if(tempv=='')
+     {
+	    document.getElementById('user_acc').setAttribute('value',entertip);
+		document.getElementById('user_acc').setAttribute('style','color:gray;');		      
+		document.getElementById('user_pw').setAttribute('value','');
+		document.getElementById('user_pw').setAttribute('style','color:gray;');		      
+     }
+     $("#user_acc").focus(function(){
+	    var tempva=document.getElementById('user_acc').value;  
+	    if(tempva==entertip)
+	    {
+	      document.getElementById('user_acc').setAttribute('value','');
+	      document.getElementById('user_acc').setAttribute('style','color:black;');
+	      document.getElementById('user_pw').setAttribute('value','');
+	      document.getElementById('user_pw').setAttribute('style','color:black;');	
+	    }
+    });
+	//$('#loginversion').empty();
+	//load version information 
+	//$('#loginversion').text(appver);
+	
+}
+function login_adjustwindow()
+{
+var winwid=window.screen.width;//
+var winhei=window.screen.height;
+var left=(winwid-480)/2;
+var top=(winhei-360)/2;
+if(window.screenX!=left)
+{
+   window.screenX=left;//left;
+   window.screenY=top;//top;
+}
+}
+function do_login(){//处理登录
+	   var strbundle=document.getElementById('login_win_str');
+	   var failtip=strbundle.getFormattedString('forbiddenlogin',[global_login_maxtime]);
+	   if(global_loginfail_time>=global_login_maxtime)
+	      {
+		  //alert(" 您已登录"+global_login_maxtime+" 次失败，请联系管理员!");
+		  GREUtils.Dialog.alert(strbundle.getString("alert"),failtip);
+		  return;
+	      }
+	   var acc=document.getElementById("user_acc").value;
+	   var pw=document.getElementById("user_pw").value;
+	   var lo=verify_user(acc,pw);
+	   if(lo.flag)//登录成功
+	   {
+	     global_currentuseracc=lo.uacc;
+	     global_currentusertype=lo.utype;
+	     var pa={};
+	     pa.acc=lo.uacc;
+	     pa.type=lo.utype;
+	     window.openDialog("chrome://ifpms/content/main.xul","ifpms",'',pa);
+	     window.close();
+	   }
+	   else
+	   {//登录失败
+	      global_loginfail_time++;
+	      var wel=strbundle.getString('loginfail');
+	      wel=lo.failinfo;
+	      document.getElementById("user_acc").value='';
+	      document.getElementById("user_pw").value='';
+	   }
+  }
+]]>
+</script>
+
+
+<stringbundleset id="stringbundleset">
+<stringbundle id="login_win_str" src="chrome://ifpms/locale/loginwin.properties"/>
+</stringbundleset>
+
+<vbox flex='1' id="main">
+
+<hbox id="head">
+	<image style="margin: 5px;" src='chrome://ifpms/skin/Icons/title.png'/>
+</hbox>
+
+<vbox id='user_login' flex='1' pack='center' align='center'>
+
+<spacer flex="1"/>
+
+<grid flex="1">
+<columns>
+<column flex='1' />
+<column flex='1' />
+</columns>
+<rows>
+<row style="margin-top:5px;" >
+<vbox pack='center'>  <label   pack='end'  value='&loginwin.account;'  ></label>
+</vbox>
+<vbox>
+<textbox  id='user_acc'  pack='center' value=''   ></textbox>
+</vbox>	      	
+</row>
+<row style="margin-top:5px;">	    
+<vbox  pack='center'> <label   pack='center'  value='&loginwin.pw;'></label>
+</vbox>
+<vbox>
+<textbox  id='user_pw' pack='center'  type='password'  value=''></textbox>
+</vbox>
+</row>
+</rows>    
+</grid>
+
+<button label='&loginwin.login;'  id='enter' width='20px'   oncommand='do_login();'/>
+<!--<button id='loginwin_exit' label="&loginwin.exit;"  oncommand="window.close();"></button>-->
+
+<vbox flex='1' pack='start'>
+<html:div style='border:0px dashed red;'>
+<html:p align='center'><html:span id='loginversion'>v1.2</html:span> &loginwin.copyright; </html:p>
+<html:p align='center' class="default">&loginwin.ovorange; </html:p>
+<html:p align='center' class="default">&loginwin.hust_ovorange; </html:p>
+<html:p align='center' class="gsd">&loginwin.ovorange_rd; </html:p>
+<html:p align='center' class="gsd">&loginwin.yunduan_mkt; </html:p>
+</html:div>
+</vbox>
+
+</vbox>
+
+</vbox>
+</window>

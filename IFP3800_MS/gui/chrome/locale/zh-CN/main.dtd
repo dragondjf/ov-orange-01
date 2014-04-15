@@ -1,0 +1,244 @@
+﻿<!ENTITY MainWindow.title "管理系统">
+<!-- MainWindow.toolbar -->
+<!ENTITY MainWindow.toolbar.boundary_monitor      "周界监控">
+<!ENTITY MainWindow.toolbar.boundary_maintance     "周界维护">
+<!ENTITY MainWindow.toolbar.alarm_mgmt      "告警管理">
+<!ENTITY MainWindow.toolbar.account_mgmt      "用户管理">
+<!ENTITY MainWindow.toolbar.log_mgmt      "日志管理">
+<!ENTITY MainWindow.toolbar.system_mgmt      "系统管理">
+<!ENTITY MainWindow.toolbar.debug      "实时波形">
+<!ENTITY MainWindow.toolbar.help      "帮助">
+<!ENTITY MainWindow.toolbar.logout      "退出">
+
+
+<!-- login window -->
+<!ENTITY loginwin.title   "登录">
+<!ENTITY loginwin.account   "用户名:">
+<!ENTITY loginwin.pw   "密码:">
+<!ENTITY loginwin.login   "登录">
+<!ENTITY loginwin.exit   "退出">
+<!ENTITY loginwin.default   "默认用户">
+<!ENTITY loginwin.ovorange_rd   "武汉光谷奥源科技股份有限公司 研发制造">
+<!ENTITY loginwin.yunduan_mkt   "武汉云端光电安全技术有限公司 销售出品">
+<!ENTITY loginwin.ovorange   "武汉光谷奥源科技股份有限公司">
+<!ENTITY loginwin.yunduan   "武汉云端光电安全技术有限公司">
+<!ENTITY loginwin.ngia_ovorange   "华中科技大学光谷奥源联合实验室 设计制作">
+<!ENTITY loginwin.hust_ovorange   "华中科技大学下一代互联网接入系统国家工程实验室">
+<!ENTITY loginwin.copyright   "Copyright &#169; 2010-2013">
+
+<!--user management -->
+<!ENTITY usermgmt.caption  "用户管理" >
+<!ENTITY usermgmt.userinfo  "用户信息" >
+<!ENTITY usermgmt.useraccount  "用户名" >
+<!ENTITY usermgmt.userstatus  "状态" >
+<!ENTITY usermgmt.usertype  "角色" >
+<!ENTITY usermgmt.username  "姓名" >
+<!ENTITY usermgmt.usersex  "性别" >
+
+<!-- all  buttons  -->
+<!ENTITY btn_add  "新增" >
+<!ENTITY btn_edit  "修改" >
+<!ENTITY btn_del  "删除" >
+<!ENTITY btn_cancel  "取消">
+<!ENTITY btn_ok  "确认">
+
+<!--add userinfo dialog -->
+<!ENTITY edit_userinfo.title  "用户信息">
+<!ENTITY edit_userinfo.account "用户名:">
+<!ENTITY edit_userinfo.pw "密码:">
+<!ENTITY edit_userinfo.repw "重复密码:">
+<!ENTITY edit_userinfo.name "姓名:">
+<!ENTITY edit_userinfo.type "角色:">
+<!ENTITY edit_userinfo.attendant "值班员">
+<!ENTITY edit_userinfo.admin "管理员">
+<!ENTITY edit_userinfo.superadmin "超级管理员">
+<!ENTITY edit_userinfo.sex "性别:">
+<!ENTITY edit_userinfo.male "男">
+<!ENTITY edit_userinfo.female "女">
+<!ENTITY edit_userinfo.age "年龄:">
+<!ENTITY edit_userinfo.tel "联系方式:">
+<!ENTITY edit_userinfo.idnum "身份证编号(必填):">
+<!ENTITY edit_userinfo.address "地址:">
+<!ENTITY edit_userinfo.modify "修改">
+
+<!-- confirm delete user -->
+<!ENTITY confirmdelete_userinfo.title "确认删除用户">
+
+<!-- boundary maintance  -->
+<!ENTITY maintance.boundarymaintance "周界维护">
+<!ENTITY maintance.DCmgmt "数据采集器(DC)">
+<!ENTITY maintance.DCinfo "DC 信息">
+<!ENTITY maintance.dc "采集器">
+<!ENTITY maintance.dcid "采集器ID ">
+<!ENTITY maintance.paid "防区ID">
+<!ENTITY maintance.serialnumber "编号">
+<!ENTITY maintance.attribute "属性">
+<!ENTITY maintance.value "属性值">
+<!ENTITY maintance.ipaddr "IP地址 ">
+<!ENTITY maintance.macaddr "MAC地址 ">
+<!ENTITY maintance.enableflag "开启标志">
+<!ENTITY maintance.enable "开启">
+<!ENTITY maintance.disable "关闭">
+<!ENTITY maintance.devicename "设备名称">
+<!ENTITY maintance.devicedesc "设备描述">
+<!ENTITY maintance.x-coordinate "X坐标">
+<!ENTITY maintance.y-coordinate "Y坐标">
+<!ENTITY maintance.status "状态">
+<!ENTITY maintance.latest_change_time "最后变更时间">
+<!ENTITY maintance.producttype "产品类型">
+<!ENTITY maintance.panumber "防区数量">
+<!ENTITY maintance.productid "产品ID">
+<!ENTITY maintance.hwversion "硬件版本">
+<!ENTITY maintance.swversion "软件版本">
+<!ENTITY maintance.paid "防区ID">
+<!ENTITY maintance.paname "防区名称">
+<!ENTITY maintance.padesc "防区描述">
+<!ENTITY maintance.paxcoor "X坐标">
+<!ENTITY maintance.paycoor "Y坐标">
+<!ENTITY maintance.pastatus "状态">
+<!ENTITY maintance.mediumtype "介质类型">
+<!ENTITY maintance.coated "扣网">
+<!ENTITY maintance.hang1 "挂网1">
+<!ENTITY maintance.hang2 "挂网2">
+<!ENTITY maintance.hang3 "挂网3">
+<!ENTITY maintance.hang4 "挂网4">
+<!ENTITY maintance.hang5 "挂网5">
+<!ENTITY maintance.underground1 "地埋1">
+<!ENTITY maintance.underground2 "地埋2">
+<!ENTITY maintance.underground3 "地埋3">
+<!ENTITY maintance.underground4 "地埋4">
+<!ENTITY maintance.length "防区长度">
+<!ENTITY maintance.sensitivity "灵敏度">
+<!ENTITY maintance.sensitivity2 "灵敏度2">
+<!ENTITY maintance.alarmseverity "告警严重等级">
+<!ENTITY maintance.alarmsensitivity "告警灵敏度">
+<!ENTITY maintance.workmode "工作模式">
+<!ENTITY maintance.windfacor "抗风系数">
+<!ENTITY maintance.envfactor "环境系数">
+<!ENTITY maintance.checkdc "查看DC">
+<!ENTITY maintance.adddc "新增DC">
+<!ENTITY maintance.modify "修改">
+<!ENTITY maintance.apply "应用修改">
+<!ENTITY maintance.remove "删除">
+<!ENTITY maintance.tip.dcenableflag "禁用后将中断与采集器通讯,包括采集，连接检查,配置同步等全部禁用。">
+<!ENTITY maintance.tip.paenableflag "禁用后不再进行入侵识别。">
+<!ENTITY maintance.tip.status  "0-undef 1-disconn 2-connect 3-fault 4-break">
+<!ENTITY maintance.tip.mediumlength  "单位千米">
+<!ENTITY maintance.tip.sensitivity  "0(低)-9(高)">
+<!ENTITY maintance.tip.sensitivity2  "0(低)-9(高)">
+<!ENTITY maintance.tip.alarmseverity  "等于或高于这个等级的告警才处理，否则忽略">
+<!ENTITY maintance.tip.windfactor  "0 禁用 1 低 2 中 3 高">
+<!ENTITY maintance.tip.envfactor  "环境系数1到10之间">
+<!ENTITY maintance.tip.alarmsensitivity  "告警灵敏度">
+<!ENTITY maintance.tip.workmode  "工作模式">
+
+<!--Add PA dialog  -->
+<!ENTITY maintance.addpadialog.title "新增 DC ">
+<!ENTITY maintance.addpadialog.ipaddr "IP 地址: ">
+<!ENTITY maintance.addpadialog.panumber "防区数量:">
+
+<!-- debug xul -->
+<!ENTITY debug.title "调试 ">
+<!ENTITY debug.wave.label "波形">
+<!ENTITY debug.pa.label "防区">
+<!ENTITY debug.wave.variable "变量">
+<!ENTITY debug.wave.refreshcycle "刷新周期">
+<!ENTITY debug.wave.show "显示">
+<!ENTITY debug.wave.win1 "窗口一">
+<!ENTITY debug.wave.win2 "窗口二">
+<!ENTITY debug.wave.frequency "频域">
+<!ENTITY debug.wave.amplitude "幅域">
+<!ENTITY debug.wave.spread "幅差">
+<!ENTITY debug.wave.prewarn "预警">
+
+<!ENTITY debug.layout "布局">
+<!ENTITY debug.samplenumber "样本起点">
+<!ENTITY debug.sampleend "样本终点">
+<!ENTITY debug.yaxis "Y轴">
+<!ENTITY debug.ok "确定">
+<!ENTITY debug.cancel "取消">
+<!ENTITY debug.wave.fivemin "5分钟">
+<!ENTITY debug.wave.pause "暂停">
+<!ENTITY debug.wave.recover "恢复">
+<!ENTITY debug.wave.export "图片导出">
+<!ENTITY debug.wave.auto "自动">
+<!ENTITY debug.wave.manual "手动">
+<!ENTITY debug.wave.xvalue "X轴刻度">
+<!ENTITY debug.wave.count "点数">
+<!ENTITY debug.wave.timestamp "时间戳">
+<!ENTITY debug.wave.win1_range "窗口1范围">
+<!ENTITY debug.wave.win2_range "窗口2范围">
+<!ENTITY debug.wave.win_floor "下限">
+<!ENTITY debug.wave.win_ceil "上限">
+
+<!-- quitconfirm xul -->
+<!ENTITY quitconfirm.title "关闭窗口 ">
+<!ENTITY quitconfirm.tip "关闭窗口时 ">
+<!ENTITY quitconfirm.minimize "最小化 ">
+<!ENTITY quitconfirm.close "退出系统">
+<!ENTITY quitconfirm.saveconfig  "保存配置" >
+
+<!-- sys-management-->
+<!ENTITY sysmgmt.language "语言选择:">
+<!ENTITY sysmgmt.alarmmax "告警记录长度:">
+<!ENTITY sysmgmt.paIcons "防区图标:">
+<!ENTITY sysmgmt.iconBig "大">
+<!ENTITY sysmgmt.iconZ "中">
+<!ENTITY sysmgmt.iconSmall "小">
+<!ENTITY sysmgmt.sysSet "系统设置">
+<!ENTITY sysmgmt.alarmSet "告警设置">
+<!ENTITY sysmgmt.version "版本信息">
+<!ENTITY sysmgmt.boundarySet "周界监控设置">
+<!ENTITY sysmgmt.importMap "选择图片">
+<!ENTITY sysmgmt.imgPreview "图片预览">
+<!ENTITY sysmgmt.importStr "保存选择：">
+<!ENTITY sysmgmt.import "保存">
+<!ENTITY sysmgmt.oncancel "撤销选择">
+<!ENTITY sysmgmt.useDefaultImg "恢复默认">
+<!ENTITY sysmgmt.imgSize "提示：1>为得到更好的显示效果所导入的图片应大于700×500像素；2>新设置下次启动后启用。">
+<!ENTITY sysmgmt.alarmprocmode "告警处理模式:">
+<!ENTITY sysmgmt.openauto "自动弹出">
+<!ENTITY sysmgmt.openhand "手动弹出(F2)">
+
+
+
+<!-- help -->
+<!ENTITY hlp.title  " 帮助文档">
+<!ENTITY hlp.label  "帮助">
+<!ENTITY hlp.cattitle  "标题">
+<!ENTITY hlp.catalog "目录   ">
+<!ENTITY hlp.hidesearchbox "点击折叠展开搜索">
+<!ENTITY hlp.hlptheme "帮助主题:">
+<!ENTITY hlp.search  "搜索">
+<!ENTITY hlp.hidecatalog  "点击折叠展开目录">
+<!ENTITY hlp.back  "后退">
+<!ENTITY hlp.forward "前进">
+<!ENTITY hlp.return "返回目录">
+
+<!-- alarm mgmt -->
+<!ENTITY alarm.typefilter "过滤">
+<!ENTITY alarm.alarm "吿警">
+<!ENTITY alarm.allalarm "全部">
+<!ENTITY alarm.alarmid "告警编号">
+<!ENTITY alarm.alarmtype "告警类型">
+<!ENTITY alarm.collector "采集器">
+<!ENTITY alarm.protection "防区">
+<!ENTITY alarm.happen_time "发生时间">
+<!ENTITY alarm.isconfirmed "是否确认">
+<!ENTITY alarm.playwav "复核告警">
+<!ENTITY alarm.confirmnotes "确认备注">
+<!ENTITY alarm.confirm_time "确认时间">
+<!ENTITY alarm.allselect "全选">
+<!ENTITY alarm.perpage "每页显示">
+<!ENTITY alarm.sortedby "条告警  按">
+<!ENTITY alarm.sortmethod "排序 排序方式 ">
+<!ENTITY alarm.ascend "升序">
+<!ENTITY alarm.descend "降序">
+<!ENTITY alarm.jumpto "跳到第">
+<!ENTITY alarm.page "页">
+<!ENTITY alarm.prepage "上一页">
+<!ENTITY alarm.nextpage "下一页">
+<!ENTITY alarm.clearalarm "清除告警">
+<!ENTITY alarm.confirmalarm "确认告警">
+<!ENTITY alarm.refresh "刷新">
+<!ENTITY alarm.confirm_operator "操作员">
