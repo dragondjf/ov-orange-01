@@ -7,7 +7,6 @@
 *.egg
 *.egg-info
 dist
-build
 eggs
 parts
 bin
@@ -15,7 +14,6 @@ var
 sdist
 develop-eggs
 .installed.cfg
-lib
 lib64
 __pycache__
 
@@ -38,9 +36,9 @@ nosetests.xml
 # log file
 log/files/server.log
 
-v1.2/gui/chrome/etc/custom.conf
-v1.2/gui/log/ifpms.log
-v1.2/gui/log/packet.log
-v1.2/gui/chrome/etc/alarm.log
+IFP3800_MS/gui/chrome/etc/custom.conf
+IFP3800_MS/gui/log/ifpms.log
+IFP3800_MS/gui/log/packet.log
+IFP3800_MS/gui/chrome/etc/alarm.log
 
 QIfpms/options/*.json

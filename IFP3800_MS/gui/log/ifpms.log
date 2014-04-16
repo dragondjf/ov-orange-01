@@ -1,0 +1,63 @@
+2014-04-16 20:34:06,869     INFO [ nsipyifpmsdc.py: 528] nsIPyIfpmsDCMgmt startup...
+2014-04-16 20:34:07,230     INFO [ nsipyifpmsdc.py: 786] start serv...
+2014-04-16 20:34:07,385     INFO [       remote.py: 165] remote thread init.
+2014-04-16 20:34:07,385     INFO [ nsipyifpmsdc.py: 823] remote startup ok.
+2014-04-16 20:34:07,385     INFO [ nsipyifpmsdc.py: 832] startup ok.
+2014-04-16 20:34:07,401     INFO [ nsipyifpmsdc.py: 561] create DC-1 192.168.0.105
+2014-04-16 20:34:07,417     INFO [    dctcpserv.py: 476] add ipaddr: 192.168.0.105
+2014-04-16 20:34:07,417     INFO [ nsipyifpmsdc.py: 603] create PA-1-1
+2014-04-16 20:34:07,417     INFO [ nsipyifpmsdc.py: 603] create PA-1-2
+2014-04-16 20:34:07,417     INFO [    collector.py: 148] active Collector 192.168.0.105
+2014-04-16 20:34:07,433     INFO [ nsipyifpmsdc.py: 561] create DC-2 1.2.3.4
+2014-04-16 20:34:07,433     INFO [    dctcpserv.py: 476] add ipaddr: 1.2.3.4
+2014-04-16 20:34:07,433     INFO [ nsipyifpmsdc.py: 603] create PA-2-1
+2014-04-16 20:34:07,433     INFO [ nsipyifpmsdc.py: 603] create PA-2-2
+2014-04-16 20:34:07,433     INFO [    collector.py: 148] active Collector 1.2.3.4
+2014-04-16 20:34:07,447     INFO [ nsipyifpmsdc.py: 561] create DC-3 2.3.6.5
+2014-04-16 20:34:07,447     INFO [    dctcpserv.py: 476] add ipaddr: 2.3.6.5
+2014-04-16 20:34:07,447     INFO [ nsipyifpmsdc.py: 603] create PA-3-1
+2014-04-16 20:34:07,447     INFO [ nsipyifpmsdc.py: 603] create PA-3-2
+2014-04-16 20:34:07,447     INFO [    collector.py: 148] active Collector 2.3.6.5
+2014-04-16 20:34:11,760     INFO [ nsipyifpmsdc.py: 671] remove PA-3-1
+2014-04-16 20:34:11,760     INFO [ nsipyifpmsdc.py: 671] remove PA-3-2
+2014-04-16 20:34:11,760     INFO [    dctcpserv.py: 483] remove out ipaddr: 2.3.6.5
+2014-04-16 20:34:11,760     INFO [ nsipyifpmsdc.py: 681] remove DC-3 2.3.6.5
+2014-04-16 20:34:15,917     INFO [ nsipyifpmsdc.py: 671] remove PA-2-1
+2014-04-16 20:34:15,917     INFO [ nsipyifpmsdc.py: 671] remove PA-2-2
+2014-04-16 20:34:15,917     INFO [    dctcpserv.py: 483] remove out ipaddr: 1.2.3.4
+2014-04-16 20:34:15,917     INFO [ nsipyifpmsdc.py: 681] remove DC-2 1.2.3.4
+2014-04-16 20:34:22,542     INFO [ nsipyifpmsdc.py: 561] create DC-2 1.2.3.4
+2014-04-16 20:34:22,542     INFO [    dctcpserv.py: 476] add ipaddr: 1.2.3.4
+2014-04-16 20:34:22,542     INFO [ nsipyifpmsdc.py: 603] create PA-2-1
+2014-04-16 20:34:22,542     INFO [ nsipyifpmsdc.py: 603] create PA-2-2
+2014-04-16 20:34:22,542     INFO [    collector.py: 148] active Collector 1.2.3.4
+2014-04-16 20:34:36,107     INFO [ nsipyifpmsdc.py: 528] nsIPyIfpmsDCMgmt startup...
+2014-04-16 20:34:36,341     INFO [ nsipyifpmsdc.py: 786] start serv...
+2014-04-16 20:34:36,388     INFO [       remote.py: 165] remote thread init.
+2014-04-16 20:34:36,388     INFO [ nsipyifpmsdc.py: 823] remote startup ok.
+2014-04-16 20:34:36,388     INFO [ nsipyifpmsdc.py: 832] startup ok.
+2014-04-16 20:34:36,388     INFO [ nsipyifpmsdc.py: 561] create DC-1 192.168.0.105
+2014-04-16 20:34:36,404     INFO [    dctcpserv.py: 476] add ipaddr: 192.168.0.105
+2014-04-16 20:34:36,404     INFO [ nsipyifpmsdc.py: 603] create PA-1-1
+2014-04-16 20:34:36,404     INFO [ nsipyifpmsdc.py: 603] create PA-1-2
+2014-04-16 20:34:36,404     INFO [    collector.py: 148] active Collector 192.168.0.105
+2014-04-16 20:34:36,420     INFO [ nsipyifpmsdc.py: 561] create DC-2 1.2.3.4
+2014-04-16 20:34:36,420     INFO [    dctcpserv.py: 476] add ipaddr: 1.2.3.4
+2014-04-16 20:34:36,420     INFO [ nsipyifpmsdc.py: 603] create PA-2-1
+2014-04-16 20:34:36,420     INFO [ nsipyifpmsdc.py: 603] create PA-2-2
+2014-04-16 20:34:36,420     INFO [    collector.py: 148] active Collector 1.2.3.4
+2014-04-16 20:36:03,750     INFO [ nsipyifpmsdc.py: 528] nsIPyIfpmsDCMgmt startup...
+2014-04-16 20:36:04,000     INFO [ nsipyifpmsdc.py: 786] start serv...
+2014-04-16 20:36:04,157     INFO [       remote.py: 165] remote thread init.
+2014-04-16 20:36:04,157     INFO [ nsipyifpmsdc.py: 823] remote startup ok.
+2014-04-16 20:36:04,157     INFO [ nsipyifpmsdc.py: 832] startup ok.
+2014-04-16 20:36:04,157     INFO [ nsipyifpmsdc.py: 561] create DC-1 192.168.0.105
+2014-04-16 20:36:04,157     INFO [    dctcpserv.py: 476] add ipaddr: 192.168.0.105
+2014-04-16 20:36:04,157     INFO [ nsipyifpmsdc.py: 603] create PA-1-1
+2014-04-16 20:36:04,157     INFO [ nsipyifpmsdc.py: 603] create PA-1-2
+2014-04-16 20:36:04,157     INFO [    collector.py: 148] active Collector 192.168.0.105
+2014-04-16 20:36:04,171     INFO [ nsipyifpmsdc.py: 561] create DC-2 1.2.3.4
+2014-04-16 20:36:04,187     INFO [    dctcpserv.py: 476] add ipaddr: 1.2.3.4
+2014-04-16 20:36:04,187     INFO [ nsipyifpmsdc.py: 603] create PA-2-1
+2014-04-16 20:36:04,187     INFO [ nsipyifpmsdc.py: 603] create PA-2-2
+2014-04-16 20:36:04,187     INFO [    collector.py: 148] active Collector 1.2.3.4
