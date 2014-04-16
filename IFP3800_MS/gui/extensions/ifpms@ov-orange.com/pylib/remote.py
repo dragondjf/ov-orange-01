@@ -128,7 +128,29 @@ class SetProtectHandler(tornado.web.RequestHandler):
         self.write("SetProtectHandler")
 
     def post(self):
-        self.write("SetProtectHandler post")
+        '''
+        数据格式：
+        {"did": 1, "pid":1, "enable":1}# 1:开启 0：禁用
+        '''
+        did = self.get_argument('did', '')
+        pid = self.get_argument('pid', '')
+        enable = self.get_argument('enable', '')
+        flag = False
+        if enable != "":
+            try:
+                for i in xrange(0, self.application.mgmt.pa_list.length):
+                    t = self.application.mgmt.pa_list.queryElementAt(i, components.interfaces.nsIPyIfpmsPA)
+                    if t.did == int(did) and t.pid == int(pid):
+                        t.enable = bool(int(enable))
+                        flag = True
+                        break
+            except Exception, e:
+                logger.exception(e)
+            # 1:成功 0：失败
+            if flag:
+                self.write("1")
+            else:
+                self.write("0")
 
 
 class NotFoundHandler(tornado.web.RequestHandler):
