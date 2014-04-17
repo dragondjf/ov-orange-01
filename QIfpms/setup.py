@@ -104,7 +104,7 @@ buildOptions = dict(
     packages=[],
     excludes=[],
     # includes=['PyQt5.QtWebKit', "PyQt5.QtPrintSupport"],
-    icon="gui\skin\images\logo1.ico",
+    icon="gui\skin\images\QIfpms.ico",
 )
 
 
@@ -117,7 +117,7 @@ executables = [
     Executable(
         'main.py',
         base=base,
-        icon="gui\skin\images\logo1.ico",
+        icon="gui\skin\images\QIfpms.ico",
         targetName="QIfpms.exe",
         appendScriptToExe=False,
         appendScriptToLibrary=True,

@@ -8,7 +8,7 @@ mainwindow = {
     'title': "QIFPMS",
     'size': (0.8, 0.9),
     'minsize': (0.4, 0.3),
-    'icon': "gui/skin/images/ov-orange-logo.png",
+    'icon': "gui/skin/images/QIfpms.png",
     'fullscreenflag': True,
 }
 
@@ -19,7 +19,7 @@ __url__ = ""
 __description__ = '''
     This is a SoftwareFrame based on PyQt5.
 '''
-__logoico__ = "gui/skin/images/ov-orange-logo.png",
+__logoico__ = "gui/skin/images/QIfpms.png",
 __version__ = '1.0.0'
 
 
