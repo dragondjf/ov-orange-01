@@ -19,7 +19,7 @@ __url__ = ""
 __description__ = '''
     This is a SoftwareFrame based on PyQt5.
 '''
-__logoico__ = "gui/skin/images/QIfpms.png",
+__logoico__ = "gui/skin/images/QIfpms.ico"
 __version__ = '1.0.0'
 
 
