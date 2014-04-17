@@ -64,11 +64,11 @@ class GuiManger(QtCore.QObject):
             views['DiagramScene'].addItem(item)
             self.paitems.update({pa['sid']: item})
 
-            t = pa['sid'] +  '  ' + pa['name']
+            t = pa['sid'] + '  ' + pa['name']
             views['PATable'].addItem(i, t)
             self.paLabels.update({pa['sid']: i})
             i += 1
-
+            self.updatePAStatus({'sid': pa['sid'], 'status': pa['status']})
 
     @QtCore.pyqtSlot(dict)
     def updatePAStatus(self, alarm):
@@ -82,15 +82,25 @@ class GuiManger(QtCore.QObject):
 
     @QtCore.pyqtSlot(int)
     def settings(self, index):
-        flag , formdata = settingsinput(windowsoptions['settingsdialog'])
+        flag, formdata = settingsinput(self.pas[index], windowsoptions['settingsdialog'])
         if flag:
             payload = {
-                "did": self.pas[index]['did'], 
-                "pid": self.pas[index]['pid'], 
+                "did": self.pas[index]['did'],
+                "pid": self.pas[index]['pid'],
                 "enable": int(formdata['enable'])
             }
             response = requests.post('http://%s:%s/setprotect' % ("localhost", "8888"), params=payload, timeout=3)
-            print(response.text)
+            print("*"*10, index, response.json())
+            if int(response.json()) == 1:
+                if int(formdata['enable']) == 1:
+                    views['StatusBar'].showMessage(self.pas[index]['name'] + "   启用成功")
+                elif int(formdata['enable']) == 0:
+                    views['StatusBar'].showMessage(self.pas[index]['name'] + "   禁用成功")
+            else:
+                if int(formdata['enable']) == 1:
+                    views['StatusBar'].showMessage("发送启用%s 命令失败" % self.pas[index]['name'])
+                elif int(formdata['enable']) == 0:
+                    views['StatusBar'].showMessage("发送禁用%s 命令失败" % self.pas[index]['name'])
 
     def addItem(self, alarm):
         bgcolor = status_color[alarm[1]]
@@ -109,3 +119,9 @@ class GuiManger(QtCore.QObject):
             newItem.setBackground(bgBrush)
             newItem.setForeground(fgBrush)
             views['AlarmTable'] .setItem(0, col, newItem)
+
+    def getPAList(self):
+        response = requests.get('http://%s:%s/palist' % self.address, timeout=3)
+        result = response.json()
+        pas = result['protection_areas']
+        return pas

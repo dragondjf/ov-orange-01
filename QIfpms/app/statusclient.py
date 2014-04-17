@@ -19,7 +19,7 @@ class StatusClientThread(threading.Thread, QtCore.QObject):
         self.wsurl = "ws://%s:%s/pushstatus" % address
         self.ws = websocket.WebSocketApp(self.wsurl, on_open=on_open, on_message=on_message, on_error=on_error, on_close=on_close)
         self.ws.address = self.address
-        websocket.enableTrace(True)
+        # websocket.enableTrace(True)
 
     def run(self):
         self.ws.run_forever()            

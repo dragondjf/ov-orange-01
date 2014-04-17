@@ -44,7 +44,6 @@ class PATable(QtWidgets.QTableWidget):
         self.setSelectionMode(self.SingleSelection)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
         self.setEditTriggers(self.NoEditTriggers)
-        
         self.setIconSize(QtCore.QSize(self.iconsize, self.iconsize))
 
         self.initData()
@@ -58,7 +57,7 @@ class PATable(QtWidgets.QTableWidget):
         self.yellowPixmap = QtGui.QIcon("gui/skin/images/colorball3/yellow.png")
         self.grayPixmap = QtGui.QIcon("gui/skin/images/colorball3/gray.png")
         self.colors = {
-            'red':self.redPixmap,
+            'red': self.redPixmap,
             'green': self.greenPixmap,
             'yellow': self.yellowPixmap,
             'gray': self.grayPixmap
@@ -91,7 +90,9 @@ class PATable(QtWidgets.QTableWidget):
         self.setCellWidget(row, 2, settingItem)
 
     def clickSetting(self):
-        signal_DB.settingsIndex_sin.emit(self.currentRow())
+        for row in range(self.rowCount()):
+            if self.cellWidget(row, 2) is self.sender():
+                signal_DB.settingsIndex_sin.emit(row)
 
     def changeColor(self, row, bgcolor):
         for col in range(self.columnCount()):
@@ -248,8 +249,8 @@ class PAItem(QtWidgets.QGraphicsPixmapItem):
         self.grayPixmap = QtGui.QPixmap("gui/skin/images/colorball3/gray.png").scaled(self.size, self.size)
 
         self.pixmaps = [
-            self.grayPixmap, self.grayPixmap, 
-            self.greenPixmap, self.greenPixmap, 
+            self.grayPixmap, self.grayPixmap,
+            self.greenPixmap, self.greenPixmap,
             self.redPixmap, self.yellowPixmap, self.redPixmap
         ]
 

@@ -4,6 +4,7 @@ import os
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
+import requests
 
 if __name__ == '__main__':
     from basedialog import BaseDialog
@@ -12,9 +13,8 @@ else:
 
 
 class SettingsDialog(BaseDialog):
-    def __init__(self, styleoptions, parent=None):
+    def __init__(self, pa, styleoptions, parent=None):
         super(SettingsDialog, self).__init__(styleoptions, parent)
-
         self.data = {}
 
         formLayout = QtWidgets.QFormLayout()
@@ -22,12 +22,26 @@ class SettingsDialog(BaseDialog):
         formLayout.setLabelAlignment(QtCore.Qt.AlignRight)
         formLayout.setHorizontalSpacing(40)
 
+        nameLabel = QtWidgets.QLabel("防区名字:")
+        paNameLabel = QtWidgets.QLabel(pa['name'])
+
+        didLabel = QtWidgets.QLabel("采集器:")
+        paDidLabel = QtWidgets.QLabel(str(pa['did']))
+
+        pidLabel = QtWidgets.QLabel("防区:")
+        paPidLabel = QtWidgets.QLabel(str(pa['pid']))
+
         self.startLabel = QtWidgets.QLabel("启用:")
         self.startLabel.setFixedWidth(100)
         self.startLabel.setAlignment(QtCore.Qt.AlignRight)
         self.startCheckBox = QtWidgets.QCheckBox()
-        self.startCheckBox.setChecked(True)
+        self.startCheckBox.setChecked(pa['status'])
 
+        print("pa status:", pa['status'])
+
+        formLayout.addRow(nameLabel, paNameLabel)
+        formLayout.addRow(didLabel, paDidLabel)
+        formLayout.addRow(pidLabel, paPidLabel)
         formLayout.addRow(self.startLabel, self.startCheckBox)
 
         #确认按钮布局
@@ -41,17 +55,17 @@ class SettingsDialog(BaseDialog):
 
         self.layout().addLayout(formLayout)
         self.layout().addLayout(enterwidget_mainlayout)
-        self.setFixedSize(400, 200)
+        self.setFixedSize(400, 300)
 
     def enter(self):
         self.data = {
-            "enable": self.startCheckBox.isChecked() 
+            "enable": self.startCheckBox.isChecked()
         }
         self.accept()  # 关闭对话框并返回1
 
 
-def settingsinput(options):
-    dialog = SettingsDialog(options)
+def settingsinput(pa, options):
+    dialog = SettingsDialog(pa, options)
     if dialog.exec_():
         return True, dialog.data
     else:
