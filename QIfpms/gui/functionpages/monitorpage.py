@@ -41,7 +41,7 @@ class PATable(QtWidgets.QTableWidget):
         self.parent = parent
         self.setShowGrid(False)
         self.setSelectionBehavior(self.SelectRows)
-        self.setSelectionMode(self.MultiSelection)
+        self.setSelectionMode(self.SingleSelection)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
         self.setEditTriggers(self.NoEditTriggers)
         
@@ -96,11 +96,12 @@ class PATable(QtWidgets.QTableWidget):
     def changeColor(self, row, bgcolor):
         for col in range(self.columnCount()):
             item = self.item(row, col)
-            if col == 0:
-                item.setIcon(self.colors[bgcolor])
-            else:
-                bgBrush = QtGui.QBrush(QtGui.QColor(bgcolor))
-                item.setBackground(bgBrush)
+            if item:
+                if col == 0:
+                    item.setIcon(self.colors[bgcolor])
+                else:
+                    bgBrush = QtGui.QBrush(QtGui.QColor(bgcolor))
+                    item.setBackground(bgBrush)
 
     def addItem(self, row, message, bgcolor="gray", fgcolor="white"):
         self.insertRow(row)
@@ -229,6 +230,8 @@ class MapPanel(QtWidgets.QFrame):
 
 class PAItem(QtWidgets.QGraphicsPixmapItem):
 
+    size = 48
+
     def __init__(self, contextMenu, parent=None):
         super(PAItem, self).__init__(parent)
         self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
@@ -239,10 +242,10 @@ class PAItem(QtWidgets.QGraphicsPixmapItem):
         self.setPixmap(self.grayPixmap)
 
     def initData(self):
-        self.redPixmap = QtGui.QPixmap("gui/skin/images/colorball3/red.png").scaled(64, 64)
-        self.greenPixmap = QtGui.QPixmap("gui/skin/images/colorball3/green.png").scaled(64, 64)
-        self.yellowPixmap = QtGui.QPixmap("gui/skin/images/colorball3/yellow.png").scaled(64, 64)
-        self.grayPixmap = QtGui.QPixmap("gui/skin/images/colorball3/gray.png").scaled(64, 64)
+        self.redPixmap = QtGui.QPixmap("gui/skin/images/colorball3/red.png").scaled(self.size, self.size)
+        self.greenPixmap = QtGui.QPixmap("gui/skin/images/colorball3/green.png").scaled(self.size, self.size)
+        self.yellowPixmap = QtGui.QPixmap("gui/skin/images/colorball3/yellow.png").scaled(self.size, self.size)
+        self.grayPixmap = QtGui.QPixmap("gui/skin/images/colorball3/gray.png").scaled(self.size, self.size)
 
         self.pixmaps = [
             self.grayPixmap, self.grayPixmap, 

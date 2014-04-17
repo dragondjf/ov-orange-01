@@ -44,14 +44,14 @@ class GuiManger(QtCore.QObject):
         signal_DB.simpleAlarm_sin.connect(self.updatePAStatus)
         signal_DB.settingsIndex_sin.connect(self.settings)
 
-        views['DiagramScene'].selectionChanged.connect(self.selectPA)
+        # views['DiagramScene'].selectionChanged.connect(self.selectPA)
 
-    def selectPA(self):
-        paSelectItems = views['DiagramScene'].selectedItems()
-        for key, value in self.paitems.items():
-            if value in paSelectItems:
-                index = self.paLabels[key]
-                views['PATable'].selectRow(index)
+    # def selectPA(self):
+    #     paSelectItems = views['DiagramScene'].selectedItems()
+    #     for key, value in self.paitems.items():
+    #         if value in paSelectItems:
+    #             index = self.paLabels[key]
+    #             views['PATable'].selectRow(index)
 
     @QtCore.pyqtSlot(list)
     def createItems(self, pas):
@@ -87,7 +87,7 @@ class GuiManger(QtCore.QObject):
             payload = {
                 "did": self.pas[index]['did'], 
                 "pid": self.pas[index]['pid'], 
-                "enable": formdata['enable']
+                "enable": int(formdata['enable'])
             }
             response = requests.post('http://%s:%s/setprotect' % ("localhost", "8888"), params=payload, timeout=3)
             print(response.text)
