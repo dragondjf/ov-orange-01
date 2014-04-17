@@ -119,6 +119,8 @@ class MainWindow(QtWidgets.QMainWindow):
                 elif item == 'exitsaveRadio' and exitflag[item]:
                     evt.accept()
                     self.saveoptions()
+                    if not os.path.exists("options"):
+                        os.mkdir("options")
                     with open("options\windowsoptions.json", 'w') as f:
                         json.dump(windowsoptions, f, indent=4)
         else:
