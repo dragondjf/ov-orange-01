@@ -7,7 +7,8 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from gui.mainwindow import collectView, views
 from gui.uiconfig import windowsoptions
-
+from dataBase import signal_DB
+from gui.mainwindow.qrc_icons import *
 
 class Splitter(QtWidgets.QSplitter):
 
@@ -24,11 +25,15 @@ class Splitter(QtWidgets.QSplitter):
 
         self.addWidget(self.paListPanel)
         self.addWidget(self.mapPanel)
+        self.setContentsMargins(0, 0, 0, 0)
 
 
 class PATable(QtWidgets.QTableWidget):
 
     viewID = "PATable"
+
+    iconsize = 36
+    setting_size = 48
 
     @collectView
     def __init__(self, parent=None):
@@ -36,112 +41,98 @@ class PATable(QtWidgets.QTableWidget):
         self.parent = parent
         self.setShowGrid(False)
         self.setSelectionBehavior(self.SelectRows)
-        self.setSelectionMode(self.SingleSelection)
+        self.setSelectionMode(self.MultiSelection)
         self.setFocusPolicy(QtCore.Qt.NoFocus)
         self.setEditTriggers(self.NoEditTriggers)
+        
+        self.setIconSize(QtCore.QSize(self.iconsize, self.iconsize))
 
+        self.initData()
         self.initHeader()
         self.initColumnWidth()
+        self.initConnect()
+
+    def initData(self):
+        self.redPixmap = QtGui.QIcon("gui/skin/images/colorball3/red.png")
+        self.greenPixmap = QtGui.QIcon("gui/skin/images/colorball3/green.png")
+        self.yellowPixmap = QtGui.QIcon("gui/skin/images/colorball3/yellow.png")
+        self.grayPixmap = QtGui.QIcon("gui/skin/images/colorball3/gray.png")
+        self.colors = {
+            'red':self.redPixmap,
+            'green': self.greenPixmap,
+            'yellow': self.yellowPixmap,
+            'gray': self.grayPixmap
+        }
 
     def initHeader(self):
         self.setColumnCount(3)
-        # headerview = QtWidgets.QHeaderView(QtCore.Qt.Horizontal, self)
         self.horizontalHeader().hide()
         self.verticalHeader().hide()
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
     def initColumnWidth(self):
-        self.setColumnWidth(0, 60)
-        self.setColumnWidth(2, 60)
+        self.setColumnWidth(0, self.iconsize + 6)
+        self.setColumnWidth(2, self.setting_size)
         self.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Fixed)
         self.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
         self.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Fixed)
 
+    def initConnect(self):
+        # self.cellClicked.connect(self.action_cellClicked)
+        pass
+
+    def action_cellClicked(self, row, column):
+        self.removeColumn(2)
+        self.insertColumn(2)
+        self.setColumnWidth(2, self.setting_size)
+
+        settingItem = QtWidgets.QPushButton("设置")
+        settingItem.clicked.connect(self.clickSetting)
+        self.setCellWidget(row, 2, settingItem)
+
+    def clickSetting(self):
+        signal_DB.settingsIndex_sin.emit(self.currentRow())
+
     def changeColor(self, row, bgcolor):
         for col in range(self.columnCount()):
             item = self.item(row, col)
-            bgBrush = QtGui.QBrush(QtGui.QColor(bgcolor))
-            item.setBackground(bgBrush)
+            if col == 0:
+                item.setIcon(self.colors[bgcolor])
+            else:
+                bgBrush = QtGui.QBrush(QtGui.QColor(bgcolor))
+                item.setBackground(bgBrush)
 
     def addItem(self, row, message, bgcolor="gray", fgcolor="white"):
-        print(row, message)
         self.insertRow(row)
-        
         bgBrush = QtGui.QBrush(QtGui.QColor(bgcolor))
         fgBrush = QtGui.QBrush(QtGui.QColor(fgcolor))
-
+        self.setRowHeight(row, self.iconsize + 6)
         for col in range(self.columnCount()):
             if col == 0:
                 item = QtWidgets.QTableWidgetItem("")
+                item.setIcon(QtGui.QIcon(self.grayPixmap))
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                self.setItem(row, col, item)
             elif col == 1:
                 item = QtWidgets.QTableWidgetItem(message)
+                item.setBackground(bgBrush)
+                item.setForeground(fgBrush)
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                self.setItem(row, col, item)
             elif col == 2:
-                item = QtWidgets.QTableWidgetItem("设置")
-            item.setBackground(bgBrush)
-            item.setForeground(fgBrush)
-            self.setItem(row, col, item)
-
-# class PAPanel(QtWidgets.QScrollArea):
-
-#     viewID = "PAPanel"
-
-#     @collectView
-#     def __init__(self, parent=None):
-#         super(PAPanel, self).__init__(parent)
-#         self.parent = parent
-#         self.initData()
-#         self.initUI()
-
-#     def initData(self):
-#         pass
-
-#     def initUI(self):
-#         self.paFrame = QtWidgets.QWidget()
-#         self.paFrame.resize(QtCore.QSize(windowsoptions['pawidth'] - 40, windowsoptions['viewHeight']))
-#         self.paFrame.setObjectName("PAFrame")
-#         mainlayout = QtWidgets.QVBoxLayout()
-#         mainlayout.setSpacing(2)
-#         # for i in range(100):
-#         #     mainlayout.addWidget(PALabel("%d"%i, self))
-#         self.paFrame.setLayout(mainlayout)
-#         self.setWidget(self.paFrame)
-
-
-# class PALabel(QtWidgets.QPushButton):
-
-#     def __init__(self, name, parent=None):
-#         super(PALabel, self).__init__(parent)
-#         self.parent = parent
-#         self.setFlat(True)
-#         # self.setDisabled(True)
-#         self.setObjectName("PALabel")
-#         self.setFixedSize(windowsoptions['pawidth'] - 40, 35)
-#         self.setText(name)
-#         self.settingButton = QtWidgets.QPushButton("设置", self)
-#         self.settingButton.setObjectName("PAsetting")
-#         self.settingButton.setFixedSize(40, 35)
-#         self.settingButton.hide()
-#         self.settingButton.move(self.width() - 40, 0)
-#         self.installEventFilter(self)
-
-#     def eventFilter(self, obj, event):
-#         if event.type() == QtCore.QEvent.HoverMove:
-#             self.settingButton.show()
-#             return True
-#         elif event.type() == QtCore.QEvent.Leave:
-#             self.settingButton.hide()
-#             return True
-#         else:
-#             return super(PALabel, self).eventFilter(obj, event)
-
-#     def changeColor(self, bgcolor):
-#         style = "QPushButton#PALabel{background-color: %s;} " % bgcolor
-#         style_setting = '''QPushButton#PAsetting{
-#             color: white;
-#             background-color: green;
-#         }'''
-#         self.setStyleSheet(style)
-#         self.settingButton.setStyleSheet(style_setting)
+                settingItem = QtWidgets.QPushButton()
+                settingItem.setStyleSheet('''
+                    QPushButton{
+                        border-image: url(:/icons/light/appbar.settings.png);
+                    }
+                    QPushButton:pressed{
+                        border-image: url(:/icons/dark/appbar.settings.png);
+                    }
+                ''')
+                settingItem.setToolTip(self.tr("设置"))
+                settingItem.setFixedSize(48, 48)
+                settingItem.clicked.connect(self.clickSetting)
+                self.setCellWidget(row, 2, settingItem)
 
 
 class MonitorPage(QtWidgets.QFrame):

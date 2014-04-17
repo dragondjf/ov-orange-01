@@ -7,6 +7,7 @@ from PyQt5 import QtWidgets
 import requests
 from dataBase import signal_DB
 import threading
+from Crypto.Hash import MD5
 if __name__ == '__main__':
     from basedialog import BaseDialog
 else:
@@ -62,7 +63,7 @@ class AuthLoginDialog(BaseDialog):
         self.resize(self.width(), self.height())
         self.layout().setContentsMargins(10, 10, 10, 20)
 
-        signal_DB.loginsin.connect(self.authLogin)
+        signal_DB.login_sin.connect(self.authLogin)
 
     def clickEnter(self):
         name = self.login_name.text()
@@ -102,19 +103,20 @@ class AuthLoginThread(threading.Thread, QtCore.QObject):
         status = None
         result = None
         try:
-            userinfo = {"account": self.user, "password": "21232f297a57a5a743894a0e4a801fc3"}
+            userinfo = {"account": self.user, "password": MD5.new(('%s' % self.password).encode('utf-8')).hexdigest()}                
             result = requests.post('http://%s:%s/login' % self.address, data=userinfo)
             loginflag = int(result.json())
             if loginflag == 1:
-                signal_DB.loginsin.emit({'status': True, 'result': "登陆成功"})
+                signal_DB.login_sin.emit({'status': True, 'result': "登陆成功"})
             elif loginflag == 2:
-                signal_DB.loginsin.emit({'status': False, 'result': "请输入正确的用户名"})
+                signal_DB.login_sin.emit({'status': False, 'result': "请输入正确的用户名"})
             elif loginflag == 3:
-                signal_DB.loginsin.emit({'status': False, 'result': "请输入正确的密码"})
+                signal_DB.login_sin.emit({'status': False, 'result': "请输入正确的密码"})
         except requests.ConnectionError as e:
-            signal_DB.loginsin.emit({'status': False, 'result':"请输入正确的ip地址或端口号"})
+            signal_DB.login_sin.emit({'status': False, 'result':"请输入正确的ip地址或端口号"})
         except Exception as e:
-            signal_DB.loginsin.emit({'status': False, 'result':"请输入正确的参数"})
+            print(e)
+            signal_DB.login_sin.emit({'status': False, 'result':"请输入正确的参数"})
 
 
 def weblogin(loginoptions):

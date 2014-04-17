@@ -12,8 +12,9 @@ import threading
 import time
 from dataBase import signal_DB
 import requests
-
+from gui.dialogs import settingsinput
 from .guiconfig import views
+from gui.uiconfig import windowsoptions
 
 
 status_name = ['disable', 'disconn', 'connect', 'alarm_minor', 'alarm_critical', 'alarm_fiber_break', 'alarm_blast']
@@ -33,6 +34,7 @@ class GuiManger(QtCore.QObject):
         self.initSignalConnect()
 
     def initData(self):
+        self.pas = []
         self.paitems = {}
         self.paLabels = {}
 
@@ -40,10 +42,21 @@ class GuiManger(QtCore.QObject):
         signal_DB.pas_sin.connect(self.createItems)
         signal_DB.alarm_sin.connect(self.addItem)
         signal_DB.simpleAlarm_sin.connect(self.updatePAStatus)
+        signal_DB.settingsIndex_sin.connect(self.settings)
+
+        views['DiagramScene'].selectionChanged.connect(self.selectPA)
+
+    def selectPA(self):
+        paSelectItems = views['DiagramScene'].selectedItems()
+        for key, value in self.paitems.items():
+            if value in paSelectItems:
+                index = self.paLabels[key]
+                views['PATable'].selectRow(index)
 
     @QtCore.pyqtSlot(list)
     def createItems(self, pas):
         from gui.functionpages import PAItem
+        self.pas = pas
         i = 0
         for pa in pas:
             item = PAItem(views['DiagramScene'].itemMenu)
@@ -67,15 +80,17 @@ class GuiManger(QtCore.QObject):
         row = self.paLabels[sid]
         views['PATable'].changeColor(row, status_color[status])
 
-    def statusManager(self, alarm):
-        '''
-        {"did": 1, "status": 2, "pid": 2, "status_change_time": 1397487425, "sid": "PA-1-2"}
-        '''
-        self.count += 1
-        alarmList = [self.count, alarm['status'], alarm['did'], alarm['pid'], alarm['status_change_time'], alarm['sid'], "yes"]
-        self.addItem(alarmList)
-        simpleAlarm = {'sid': alarm['sid'], 'status': alarm['status']}
-        self.updatePAStatus(simpleAlarm)
+    @QtCore.pyqtSlot(int)
+    def settings(self, index):
+        flag , formdata = settingsinput(windowsoptions['settingsdialog'])
+        if flag:
+            payload = {
+                "did": self.pas[index]['did'], 
+                "pid": self.pas[index]['pid'], 
+                "enable": formdata['enable']
+            }
+            response = requests.post('http://%s:%s/setprotect' % ("localhost", "8888"), params=payload, timeout=3)
+            print(response.text)
 
     def addItem(self, alarm):
         bgcolor = status_color[alarm[1]]

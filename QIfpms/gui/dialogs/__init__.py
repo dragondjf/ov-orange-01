@@ -12,7 +12,7 @@ from .confirmdialog import confirm
 from .confirmdialog import ConfirmDialog
 from .basedialog import DynamicTextWidget
 from .weblogindialog import weblogin
-
+from .settingsdialog import settingsinput
 
 __version__ = '0.1.0'
 

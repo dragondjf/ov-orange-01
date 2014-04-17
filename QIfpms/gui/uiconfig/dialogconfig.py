@@ -69,5 +69,13 @@ dialogsettings = {
         'size': (400, 300),
         'logo_title': logo_title,
         'logo_img_url': logo_img_url
+    },
+    'settingsdialog': {
+        'title': u'输入设置参数',
+        'windowicon': logo_ico,
+        'minsize': (400, 300),
+        'size': (400, 300),
+        'logo_title': logo_title,
+        'logo_img_url': logo_img_url
     }
 }

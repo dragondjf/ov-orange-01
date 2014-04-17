@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from PyQt5 import QtWidgets
+
 from gui import MainWindow, GuiManger
 from app import StatusClientThread
 from gui.uiconfig import windowsoptions
@@ -16,7 +17,6 @@ import json
 if __name__ == '__main__':
     import sys
     app = QtWidgets.QApplication(sys.argv)
-
     loginsettings = windowsoptions['weblogin_window']
     login_flag, address = weblogin(loginsettings)
     if login_flag:

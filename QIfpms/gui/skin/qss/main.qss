@@ -14,9 +14,9 @@ QFrame#NavgationBar{
     background-color: green;
 }
 
-
 QStatusBar {
-    background: gray;
+    color: white;
+    background-color: rgb(0, 146, 63);
 }
 
 QStatusBar QLabel#datatimelabel{
@@ -35,6 +35,10 @@ QToolButton:hover{
     border: 1px;
 }
 
+
+QSplitter{
+    border:none;
+}
 
 QSplitter::handle {
     background-color: gray;
@@ -165,6 +169,10 @@ QHeaderView::section {
     border: 1px solid #252a31;
 }
 
+
+QTableWidget{
+    boder: none;
+}
 
 /*QFrame#AlarmListPage{
     background-color: white;

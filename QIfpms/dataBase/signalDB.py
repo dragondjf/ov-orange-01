@@ -6,10 +6,12 @@ from PyQt5 import QtCore
 
 class SignalDB(QtCore.QObject):
 
-    loginsin = QtCore.pyqtSignal(dict)
+    login_sin = QtCore.pyqtSignal(dict)
     pas_sin = QtCore.pyqtSignal(list)
     alarm_sin = QtCore.pyqtSignal(list)
     simpleAlarm_sin = QtCore.pyqtSignal(dict)
+
+    settingsIndex_sin = QtCore.pyqtSignal(int)
 
     def __init__(self):
         super(SignalDB, self).__init__()
