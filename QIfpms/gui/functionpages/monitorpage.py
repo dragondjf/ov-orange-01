@@ -5,9 +5,8 @@ import os
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
-from gui.mainwindow.guimanger import collectView, views
+from gui.mainwindow import collectView, views
 from gui.uiconfig import windowsoptions
-# from gui.mainwindow.guimanger import signal_DB
 
 
 class Splitter(QtWidgets.QSplitter):
@@ -15,15 +14,134 @@ class Splitter(QtWidgets.QSplitter):
     def __init__(self, parent=None):
         super(Splitter, self).__init__(parent)
 
-        self.paListPanel = QtWidgets.QFrame()
-        self.paListPanel.setFixedWidth(views['MainWindow'].width() * 0.22)
+        if 'pawidth' not in windowsoptions:
+            windowsoptions['pawidth'] = views['MainWindow'].width() * 0.22
+
+        self.paListPanel = PATable(self)
+        self.paListPanel.setFixedWidth(windowsoptions['pawidth'])
 
         self.mapPanel = MapPanel(self)
 
         self.addWidget(self.paListPanel)
         self.addWidget(self.mapPanel)
 
-        self.setCollapsible(0, False)
+
+class PATable(QtWidgets.QTableWidget):
+
+    viewID = "PATable"
+
+    @collectView
+    def __init__(self, parent=None):
+        super(PATable, self).__init__(parent)
+        self.parent = parent
+        self.setShowGrid(False)
+        self.setSelectionBehavior(self.SelectRows)
+        self.setSelectionMode(self.SingleSelection)
+        self.setFocusPolicy(QtCore.Qt.NoFocus)
+        self.setEditTriggers(self.NoEditTriggers)
+
+        self.initHeader()
+        self.initColumnWidth()
+
+    def initHeader(self):
+        self.setColumnCount(3)
+        # headerview = QtWidgets.QHeaderView(QtCore.Qt.Horizontal, self)
+        self.horizontalHeader().hide()
+        self.verticalHeader().hide()
+        self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
+
+    def initColumnWidth(self):
+        self.setColumnWidth(0, 60)
+        self.setColumnWidth(2, 60)
+        self.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Fixed)
+        self.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
+        self.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Fixed)
+
+    def changeColor(self, row, bgcolor):
+        for col in range(self.columnCount()):
+            item = self.item(row, col)
+            bgBrush = QtGui.QBrush(QtGui.QColor(bgcolor))
+            item.setBackground(bgBrush)
+
+    def addItem(self, row, message, bgcolor="gray", fgcolor="white"):
+        print(row, message)
+        self.insertRow(row)
+        
+        bgBrush = QtGui.QBrush(QtGui.QColor(bgcolor))
+        fgBrush = QtGui.QBrush(QtGui.QColor(fgcolor))
+
+        for col in range(self.columnCount()):
+            if col == 0:
+                item = QtWidgets.QTableWidgetItem("")
+            elif col == 1:
+                item = QtWidgets.QTableWidgetItem(message)
+            elif col == 2:
+                item = QtWidgets.QTableWidgetItem("设置")
+            item.setBackground(bgBrush)
+            item.setForeground(fgBrush)
+            self.setItem(row, col, item)
+
+# class PAPanel(QtWidgets.QScrollArea):
+
+#     viewID = "PAPanel"
+
+#     @collectView
+#     def __init__(self, parent=None):
+#         super(PAPanel, self).__init__(parent)
+#         self.parent = parent
+#         self.initData()
+#         self.initUI()
+
+#     def initData(self):
+#         pass
+
+#     def initUI(self):
+#         self.paFrame = QtWidgets.QWidget()
+#         self.paFrame.resize(QtCore.QSize(windowsoptions['pawidth'] - 40, windowsoptions['viewHeight']))
+#         self.paFrame.setObjectName("PAFrame")
+#         mainlayout = QtWidgets.QVBoxLayout()
+#         mainlayout.setSpacing(2)
+#         # for i in range(100):
+#         #     mainlayout.addWidget(PALabel("%d"%i, self))
+#         self.paFrame.setLayout(mainlayout)
+#         self.setWidget(self.paFrame)
+
+
+# class PALabel(QtWidgets.QPushButton):
+
+#     def __init__(self, name, parent=None):
+#         super(PALabel, self).__init__(parent)
+#         self.parent = parent
+#         self.setFlat(True)
+#         # self.setDisabled(True)
+#         self.setObjectName("PALabel")
+#         self.setFixedSize(windowsoptions['pawidth'] - 40, 35)
+#         self.setText(name)
+#         self.settingButton = QtWidgets.QPushButton("设置", self)
+#         self.settingButton.setObjectName("PAsetting")
+#         self.settingButton.setFixedSize(40, 35)
+#         self.settingButton.hide()
+#         self.settingButton.move(self.width() - 40, 0)
+#         self.installEventFilter(self)
+
+#     def eventFilter(self, obj, event):
+#         if event.type() == QtCore.QEvent.HoverMove:
+#             self.settingButton.show()
+#             return True
+#         elif event.type() == QtCore.QEvent.Leave:
+#             self.settingButton.hide()
+#             return True
+#         else:
+#             return super(PALabel, self).eventFilter(obj, event)
+
+#     def changeColor(self, bgcolor):
+#         style = "QPushButton#PALabel{background-color: %s;} " % bgcolor
+#         style_setting = '''QPushButton#PAsetting{
+#             color: white;
+#             background-color: green;
+#         }'''
+#         self.setStyleSheet(style)
+#         self.settingButton.setStyleSheet(style_setting)
 
 
 class MonitorPage(QtWidgets.QFrame):
@@ -127,7 +245,7 @@ class PAItem(QtWidgets.QGraphicsPixmapItem):
         self.setTransformationMode(QtCore.Qt.SmoothTransformation)
         self.contextMenu = contextMenu
         self.initData()
-        self.setPixmap(self.greenPixmap)
+        self.setPixmap(self.grayPixmap)
 
     def initData(self):
         self.redPixmap = QtGui.QPixmap("gui/skin/images/colorball3/red.png").scaled(64, 64)
@@ -159,15 +277,6 @@ class DiagramScene(QtWidgets.QGraphicsScene):
     def __init__(self, itemMenu, parent=None):
         super(DiagramScene, self).__init__(parent)
         self.itemMenu = itemMenu
-
-    def mouseDoubleClickEvent(self, event):
-        if (event.button() != QtCore.Qt.LeftButton):
-            return
-        item = PAItem(self.itemMenu)
-        self.addItem(item)
-        item.setPos(event.scenePos())
-        self.itemInserted.emit(item)
-        super(DiagramScene, self).mouseDoubleClickEvent(event)
 
     def mouseMoveEvent(self, event):
         for item in self.selectedItems():
@@ -230,7 +339,6 @@ class MapGraphicsView(QtWidgets.QGraphicsView):
                 self.viewHeight = windowsoptions["viewHeight"]
             else:
                 return
-
         self.scene().setSceneRect(QtCore.QRectF(0, 0, self.viewWidth, self.viewHeight))
         bgPixmap = QtGui.QPixmap(bgfile).scaled(self.viewWidth, self.viewHeight)
         bgBrush = QtGui.QBrush(bgPixmap)

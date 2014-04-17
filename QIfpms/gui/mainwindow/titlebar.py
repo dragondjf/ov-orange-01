@@ -6,7 +6,7 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from .qrc_icons import *
-from .guimanger import collectView, views
+from .guiconfig import collectView, views
 
 
 class TitleBar(QtWidgets.QFrame):

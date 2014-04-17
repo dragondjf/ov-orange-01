@@ -12,7 +12,7 @@ from .centerwindow import CenterWindow
 from gui.uiconfig import windowsoptions
 from gui.uiutil import set_skin
 import gui.dialogs as dialogs
-from .guimanger import collectView, views
+from .guiconfig import collectView, views
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -125,4 +125,5 @@ class MainWindow(QtWidgets.QMainWindow):
             evt.ignore()
 
     def saveoptions(self):
+        from gui.uiconfig import windowsoptions
         windowsoptions['mainwindow']['fullscreenflag'] = self.isFullScreen()

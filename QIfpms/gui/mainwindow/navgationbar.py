@@ -5,7 +5,7 @@ import os
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
-from .guimanger import collectView
+from .guiconfig import collectView
 
 
 class BaseToolButton(QtWidgets.QPushButton):

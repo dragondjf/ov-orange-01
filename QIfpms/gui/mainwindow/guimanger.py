@@ -4,7 +4,7 @@
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
-import functools
+
 import random
 from datetime import datetime
 import json
@@ -13,18 +13,7 @@ import time
 from dataBase import signal_DB
 import requests
 
-
-views = {}
-
-
-def collectView(fuc):
-
-    @functools.wraps(fuc)
-    def wrapper(*args, **kwargs):
-        self = args[0]
-        views.update({self.viewID: self})
-        fuc(*args, **kwargs)
-    return wrapper
+from .guiconfig import views
 
 
 status_name = ['disable', 'disconn', 'connect', 'alarm_minor', 'alarm_critical', 'alarm_fiber_break', 'alarm_blast']
@@ -45,6 +34,7 @@ class GuiManger(QtCore.QObject):
 
     def initData(self):
         self.paitems = {}
+        self.paLabels = {}
 
     def initSignalConnect(self):
         signal_DB.pas_sin.connect(self.createItems)
@@ -54,11 +44,18 @@ class GuiManger(QtCore.QObject):
     @QtCore.pyqtSlot(list)
     def createItems(self, pas):
         from gui.functionpages import PAItem
+        i = 0
         for pa in pas:
             item = PAItem(views['DiagramScene'].itemMenu)
             item.setPos(QtCore.QPointF(pa['cx'], pa['cy']))
             views['DiagramScene'].addItem(item)
             self.paitems.update({pa['sid']: item})
+
+            t = pa['sid'] +  '  ' + pa['name']
+            views['PATable'].addItem(i, t)
+            self.paLabels.update({pa['sid']: i})
+            i += 1
+
 
     @QtCore.pyqtSlot(dict)
     def updatePAStatus(self, alarm):
@@ -66,6 +63,9 @@ class GuiManger(QtCore.QObject):
         status = alarm['status']
         item = self.paitems[sid]
         item.setPixmap(item.pixmaps[status])
+
+        row = self.paLabels[sid]
+        views['PATable'].changeColor(row, status_color[status])
 
     def statusManager(self, alarm):
         '''

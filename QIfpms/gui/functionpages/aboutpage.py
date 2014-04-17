@@ -5,7 +5,7 @@ import os
 from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
-from gui.mainwindow.guimanger import collectView
+from gui.mainwindow import collectView
 
 
 class AboutPage(QtWidgets.QFrame):

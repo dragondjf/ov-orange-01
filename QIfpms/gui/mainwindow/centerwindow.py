@@ -7,7 +7,7 @@ from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 from .navgationbar import NavgationBar
 from .titlebar import TitleBar
-from .guimanger import collectView, views
+from .guiconfig import collectView, views
 from gui.functionpages import MonitorPage, AlarmListPage, AboutPage
 
 

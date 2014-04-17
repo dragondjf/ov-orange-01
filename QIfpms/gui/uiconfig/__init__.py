@@ -39,5 +39,6 @@ except:
     windowsoptions = {
         'mainwindow': mainwindow,
         'splashimg': os.sep.join([os.getcwd(), 'skin', 'images', 'splash.png']),
+        'viewbgfile':  os.sep.join([os.getcwd(), 'gui', 'skin', 'images', 'compayimage.jpg']),
     }
     windowsoptions.update(dialogsettings)

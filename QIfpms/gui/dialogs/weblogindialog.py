@@ -28,7 +28,7 @@ class AuthLoginDialog(BaseDialog):
         self.login_password.setPlaceholderText(u'密码')
 
         self.ipLabel = QtWidgets.QLabel(u'输入主机ip:')
-        self.ipLineEdit = QtWidgets.QLineEdit(u'192.168.1.100')
+        self.ipLineEdit = QtWidgets.QLineEdit(u'127.0.0.1')
         self.ipLineEdit.setInputMask('000.000.000.000')
         self.portLabel = QtWidgets.QLabel(u'输入主机port:')
         self.portLineEdit = QtWidgets.QLineEdit(u'8888')
@@ -42,7 +42,6 @@ class AuthLoginDialog(BaseDialog):
 
         self.statusLabel = QtWidgets.QLabel("")
         self.statusLabel.setFixedHeight(30)
-
 
         mainlayout = QtWidgets.QGridLayout()
         mainlayout.addWidget(self.login_nameLabel, 0, 0)
@@ -88,7 +87,7 @@ class AuthLoginDialog(BaseDialog):
             self.accept()
         else:
             self.pbLogin.setChecked(False)
-            self.statusLabel.setText("登录失败")
+            self.statusLabel.setText(info['result'])
 
 
 class AuthLoginThread(threading.Thread, QtCore.QObject):
@@ -99,25 +98,23 @@ class AuthLoginThread(threading.Thread, QtCore.QObject):
         self.password = password
         self.address = address
 
-        self.flag = True
-
     def run(self):
         status = None
         result = None
         try:
-            # result = requests.get('http://%s:%s/LoginHandler' % (ip, port))
-            # loginflag = result.json()
-            loginflag = True
-            if loginflag:
-                response = requests.get('http://%s:%s/palist' % self.address,  timeout=2)
-                pas = response.json()
-                result = pas['protection_areas']
-                signal_DB.loginsin.emit({'status': True, 'result': result})
-            else:
-                signal_DB.loginsin.emit({'status': False, 'result': result})
+            userinfo = {"account": self.user, "password": "21232f297a57a5a743894a0e4a801fc3"}
+            result = requests.post('http://%s:%s/login' % self.address, data=userinfo)
+            loginflag = int(result.json())
+            if loginflag == 1:
+                signal_DB.loginsin.emit({'status': True, 'result': "登陆成功"})
+            elif loginflag == 2:
+                signal_DB.loginsin.emit({'status': False, 'result': "请输入正确的用户名"})
+            elif loginflag == 3:
+                signal_DB.loginsin.emit({'status': False, 'result': "请输入正确的密码"})
+        except requests.ConnectionError as e:
+            signal_DB.loginsin.emit({'status': False, 'result':"请输入正确的ip地址或端口号"})
         except Exception as e:
-            print(e)
-            signal_DB.loginsin.emit({'status': False, 'result':result})
+            signal_DB.loginsin.emit({'status': False, 'result':"请输入正确的参数"})
 
 
 def weblogin(loginoptions):
