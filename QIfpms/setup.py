@@ -4,6 +4,7 @@ import os
 import shutil
 import zipfile
 from cx_Freeze import setup, Executable
+import PyQt5
 
 # Dependencies are automatically detected, but it might need
 # fine tuning.
@@ -131,6 +132,8 @@ if __name__ == '__main__':
         path = os.sep.join([os.getcwd(), key])
         delete_file_folder(path)
 
+    path_pyqt5 = PyQt5.__path__[0]
+
     sys.argv.append("build")
     setup(
         name='QIfpms',
@@ -145,3 +148,9 @@ if __name__ == '__main__':
 
     for item in ['options']:
         os.mkdir(os.sep.join([os.getcwd(), 'build', 'exe.win32-3.3', item]))
+
+    for item in ['msvcp100.dll']:
+        shutil.copyfile(os.sep.join([os.getcwd(), 'dll', item]), os.sep.join([os.getcwd(), 'build', 'exe.win32-3.3', item]))
+
+    for item in ['libEGL.dll']:
+        shutil.copyfile(os.sep.join([path_pyqt5, item]), os.sep.join([os.getcwd(), 'build', 'exe.win32-3.3', item]))
