@@ -118,6 +118,7 @@ class VLCDialog(QtWidgets.QDialog):
         self.setMinimumSize(600, 400)
         self.setWindowFlags(QtCore.Qt.FramelessWindowHint | QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowMinimizeButtonHint)  # 无边框， 带系统菜单， 可以最小化
         self.setSizeGripEnabled(True)
+        self.setModal(False)
         self.initData()
         self.initUI()
         self.initTimer()

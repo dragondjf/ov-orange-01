@@ -104,7 +104,7 @@ class GuiManger(QtCore.QObject):
         if 'url' not in pa:
             pa['url'] = 'http://42.96.155.222:9999/static/pm.mp4'
         vlcdialog = VLCDialog(pa['name'], pa['url'])
-        vlcdialog.exec_()
+        vlcdialog.show()
 
     @QtCore.pyqtSlot(int)
     def settings(self, index):
