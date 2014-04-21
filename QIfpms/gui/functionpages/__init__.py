@@ -4,4 +4,4 @@
 from .monitorpage import MonitorPage
 from .alarmlistpage import AlarmListPage
 from .aboutpage import AboutPage
-from .monitorpage import PAItem
+from .monitorpage import PAItem, PATextItem

@@ -10,6 +10,7 @@ from gui.uiconfig import windowsoptions
 from dataBase import signal_DB
 from gui.mainwindow.qrc_icons import *
 
+
 class Splitter(QtWidgets.QSplitter):
 
     def __init__(self, parent=None):
@@ -64,34 +65,36 @@ class PATable(QtWidgets.QTableWidget):
         }
 
     def initHeader(self):
-        self.setColumnCount(3)
+        self.setColumnCount(4)
         self.horizontalHeader().hide()
         self.verticalHeader().hide()
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
 
     def initColumnWidth(self):
         self.setColumnWidth(0, self.iconsize + 6)
-        self.setColumnWidth(2, self.setting_size)
+        self.setColumnWidth(1, 48)
+        self.setColumnWidth(3, self.setting_size)
         self.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Fixed)
-        self.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Stretch)
-        self.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Fixed)
+        self.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Fixed)
+        self.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
+        self.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Fixed)
 
     def initConnect(self):
         # self.cellClicked.connect(self.action_cellClicked)
         pass
 
     def action_cellClicked(self, row, column):
-        self.removeColumn(2)
-        self.insertColumn(2)
-        self.setColumnWidth(2, self.setting_size)
+        self.removeColumn(3)
+        self.insertColumn(3)
+        self.setColumnWidth(3, self.setting_size)
 
         settingItem = QtWidgets.QPushButton("设置")
         settingItem.clicked.connect(self.clickSetting)
-        self.setCellWidget(row, 2, settingItem)
+        self.setCellWidget(row, 3, settingItem)
 
     def clickSetting(self):
         for row in range(self.rowCount()):
-            if self.cellWidget(row, 2) is self.sender():
+            if self.cellWidget(row, 3) is self.sender():
                 signal_DB.settingsIndex_sin.emit(row)
 
     def changeColor(self, row, bgcolor):
@@ -115,13 +118,20 @@ class PATable(QtWidgets.QTableWidget):
                 item.setIcon(QtGui.QIcon(self.grayPixmap))
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 self.setItem(row, col, item)
-            elif col == 1:
-                item = QtWidgets.QTableWidgetItem(message)
+            if col == 1:
+                item = QtWidgets.QTableWidgetItem(message[0])
+                # item.setIcon(QtGui.QIcon(self.grayPixmap))
                 item.setBackground(bgBrush)
                 item.setForeground(fgBrush)
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 self.setItem(row, col, item)
             elif col == 2:
+                item = QtWidgets.QTableWidgetItem(message[1])
+                item.setBackground(bgBrush)
+                item.setForeground(fgBrush)
+                item.setTextAlignment(QtCore.Qt.AlignCenter)
+                self.setItem(row, col, item)
+            elif col == 3:
                 settingItem = QtWidgets.QPushButton()
                 settingItem.setStyleSheet('''
                     QPushButton{
@@ -134,7 +144,7 @@ class PATable(QtWidgets.QTableWidget):
                 settingItem.setToolTip(self.tr("设置"))
                 settingItem.setFixedSize(48, 48)
                 settingItem.clicked.connect(self.clickSetting)
-                self.setCellWidget(row, 2, settingItem)
+                self.setCellWidget(row, 3, settingItem)
 
 
 class MonitorPage(QtWidgets.QFrame):
@@ -187,23 +197,26 @@ class MapPanel(QtWidgets.QFrame):
         self.setLayout(mainlayout)
 
     def contextMenuEvent(self, event):
+        if windowsoptions['MapMenuflag']:
+            self.changeBackgroundAction = QtWidgets.QAction(self.tr("修改防区地图"), self, triggered=self.view.actionChangeBackground)
+            self.getPAsAction = QtWidgets.QAction(self.tr("获取所有防区"), self, triggered=self.actionGetPAs)
+            self.clearPAsAction = QtWidgets.QAction(self.tr("清除所有防区"), self, triggered=self.actionClearPAs)
 
-        self.changeBackgroundAction = QtWidgets.QAction(self.tr("修改防区地图"), self, triggered=self.view.actionChangeBackground)
-        self.getPAsAction = QtWidgets.QAction(self.tr("获取所有防区"), self, triggered=self.actionGetPAs)
-        self.clearPAsAction = QtWidgets.QAction(self.tr("清除所有防区"), self, triggered=self.actionClearPAs)
-
-        menu = QtWidgets.QMenu(self)
-        menu.addAction(self.changeBackgroundAction)
-        menu.addAction(self.getPAsAction)
-        menu.addAction(self.clearPAsAction)
-        menu.exec_(event.globalPos())
+            menu = QtWidgets.QMenu(self)
+            menu.addAction(self.changeBackgroundAction)
+            # menu.addAction(self.getPAsAction)
+            # menu.addAction(self.clearPAsAction)
+            menu.exec_(event.globalPos())
 
     def createPAContextMenu(self):
-        self.disabledAction = QtWidgets.QAction("禁用", self, triggered=self.actionDiabled)
-        self.attributeAction = QtWidgets.QAction("属性", self, triggered=self.actionAttribute)
-        self.paContextMenu = QtWidgets.QMenu(self)
-        self.paContextMenu.addAction(self.disabledAction)
-        self.paContextMenu.addAction(self.attributeAction)
+        if windowsoptions['PAMenuflag']:
+            self.disabledAction = QtWidgets.QAction("禁用", self, triggered=self.actionDiabled)
+            self.attributeAction = QtWidgets.QAction("属性", self, triggered=self.actionAttribute)
+            self.paContextMenu = QtWidgets.QMenu(self)
+            self.paContextMenu.addAction(self.disabledAction)
+            self.paContextMenu.addAction(self.attributeAction)
+        else:
+            self.paContextMenu = QtWidgets.QMenu(self)
 
     def actionDiabled(self):
         pass
@@ -259,6 +272,15 @@ class PAItem(QtWidgets.QGraphicsPixmapItem):
         self.setSelected(True)
         self.contextMenu.exec_(event.screenPos())
 
+class PATextItem(QtWidgets.QGraphicsTextItem):
+
+    def __init__(self, text, parent=None):
+        super(PATextItem, self).__init__(parent)
+        # self.setFlag(QtWidgets.QGraphicsItem.ItemIsMovable, True)
+        # self.setFlag(QtWidgets.QGraphicsItem.ItemIsSelectable, True)
+        self.setDefaultTextColor (QtGui.QColor('black'))
+        self.setHtml("<h4>%s</h4>" % text)
+
 
 class DiagramScene(QtWidgets.QGraphicsScene):
 
@@ -299,7 +321,7 @@ class MapGraphicsView(QtWidgets.QGraphicsView):
         """
         self.parent = parent
         super(MapGraphicsView, self).__init__(parent)
-        self.setDragMode(self.RubberBandDrag)
+        self.setDragMode(self.ScrollHandDrag)
         self.setRenderHint(QtGui.QPainter.Antialiasing)
         self.setRubberBandSelectionMode(QtCore.Qt.ContainsItemShape)
         self.setViewportUpdateMode(QtWidgets.QGraphicsView.BoundingRectViewportUpdate)

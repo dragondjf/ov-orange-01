@@ -57,7 +57,8 @@ class AlarmTable(QtWidgets.QTableWidget):
         super(AlarmTable, self).__init__(parent)
         self.parent = parent
         self.setObjectName("AlarmTable")
-        self.setEditTriggers(self.DoubleClicked)
+        # self.setEditTriggers(self.DoubleClicked)
+        self.setEditTriggers(self.NoEditTriggers)
         self.setSelectionBehavior(self.SelectRows)
         self.setSelectionMode(self.SingleSelection)
         self.setFocusPolicy(QtCore.Qt.NoFocus)

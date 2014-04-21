@@ -40,5 +40,7 @@ except:
         'mainwindow': mainwindow,
         'splashimg': os.sep.join([os.getcwd(), 'skin', 'images', 'splash.png']),
         'viewbgfile':  os.sep.join([os.getcwd(), 'gui', 'skin', 'images', 'compayimage.jpg']),
+        'MapMenuflag': True,
+        'PAMenuflag': False,
     }
     windowsoptions.update(dialogsettings)

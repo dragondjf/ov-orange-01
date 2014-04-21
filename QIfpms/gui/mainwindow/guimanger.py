@@ -37,6 +37,7 @@ class GuiManger(QtCore.QObject):
         self.pas = []
         self.paitems = {}
         self.paLabels = {}
+        self.alarmhistory = []
 
     def initSignalConnect(self):
         signal_DB.pas_sin.connect(self.createItems)
@@ -44,28 +45,43 @@ class GuiManger(QtCore.QObject):
         signal_DB.simpleAlarm_sin.connect(self.updatePAStatus)
         signal_DB.settingsIndex_sin.connect(self.settings)
 
-        # views['DiagramScene'].selectionChanged.connect(self.selectPA)
+        views['DiagramScene'].selectionChanged.connect(self.selectPALabel)
+        views['PATable'].itemSelectionChanged.connect(self.selectPAItem)
 
-    # def selectPA(self):
-    #     paSelectItems = views['DiagramScene'].selectedItems()
-    #     for key, value in self.paitems.items():
-    #         if value in paSelectItems:
-    #             index = self.paLabels[key]
-    #             views['PATable'].selectRow(index)
+    def selectPALabel(self):
+        try:
+            paSelectItems = views['DiagramScene'].selectedItems()
+            for key, value in self.paitems.items():
+                if value in paSelectItems:
+                    index = self.paLabels[key]
+                    views['PATable'].selectRow(index)
+        except:
+            pass
+
+    def selectPAItem(self):
+        index = views['PATable'].selectedRanges()[0].topRow()
+        sid = self.pas[index]['sid']
+        views['DiagramScene'].clearSelection()
+        self.paitems[sid].setSelected(True)
 
     @QtCore.pyqtSlot(list)
     def createItems(self, pas):
-        from gui.functionpages import PAItem
+        from gui.functionpages import PAItem, PATextItem
         self.pas = pas
         i = 0
         for pa in pas:
             item = PAItem(views['DiagramScene'].itemMenu)
-            item.setPos(QtCore.QPointF(pa['cx'], pa['cy']))
+            item.setPos(QtCore.QPointF(pa['cx']*2, pa['cy']*1.2))
+            textItem = PATextItem(pa['name'], item)
+            textItem.setPos(-5, 45)
+            item.setZValue(len(pas) - i)
             views['DiagramScene'].addItem(item)
             self.paitems.update({pa['sid']: item})
 
-            t = pa['sid'] + '  ' + pa['name']
-            views['PATable'].addItem(i, t)
+            status = status_name_zh[pa['status']]
+            name = pa['sid'] + '  ' + pa['name']
+
+            views['PATable'].addItem(i, [status, name])
             self.paLabels.update({pa['sid']: i})
             i += 1
             self.updatePAStatus({'sid': pa['sid'], 'status': pa['status']})
@@ -75,10 +91,11 @@ class GuiManger(QtCore.QObject):
         sid = alarm['sid']
         status = alarm['status']
         item = self.paitems[sid]
-        item.setPixmap(item.pixmaps[status])
+        item.setPixmap(item.pixmaps[status])  # 改变地图上防区的状态
 
         row = self.paLabels[sid]
-        views['PATable'].changeColor(row, status_color[status])
+        views['PATable'].changeColor(row, status_color[status])  # 改变整行的颜色
+        views['PATable'].item(row, 1).setText(status_name_zh[status]) # 改变当前行第二列的状态
 
     @QtCore.pyqtSlot(int)
     def settings(self, index):
@@ -90,7 +107,6 @@ class GuiManger(QtCore.QObject):
                 "enable": int(formdata['enable'])
             }
             response = requests.post('http://%s:%s/setprotect' % ("localhost", "8888"), params=payload, timeout=3)
-            print("*"*10, index, response.json())
             if int(response.json()) == 1:
                 if int(formdata['enable']) == 1:
                     views['StatusBar'].showMessage(self.pas[index]['name'] + "   启用成功")
@@ -102,6 +118,7 @@ class GuiManger(QtCore.QObject):
                 elif int(formdata['enable']) == 0:
                     views['StatusBar'].showMessage("发送禁用%s 命令失败" % self.pas[index]['name'])
 
+    @QtCore.pyqtSlot(list)
     def addItem(self, alarm):
         bgcolor = status_color[alarm[1]]
         bgBrush = QtGui.QBrush(QtGui.QColor(bgcolor))
@@ -119,6 +136,8 @@ class GuiManger(QtCore.QObject):
             newItem.setBackground(bgBrush)
             newItem.setForeground(fgBrush)
             views['AlarmTable'] .setItem(0, col, newItem)
+
+        self.alarmhistory.append(alarm)
 
     def getPAList(self):
         response = requests.get('http://%s:%s/palist' % self.address, timeout=3)

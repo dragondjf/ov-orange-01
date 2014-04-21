@@ -22,6 +22,7 @@ QStatusBar {
 QStatusBar QLabel#datatimelabel{
     background-color: transparent;
     font: 16px;
+    color: white;
 }
 
 QToolButton{
@@ -132,8 +133,6 @@ QPushButton#about:checked{
 QPushButton#about:flat{
     border: none;
 }
-
-
 
 
 QHeaderView::section {

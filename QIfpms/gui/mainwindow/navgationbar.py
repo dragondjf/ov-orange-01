@@ -39,6 +39,7 @@ class NavgationBar(QtWidgets.QFrame):
         self.setFixedHeight(baseHeight)
         self.monitorButton = BaseToolButton(self.tr("监控管理"))
         self.monitorButton.setObjectName("monitor")
+        self.monitorButton.setChecked(True)
         self.alarmListButton = BaseToolButton(self.tr("历史告警"))
         self.alarmListButton.setObjectName("alarmList")
 
