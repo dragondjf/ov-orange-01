@@ -48,6 +48,10 @@ class LoadingWidget(QtWidgets.QLabel):
 class VLCDialog(QtWidgets.QDialog):
     """docstring for VLCDialog"""
     style = '''
+        QDialog{
+            background-color:gray;
+        }
+
         QPushButton
         {
             color: rgb(255, 255, 255);

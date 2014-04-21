@@ -41,5 +41,6 @@ IFP3800_MS/gui/log/ifpms.log
 IFP3800_MS/gui/log/packet.log
 IFP3800_MS/gui/chrome/etc/alarm.log
 
+QIfpms/vlc/plugins/plugins.dat
 QIfpms/options/*.json
 QIfpms/build/
