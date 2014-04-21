@@ -137,7 +137,10 @@ def find_lib():
                  # restore cwd after dll has been loaded
                 os.chdir(p)
             else:  # may fail
-                dll = ctypes.CDLL('libvlc.dll')
+                try:
+                    dll = ctypes.CDLL('libvlc.dll')
+                except:
+                    pass
         else:
             plugin_path = os.path.dirname(p)
             dll = ctypes.CDLL(p)
@@ -161,6 +164,14 @@ def find_lib():
 
 # plugin_path used on win32 and MacOS in override.py
 dll, plugin_path  = find_lib()
+if not dll:
+    dll_path = os.sep.join([os.getcwd(), 'vlc', 'libvlc.dll'])
+    plugin_path = os.sep.join([os.getcwd(), 'vlc'])
+    if os.path.exists(dll_path):
+        p = os.getcwd()
+        os.chdir(plugin_path)
+        dll = ctypes.CDLL(dll_path)
+        os.chdir(p)
 
 class VLCException(Exception):
     """Exception raised by libvlc methods.

@@ -133,6 +133,7 @@ if __name__ == '__main__':
         delete_file_folder(path)
 
     path_pyqt5 = PyQt5.__path__[0]
+    build_path = os.sep.join([os.getcwd(), 'build', 'exe.win32-3.3'])
 
     sys.argv.append("build")
     setup(
@@ -144,13 +145,16 @@ if __name__ == '__main__':
     )
 
     for item in ['skin']:
-        shutil.copytree(os.sep.join([os.getcwd(), 'gui', item]), os.sep.join([os.getcwd(), 'build', 'exe.win32-3.3', 'gui', item]))
+        shutil.copytree(os.sep.join([os.getcwd(), 'gui', item]), os.sep.join([build_path, 'gui', item]))
 
     for item in ['options']:
-        os.mkdir(os.sep.join([os.getcwd(), 'build', 'exe.win32-3.3', item]))
+        os.mkdir(os.sep.join([build_path, item]))
 
     for item in ['msvcp100.dll']:
-        shutil.copyfile(os.sep.join([os.getcwd(), 'dll', item]), os.sep.join([os.getcwd(), 'build', 'exe.win32-3.3', item]))
+        shutil.copyfile(os.sep.join([os.getcwd(), 'dll', item]), os.sep.join([build_path, item]))
 
     for item in ['libEGL.dll']:
-        shutil.copyfile(os.sep.join([path_pyqt5, item]), os.sep.join([os.getcwd(), 'build', 'exe.win32-3.3', item]))
+        shutil.copyfile(os.sep.join([path_pyqt5, item]), os.sep.join([build_path, item]))
+
+    for item in ['vlc']:
+        shutil.copytree(os.sep.join([os.getcwd(), item]), os.sep.join([build_path, item]))

@@ -35,6 +35,9 @@ class PATable(QtWidgets.QTableWidget):
 
     iconsize = 36
     setting_size = 48
+    video_column = 3
+    settting_column = 4
+
 
     @collectView
     def __init__(self, parent=None):
@@ -65,7 +68,7 @@ class PATable(QtWidgets.QTableWidget):
         }
 
     def initHeader(self):
-        self.setColumnCount(4)
+        self.setColumnCount(5)
         self.horizontalHeader().hide()
         self.verticalHeader().hide()
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -74,28 +77,35 @@ class PATable(QtWidgets.QTableWidget):
         self.setColumnWidth(0, self.iconsize + 6)
         self.setColumnWidth(1, 48)
         self.setColumnWidth(3, self.setting_size)
+        self.setColumnWidth(4, self.setting_size)
         self.horizontalHeader().setSectionResizeMode(0, QtWidgets.QHeaderView.Fixed)
         self.horizontalHeader().setSectionResizeMode(1, QtWidgets.QHeaderView.Fixed)
         self.horizontalHeader().setSectionResizeMode(2, QtWidgets.QHeaderView.Stretch)
         self.horizontalHeader().setSectionResizeMode(3, QtWidgets.QHeaderView.Fixed)
+        self.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.Fixed)
 
     def initConnect(self):
         # self.cellClicked.connect(self.action_cellClicked)
         pass
 
     def action_cellClicked(self, row, column):
-        self.removeColumn(3)
-        self.insertColumn(3)
-        self.setColumnWidth(3, self.setting_size)
+        self.removeColumn(self.settting_column)
+        self.insertColumn(self.settting_column)
+        self.setColumnWidth(self.settting_column, self.setting_size)
 
         settingItem = QtWidgets.QPushButton("设置")
         settingItem.clicked.connect(self.clickSetting)
-        self.setCellWidget(row, 3, settingItem)
+        self.setCellWidget(row, self.settting_column, settingItem)
 
     def clickSetting(self):
         for row in range(self.rowCount()):
-            if self.cellWidget(row, 3) is self.sender():
+            if self.cellWidget(row, self.settting_column) is self.sender():
                 signal_DB.settingsIndex_sin.emit(row)
+
+    def clickVedio(self):
+        for row in range(self.rowCount()):
+            if self.cellWidget(row, self.video_column) is self.sender():
+                signal_DB.videoIndex_sin.emit(row)
 
     def changeColor(self, row, bgcolor):
         for col in range(self.columnCount()):
@@ -131,7 +141,21 @@ class PATable(QtWidgets.QTableWidget):
                 item.setForeground(fgBrush)
                 item.setTextAlignment(QtCore.Qt.AlignCenter)
                 self.setItem(row, col, item)
-            elif col == 3:
+            elif col == self.video_column:
+                settingItem = QtWidgets.QPushButton()
+                settingItem.setStyleSheet('''
+                    QPushButton{
+                        border-image: url(:/icons/light/appbar.monitor.play.png);
+                    }
+                    QPushButton:pressed{
+                        border-image: url(:/icons/dark/appbar.monitor.play.png);
+                    }
+                ''')
+                settingItem.setToolTip(self.tr("视频"))
+                settingItem.setFixedSize(48, 48)
+                settingItem.clicked.connect(self.clickVedio)
+                self.setCellWidget(row, col, settingItem)
+            elif col == self.settting_column:
                 settingItem = QtWidgets.QPushButton()
                 settingItem.setStyleSheet('''
                     QPushButton{
@@ -144,7 +168,8 @@ class PATable(QtWidgets.QTableWidget):
                 settingItem.setToolTip(self.tr("设置"))
                 settingItem.setFixedSize(48, 48)
                 settingItem.clicked.connect(self.clickSetting)
-                self.setCellWidget(row, 3, settingItem)
+                self.setCellWidget(row, col, settingItem)
+
 
 
 class MonitorPage(QtWidgets.QFrame):

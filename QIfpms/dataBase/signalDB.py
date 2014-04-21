@@ -12,6 +12,7 @@ class SignalDB(QtCore.QObject):
     simpleAlarm_sin = QtCore.pyqtSignal(dict)
 
     settingsIndex_sin = QtCore.pyqtSignal(int)
+    videoIndex_sin = QtCore.pyqtSignal(int)
 
     def __init__(self):
         super(SignalDB, self).__init__()

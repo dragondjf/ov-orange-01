@@ -15,6 +15,7 @@ import requests
 from gui.dialogs import settingsinput
 from .guiconfig import views
 from gui.uiconfig import windowsoptions
+from gui.vlc import VLCDialog
 
 
 status_name = ['disable', 'disconn', 'connect', 'alarm_minor', 'alarm_critical', 'alarm_fiber_break', 'alarm_blast']
@@ -44,6 +45,7 @@ class GuiManger(QtCore.QObject):
         signal_DB.alarm_sin.connect(self.addItem)
         signal_DB.simpleAlarm_sin.connect(self.updatePAStatus)
         signal_DB.settingsIndex_sin.connect(self.settings)
+        signal_DB.videoIndex_sin.connect(self.vedioplay)
 
         views['DiagramScene'].selectionChanged.connect(self.selectPALabel)
         views['PATable'].itemSelectionChanged.connect(self.selectPAItem)
@@ -96,6 +98,13 @@ class GuiManger(QtCore.QObject):
         row = self.paLabels[sid]
         views['PATable'].changeColor(row, status_color[status])  # 改变整行的颜色
         views['PATable'].item(row, 1).setText(status_name_zh[status]) # 改变当前行第二列的状态
+
+    def vedioplay(self, index):
+        pa = self.pas[index]
+        if 'url' not in pa:
+            pa['url'] = 'http://42.96.155.222:9999/static/pm.mp4'
+        vlcdialog = VLCDialog(pa['name'], pa['url'])
+        vlcdialog.exec_()
 
     @QtCore.pyqtSlot(int)
     def settings(self, index):
