@@ -1,0 +1,2 @@
+
+from .vlcdialog import VLCDialog
