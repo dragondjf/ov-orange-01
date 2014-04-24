@@ -8,11 +8,6 @@ from app import StatusClientThread
 from gui.uiconfig import windowsoptions
 from gui.dialogs import weblogin
 
-from gui import signal_DB
-import threading
-import websocket
-import json
-
 
 if __name__ == '__main__':
     import sys
