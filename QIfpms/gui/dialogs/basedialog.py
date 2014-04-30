@@ -6,6 +6,10 @@ from PyQt5 import QtCore
 from PyQt5 import QtWidgets
 
 style = '''
+    QDialog{
+        border:4px solid green;
+    }
+
     QPushButton
     {
         color: rgb(255, 255, 255);
