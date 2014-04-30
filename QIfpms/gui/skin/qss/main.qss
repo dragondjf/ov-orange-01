@@ -12,6 +12,14 @@ QFrame#TitleBar{
 
 QFrame#NavgationBar{
     background-color: green;
+    border-bottom: 2px solid black;
+}
+
+QFrame#CenterWindow{
+    border-left: 5px solid green;
+    border-right: 5px solid green;
+    border-bottom: none;
+    border-top: none;
 }
 
 QStatusBar {
@@ -66,6 +74,7 @@ QPushButton#monitor{
     color: white;
     text-align: center bottom;
     padding-bottom: 5px;
+    border-bottom: 2px solid black;
 }
 
 QPushButton#monitor:hover{
@@ -91,6 +100,7 @@ QPushButton#alarmList{
     color: white;
     text-align: center bottom;
     padding-bottom: 5px;
+
 }
 
 QPushButton#alarmList:hover{
@@ -135,6 +145,32 @@ QPushButton#about:flat{
 }
 
 
+QPushButton#exit{
+    background-image: url(:/icons/dark/appbar.app.remove.png);
+    background-repeat:no-repeat;
+    background-position: center bottom;
+    background-color: transparent;
+    background-color: transparent;
+    color: white;
+    text-align: center bottom;
+    padding-bottom: 5px;
+}
+
+QPushButton#exit:hover{
+    background-color: lightgreen;
+    border:1px  black;
+    opacity: 0.1;
+}
+
+QPushButton#exit:checked{
+    background-color: #00CD00;
+    color: white;
+}
+
+QPushButton#exit:flat{
+    border: none;
+}
+
 QHeaderView::section {
     background-color: #3b4351;
     color: white;
@@ -171,6 +207,9 @@ QHeaderView::section {
 
 QTableWidget{
     border: none;
+    background-color: rgb(48, 48, 48);
+    selection-color: #252a31;
+    selection-background-color:lightgray;
 }
 
 /*QFrame#AlarmListPage{

@@ -49,6 +49,7 @@ class GuiManger(QtCore.QObject):
 
         views['DiagramScene'].selectionChanged.connect(self.selectPALabel)
         views['PATable'].itemSelectionChanged.connect(self.selectPAItem)
+        views['NavgationBar'].exitButton.clicked.connect(views['MainWindow'].close)
 
     def selectPALabel(self):
         try:

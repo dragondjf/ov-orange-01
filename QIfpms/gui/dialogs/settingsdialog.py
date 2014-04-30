@@ -46,16 +46,20 @@ class SettingsDialog(BaseDialog):
 
         #确认按钮布局
         self.pbEnter = QtWidgets.QPushButton(u'确定', self)
+        self.pbEnter.setFixedHeight(30)
         self.pbCancel = QtWidgets.QPushButton(u'取消', self)
+        self.pbCancel.setFixedHeight(30)
         self.pbEnter.clicked.connect(self.enter)
         self.pbCancel.clicked.connect(self.reject)
         enterwidget_mainlayout = QtWidgets.QGridLayout()
         enterwidget_mainlayout.addWidget(self.pbEnter, 0, 0)
         enterwidget_mainlayout.addWidget(self.pbCancel, 0, 1)
 
+        self.layout().addStretch()
         self.layout().addLayout(formLayout)
+        self.layout().addStretch()
         self.layout().addLayout(enterwidget_mainlayout)
-        self.setFixedSize(400, 300)
+        self.layout().addSpacing(10)
 
     def enter(self):
         self.data = {

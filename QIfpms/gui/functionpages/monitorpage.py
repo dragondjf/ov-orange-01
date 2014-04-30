@@ -145,10 +145,10 @@ class PATable(QtWidgets.QTableWidget):
                 settingItem = QtWidgets.QPushButton()
                 settingItem.setStyleSheet('''
                     QPushButton{
-                        border-image: url(:/icons/light/appbar.monitor.play.png);
+                        border-image: url(:/icons/dark/appbar.monitor.play.png);
                     }
                     QPushButton:pressed{
-                        border-image: url(:/icons/dark/appbar.monitor.play.png);
+                        border-image: url(:/icons/light/appbar.monitor.play.png);
                     }
                 ''')
                 settingItem.setToolTip(self.tr("视频"))
@@ -159,10 +159,10 @@ class PATable(QtWidgets.QTableWidget):
                 settingItem = QtWidgets.QPushButton()
                 settingItem.setStyleSheet('''
                     QPushButton{
-                        border-image: url(:/icons/light/appbar.settings.png);
+                        border-image: url(:/icons/dark/appbar.settings.png);
                     }
                     QPushButton:pressed{
-                        border-image: url(:/icons/dark/appbar.settings.png);
+                        border-image: url(:/icons/light/appbar.settings.png);
                     }
                 ''')
                 settingItem.setToolTip(self.tr("设置"))

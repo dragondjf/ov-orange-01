@@ -35,6 +35,7 @@ class AuthLoginDialog(BaseDialog):
         self.portLineEdit = QtWidgets.QLineEdit(u'8888')
 
         self.pbLogin = QtWidgets.QPushButton(u'登录', self)
+
         self.pbLogin.setCheckable(True)
         self.pbCancel = QtWidgets.QPushButton(u'取消', self)
         enterwidget_mainlayout = QtWidgets.QGridLayout()
@@ -58,6 +59,8 @@ class AuthLoginDialog(BaseDialog):
 
         self.pbLogin.clicked.connect(self.clickEnter)
         self.pbCancel.clicked.connect(self.reject)
+        self.pbLogin.setFixedHeight(30)
+        self.pbCancel.setFixedHeight(30)
 
         self.layout().addLayout(mainlayout)
         self.resize(self.width(), self.height())

@@ -35,7 +35,7 @@ class NavgationBar(QtWidgets.QFrame):
         self.buttons = {}
 
     def initUI(self):
-        baseHeight = 60
+        baseHeight = 66
         self.setFixedHeight(baseHeight)
         self.monitorButton = BaseToolButton(self.tr("监控管理"))
         self.monitorButton.setObjectName("monitor")
@@ -46,14 +46,19 @@ class NavgationBar(QtWidgets.QFrame):
         self.aboutButton = BaseToolButton(self.tr("关于我们"))
         self.aboutButton.setObjectName("about")
 
+        self.exitButton = BaseToolButton(self.tr("退出程序"))
+        self.exitButton.setObjectName("exit")
+
         self.buttons.update({"monitor": self.monitorButton})
         self.buttons.update({"alarmList": self.alarmListButton})
         self.buttons.update({"about": self.aboutButton})
+        self.buttons.update({"exit": self.exitButton})
 
         mainLayout = QtWidgets.QHBoxLayout()
         mainLayout.addWidget(self.monitorButton)
         mainLayout.addWidget(self.alarmListButton)
         mainLayout.addWidget(self.aboutButton)
+        mainLayout.addWidget(self.exitButton)        
         mainLayout.addStretch()
         mainLayout.setContentsMargins(10, 0, 0, 0)
         mainLayout.setSpacing(1)

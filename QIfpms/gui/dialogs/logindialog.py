@@ -36,6 +36,9 @@ class LoginDialog(BaseDialog):
         self.enterwidget = QtWidgets.QWidget()
         self.pbLogin = QtWidgets.QPushButton(u'登录', self)
         self.pbCancel = QtWidgets.QPushButton(u'取消', self)
+        self.pbLogin.setFixedHeight(30)
+        self.pbCancel.setFixedHeight(30)
+
         self.pbLogin.clicked.connect(self.login)
         self.pbCancel.clicked.connect(self.reject)
 

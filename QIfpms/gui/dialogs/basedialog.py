@@ -42,9 +42,10 @@ style = '''
     QLineEdit {
         padding: 1px;
         border-style: solid;
-        border: 2px solid gray;
+        border: 2px solid lightgray;
         border-radius: 8px;
         width:40px;
+        height: 30px;
     }
 '''
 
@@ -75,11 +76,29 @@ class BaseDialog(QtWidgets.QDialog):
         self.setStyleSheet(style) # 设置主窗口样式
         self.resize(size[0], size[1])
 
+    def mousePressEvent(self, event):
+        # 鼠标点击事件
+        if event.button() == QtCore.Qt.LeftButton:
+            self.dragPosition = event.globalPos() - self.frameGeometry().topLeft()
+            event.accept()
+
+    def mouseReleaseEvent(self, event):
+        # 鼠标释放事件
+        if hasattr(self, "dragPosition"):
+            del self.dragPosition
+
+    def mouseMoveEvent(self, event):
+        # 鼠标移动事件
+        if hasattr(self, "dragPosition"):
+            if event.buttons() == QtCore.Qt.LeftButton:
+                self.move(event.globalPos() - self.dragPosition)
+                event.accept()
+
 
 class DynamicTextWidget(QtWidgets.QWidget):
     def __init__(self, text, bg, parent=None):
         super(DynamicTextWidget, self).__init__(parent)
-
+        self.setFixedSize(443, 132)
         self.bg = bg
         self.text = text
 

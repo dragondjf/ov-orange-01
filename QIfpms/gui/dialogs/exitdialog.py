@@ -37,6 +37,9 @@ class ExitDialog(BaseDialog):
         self.enterwidget = QtWidgets.QWidget()
         self.pbEnter = QtWidgets.QPushButton(u'确定', self)
         self.pbCancel = QtWidgets.QPushButton(u'取消', self)
+        self.pbEnter.setFixedHeight(30)
+        self.pbCancel.setFixedHeight(30)
+
         self.pbEnter.clicked.connect(self.exit)
         self.pbCancel.clicked.connect(self.close)
 
@@ -45,7 +48,9 @@ class ExitDialog(BaseDialog):
         enterwidget_mainlayout.addWidget(self.pbCancel, 0, 1)
         self.enterwidget.setLayout(enterwidget_mainlayout)
 
+        self.layout().addStretch()
         self.layout().addWidget(self.exitoptwidget)
+        self.layout().addStretch()
         self.layout().addWidget(self.enterwidget)
         self.resize(self.width(), self.height())
 
