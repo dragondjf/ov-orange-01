@@ -35,9 +35,7 @@ class SettingsDialog(BaseDialog):
         self.startLabel.setFixedWidth(100)
         self.startLabel.setAlignment(QtCore.Qt.AlignRight)
         self.startCheckBox = QtWidgets.QCheckBox()
-        self.startCheckBox.setChecked(pa['status'])
-
-        print("pa status:", pa['status'])
+        self.startCheckBox.setChecked(pa['enable'])
 
         formLayout.addRow(nameLabel, paNameLabel)
         formLayout.addRow(didLabel, paDidLabel)

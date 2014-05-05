@@ -5,6 +5,7 @@ from PyQt5 import QtCore
 from PyQt5 import QtGui
 from PyQt5 import QtWidgets
 
+import requests
 import random
 from datetime import datetime
 import json
@@ -50,6 +51,14 @@ class GuiManger(QtCore.QObject):
         views['DiagramScene'].selectionChanged.connect(self.selectPALabel)
         views['PATable'].itemSelectionChanged.connect(self.selectPAItem)
         views['NavgationBar'].exitButton.clicked.connect(views['MainWindow'].close)
+
+    def updatePAs(self):
+        try:
+            response = requests.get('http://%s:%s/palist' % self.address, timeout=3)
+            result = response.json()
+            self.pas = result['protection_areas']
+        except Exception as e:
+            print(e)
 
     def selectPALabel(self):
         try:
@@ -109,6 +118,7 @@ class GuiManger(QtCore.QObject):
 
     @QtCore.pyqtSlot(int)
     def settings(self, index):
+        self.updatePAs()
         flag, formdata = settingsinput(self.pas[index], windowsoptions['settingsdialog'])
         if flag:
             payload = {
