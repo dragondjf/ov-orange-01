@@ -4,6 +4,7 @@ import os
 from PyQt5 import QtGui
 from PyQt5 import QtCore
 from PyQt5 import QtWidgets
+from gui.uiconfig import windowsoptions
 import requests
 from dataBase import signal_DB
 import threading
@@ -19,20 +20,25 @@ class AuthLoginDialog(BaseDialog):
     def __init__(self, styleoptions, parent=None):
         super(AuthLoginDialog, self).__init__(styleoptions, parent)
 
+        name = windowsoptions['logininfo']['name']
+        password = windowsoptions['logininfo']['password']
+        ip = windowsoptions['logininfo']['ip']
+        port = windowsoptions['logininfo']['port']
+
         self.login_nameLabel = QtWidgets.QLabel(u'用户名')
-        self.login_name = QtWidgets.QLineEdit(self)
+        self.login_name = QtWidgets.QLineEdit(name, self)
         self.login_name.setPlaceholderText(u'用户名')
 
         self.login_passwordLabel = QtWidgets.QLabel(u'密码')
-        self.login_password = QtWidgets.QLineEdit(self)
+        self.login_password = QtWidgets.QLineEdit(password, self)
         self.login_password.setEchoMode(QtWidgets.QLineEdit.Password)
         self.login_password.setPlaceholderText(u'密码')
 
         self.ipLabel = QtWidgets.QLabel(u'输入主机ip:')
-        self.ipLineEdit = QtWidgets.QLineEdit(u'127.0.0.1')
+        self.ipLineEdit = QtWidgets.QLineEdit(ip)
         self.ipLineEdit.setInputMask('000.000.000.000')
         self.portLabel = QtWidgets.QLabel(u'输入主机port:')
-        self.portLineEdit = QtWidgets.QLineEdit(u'8888')
+        self.portLineEdit = QtWidgets.QLineEdit(port)
 
         self.pbLogin = QtWidgets.QPushButton(u'登录', self)
 
@@ -88,6 +94,12 @@ class AuthLoginDialog(BaseDialog):
     def authLogin(self, info):
         if info['status']:
             self.pas = info['result']
+            windowsoptions['logininfo'] = {
+                'name': self.login_name.text(),
+                'password': self.login_password.text(),
+                'ip': self.ipLineEdit.text(),
+                'port': self.portLineEdit.text(),
+            }
             self.accept()
         else:
             self.pbLogin.setChecked(False)

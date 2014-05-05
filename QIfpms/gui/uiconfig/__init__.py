@@ -42,5 +42,11 @@ except:
         'viewbgfile':  os.sep.join([os.getcwd(), 'gui', 'skin', 'images', 'compayimage.jpg']),
         'MapMenuflag': True,
         'PAMenuflag': False,
+        'logininfo':{
+            'name': '',
+            'password': '',
+            'ip': '127.0.0.1',
+            'port': '8888'
+        }
     }
     windowsoptions.update(dialogsettings)
