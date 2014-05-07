@@ -47,18 +47,11 @@ class GuiManger(QtCore.QObject):
         signal_DB.simpleAlarm_sin.connect(self.updatePAStatus)
         signal_DB.settingsIndex_sin.connect(self.settings)
         signal_DB.videoIndex_sin.connect(self.vedioplay)
+        signal_DB.refreshsin.connect(self.refreshPAs)
 
         views['DiagramScene'].selectionChanged.connect(self.selectPALabel)
         views['PATable'].itemSelectionChanged.connect(self.selectPAItem)
         views['NavgationBar'].exitButton.clicked.connect(views['MainWindow'].close)
-
-    def updatePAs(self):
-        try:
-            response = requests.get('http://%s:%s/palist' % self.address, timeout=3)
-            result = response.json()
-            self.pas = result['protection_areas']
-        except Exception as e:
-            print(e)
 
     def selectPALabel(self):
         try:
@@ -71,16 +64,26 @@ class GuiManger(QtCore.QObject):
             pass
 
     def selectPAItem(self):
-        index = views['PATable'].selectedRanges()[0].topRow()
-        sid = self.pas[index]['sid']
-        views['DiagramScene'].clearSelection()
-        self.paitems[sid].setSelected(True)
+        if views['PATable'].selectedRanges():
+            index = views['PATable'].selectedRanges()[0].topRow()
+            sid = self.pas[index]['sid']
+            views['DiagramScene'].clearSelection()
+            self.paitems[sid].setSelected(True)
+
+    def refreshPAs(self):
+        pas = self.getPAList()
+        if pas:
+            self.createItems(pas)
+        else:
+            msg("sdsdsd", windowsoptions['msgdialog'])
 
     @QtCore.pyqtSlot(list)
     def createItems(self, pas):
         from gui.functionpages import PAItem, PATextItem
         self.pas = pas
         i = 0
+        views['PATable'].clearSelf()
+        views['DiagramScene'].clear()
         for pa in pas:
             item = PAItem(views['DiagramScene'].itemMenu)
             item.setPos(QtCore.QPointF(pa['cx']*2, pa['cy']*1.2))
@@ -118,7 +121,7 @@ class GuiManger(QtCore.QObject):
 
     @QtCore.pyqtSlot(int)
     def settings(self, index):
-        self.updatePAs()
+        self.pas = self.getPAList()
         flag, formdata = settingsinput(self.pas[index], windowsoptions['settingsdialog'])
         if flag:
             payload = {
@@ -160,7 +163,11 @@ class GuiManger(QtCore.QObject):
         self.alarmhistory.append(alarm)
 
     def getPAList(self):
-        response = requests.get('http://%s:%s/palist' % self.address, timeout=3)
-        result = response.json()
-        pas = result['protection_areas']
-        return pas
+        try:
+            response = requests.get('http://%s:%s/palist' % self.address, timeout=3)
+            result = response.json()
+            pas = result['protection_areas']
+            return pas
+        except Exception as e:
+            print(e)
+            return None

@@ -26,10 +26,12 @@ class StatusClientThread(threading.Thread):
         # websocket.enableTrace(True)
 
     def run(self):
-        self.ws.run_forever()
+        while 1:
+            self.ws.run_forever()
 
     @staticmethod
     def on_open(ws):
+        print('ws on_open')
         global pas
         response = requests.get('http://%s:%s/palist' % ws.address, timeout=3)
         result = response.json()
@@ -56,6 +58,7 @@ class StatusClientThread(threading.Thread):
             alarm['sid'] = pa['sid']
             alarm['status_change_time'] = time.time()
             StatusClientThread.sendAlarm2UI(alarm)
+        print('ws on_close')
 
     @staticmethod
     def sendAlarm2UI(alarm):

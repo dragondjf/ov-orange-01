@@ -14,6 +14,8 @@ class SignalDB(QtCore.QObject):
     settingsIndex_sin = QtCore.pyqtSignal(int)
     videoIndex_sin = QtCore.pyqtSignal(int)
 
+    refreshsin = QtCore.pyqtSignal()
+
     def __init__(self):
         super(SignalDB, self).__init__()
 

@@ -170,6 +170,10 @@ class PATable(QtWidgets.QTableWidget):
                 settingItem.clicked.connect(self.clickSetting)
                 self.setCellWidget(row, col, settingItem)
 
+    def clearSelf(self):
+        for i in range(self.rowCount()):
+            self.removeRow(0)
+
 
 
 class MonitorPage(QtWidgets.QFrame):
@@ -354,6 +358,12 @@ class MapGraphicsView(QtWidgets.QGraphicsView):
         self.setResizeAnchor(self.AnchorUnderMouse)
         self.setCacheMode(QtWidgets.QGraphicsView.CacheBackground)
 
+        self.refreshButton = QtWidgets.QPushButton(self.tr("同步防区"), self)
+        self.refreshButton.clicked.connect(self.refreshPAList)
+
+    def refreshPAList(self):
+        signal_DB.refreshsin.emit()
+
     def actionChangeBackground(self, firstFalg=False):
         if "viewbgfile" in windowsoptions:
             if firstFalg:
@@ -397,4 +407,8 @@ class MapGraphicsView(QtWidgets.QGraphicsView):
 
     def resizeEvent(self, event):
         self.actionChangeBackground(True)
+        if views['MainWindow'].isFullScreen():
+            self.refreshButton.move(self.width() - 80, 0)
+        else:
+            self.refreshButton.move(self.width() - 95, 0)
         super(MapGraphicsView, self).resizeEvent(event)
